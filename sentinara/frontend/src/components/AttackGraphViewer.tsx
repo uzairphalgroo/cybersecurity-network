@@ -238,34 +238,38 @@ export const AttackGraphViewer: React.FC<AttackGraphViewerProps> = ({ graphData 
     }
   };
 
+  const [isLegendOpen, setIsLegendOpen] = useState<boolean>(false);
+
   const handleFit = () => {
     if (cyRef.current) {
-      cyRef.current.fit(undefined, 40);
+      cyRef.current.fit(undefined, 30);
     }
   };
 
   return (
-    <div className="relative flex h-[480px] sm:h-[560px] lg:h-[620px] w-full flex-col rounded-3xl border border-white/10 bg-black/90 backdrop-blur-2xl overflow-hidden shadow-2xl font-tech">
+    <div className="relative flex h-[420px] xs:h-[480px] sm:h-[560px] lg:h-[620px] w-full flex-col rounded-3xl border border-white/10 bg-black/90 backdrop-blur-2xl overflow-hidden shadow-2xl font-tech">
       {/* Top Controls Bar */}
-      <div className="z-10 flex flex-wrap items-center justify-between border-b border-white/[0.08] bg-zinc-950/90 px-5 py-3 gap-3">
-        <div className="flex items-center gap-2">
-          <Cpu className="h-4 w-4 text-white" />
-          <span className="text-xs font-orbitron font-bold text-white tracking-wider">
-            PERMISSION GRAPH // ATTACK CHAINS
-          </span>
-          <span className="rounded-md bg-white/10 border border-white/15 px-2 py-0.5 text-[10px] font-mono text-zinc-300">
-            {graphData.total_nodes} Nodes &bull; {graphData.total_edges} Edges
+      <div className="z-10 flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/[0.08] bg-zinc-950/90 px-3 sm:px-5 py-2.5 sm:py-3 gap-2 sm:gap-3">
+        <div className="flex items-center justify-between sm:justify-start gap-2">
+          <div className="flex items-center gap-2">
+            <Cpu className="h-4 w-4 text-cyan-400 shrink-0" />
+            <span className="text-xs font-orbitron font-bold text-white tracking-wider truncate">
+              PERMISSION GRAPH
+            </span>
+          </div>
+          <span className="rounded-md bg-white/10 border border-white/15 px-2 py-0.5 text-[9px] sm:text-[10px] font-mono text-zinc-300 shrink-0">
+            {graphData.total_nodes}N &bull; {graphData.total_edges}E
           </span>
         </div>
 
         {/* Layout & Zoom Controls */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center rounded-xl border border-white/10 bg-black p-0.5">
+        <div className="flex items-center justify-between sm:justify-end gap-2 overflow-x-auto pb-0.5 sm:pb-0 scrollbar-none">
+          <div className="flex items-center rounded-xl border border-white/10 bg-black p-0.5 shrink-0">
             {(['cose', 'breadthfirst', 'concentric', 'circle'] as const).map((l) => (
               <button
                 key={l}
                 onClick={() => handleLayoutChange(l)}
-                className={`rounded-lg px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider transition-all ${
+                className={`rounded-lg px-2 sm:px-2.5 py-1 text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   activeLayout === l
                     ? 'bg-white text-black shadow-md'
                     : 'text-zinc-400 hover:text-white'
@@ -276,25 +280,25 @@ export const AttackGraphViewer: React.FC<AttackGraphViewerProps> = ({ graphData 
             ))}
           </div>
 
-          <div className="flex items-center gap-1 border-l border-white/10 pl-2">
+          <div className="flex items-center gap-1 border-l border-white/10 pl-2 shrink-0">
             <button
               onClick={() => handleZoom(1.2)}
               title="Zoom In"
-              className="btn-tech-gradient rounded-lg p-1.5 text-zinc-300 hover:text-white"
+              className="btn-tech-gradient rounded-lg p-1.5 text-zinc-300 hover:text-white cursor-pointer"
             >
               <ZoomIn className="h-3.5 w-3.5" />
             </button>
             <button
               onClick={() => handleZoom(0.8)}
               title="Zoom Out"
-              className="btn-tech-gradient rounded-lg p-1.5 text-zinc-300 hover:text-white"
+              className="btn-tech-gradient rounded-lg p-1.5 text-zinc-300 hover:text-white cursor-pointer"
             >
               <ZoomOut className="h-3.5 w-3.5" />
             </button>
             <button
               onClick={handleFit}
               title="Reset View"
-              className="btn-tech-gradient rounded-lg p-1.5 text-zinc-300 hover:text-white"
+              className="btn-tech-gradient rounded-lg p-1.5 text-zinc-300 hover:text-white cursor-pointer"
             >
               <Maximize2 className="h-3.5 w-3.5" />
             </button>
@@ -303,51 +307,72 @@ export const AttackGraphViewer: React.FC<AttackGraphViewerProps> = ({ graphData 
       </div>
 
       {/* Main Canvas & Inspector Drawer */}
-      <div className="relative flex-1">
+      <div className="relative flex-1 overflow-hidden">
         <div ref={containerRef} className="h-full w-full bg-[#020202]" />
 
-        {/* Legend Overlay */}
-        <div className="absolute bottom-3 left-3 z-10 rounded-2xl border border-white/10 bg-black/85 p-3 backdrop-blur-xl text-[11px] font-mono space-y-1.5 shadow-2xl pointer-events-none">
-          <div className="font-bold text-white uppercase text-[10px] tracking-wider mb-1">GRAPH TOPOLOGY</div>
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-rose-500 ring-2 ring-rose-500/40" />
-            <span className="text-zinc-300">Public Threat / Attack Vector</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-white" />
-            <span className="text-zinc-300">IAM User / Identity</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-purple-400" />
-            <span className="text-zinc-300">IAM Role / ServiceAccount</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-            <span className="text-zinc-300">S3 Bucket / Encrypted Vault</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-teal-400" />
-            <span className="text-zinc-300">Security Group Perimeter</span>
-          </div>
+        {/* Collapsible / Non-Overlapping Legend */}
+        <div className="absolute bottom-2.5 left-2.5 sm:bottom-3 sm:left-3 z-10 font-mono">
+          {isLegendOpen ? (
+            <div className="rounded-2xl border border-white/15 bg-black/95 p-3.5 backdrop-blur-2xl text-[11px] space-y-1.5 shadow-2xl max-w-[260px] animate-in fade-in zoom-in-95 duration-200">
+              <div className="flex items-center justify-between border-b border-white/10 pb-1.5 mb-1.5">
+                <span className="font-bold text-white uppercase text-[10px] tracking-wider">GRAPH TOPOLOGY</span>
+                <button
+                  onClick={() => setIsLegendOpen(false)}
+                  className="rounded p-0.5 text-zinc-400 hover:text-white"
+                  title="Close Legend"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-rose-500 ring-2 ring-rose-500/40 shrink-0" />
+                <span className="text-zinc-300 text-[10px]">Public Threat / Vector</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-white shrink-0" />
+                <span className="text-zinc-300 text-[10px]">IAM User / Identity</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-purple-400 shrink-0" />
+                <span className="text-zinc-300 text-[10px]">IAM Role / ServiceAccount</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-amber-400 shrink-0" />
+                <span className="text-zinc-300 text-[10px]">S3 Bucket / Data Vault</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-teal-400 shrink-0" />
+                <span className="text-zinc-300 text-[10px]">Security Group Perimeter</span>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsLegendOpen(true)}
+              className="flex items-center gap-1.5 rounded-xl border border-white/15 bg-black/85 px-3 py-1.5 text-[10px] font-bold text-zinc-300 hover:text-white hover:bg-zinc-900 shadow-xl backdrop-blur-md cursor-pointer transition-all hover:scale-105 active:scale-95"
+            >
+              <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span>🏷️ Legend</span>
+            </button>
+          )}
         </div>
 
         {/* Node Inspection Drawer */}
         {selectedNode && (
-          <div className="absolute right-3 top-3 bottom-3 z-20 w-[calc(100%-1.5rem)] sm:w-80 rounded-2xl border border-white/15 bg-black/95 p-5 backdrop-blur-2xl shadow-2xl overflow-y-auto font-tech">
+          <div className="absolute inset-x-2 bottom-2 sm:inset-x-auto sm:right-3 sm:top-3 sm:bottom-3 z-20 sm:w-80 rounded-2xl border border-white/20 bg-zinc-950/98 p-4 sm:p-5 backdrop-blur-2xl shadow-2xl overflow-y-auto max-h-[55vh] sm:max-h-none font-tech animate-in slide-in-from-bottom-5 sm:slide-in-from-right-5 duration-200">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-400">NODE INSPECTOR</span>
-                <h4 className="text-sm font-bold text-white truncate max-w-[200px] mt-0.5">{selectedNode.label}</h4>
+                <h4 className="text-xs sm:text-sm font-bold text-white truncate max-w-[200px] mt-0.5">{selectedNode.label}</h4>
               </div>
               <button
                 onClick={() => setSelectedNode(null)}
-                className="btn-tech-gradient rounded-lg p-1 text-zinc-400 hover:text-white"
+                className="btn-tech-gradient rounded-lg p-1.5 text-zinc-400 hover:text-white cursor-pointer"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="mt-4 space-y-3 text-xs font-mono">
+            <div className="mt-3 sm:mt-4 space-y-2.5 sm:space-y-3 text-xs font-mono">
               <div>
                 <span className="text-zinc-500 uppercase text-[10px]">ID:</span>
                 <p className="text-[11px] text-zinc-200 break-all">{selectedNode.id}</p>
@@ -380,7 +405,7 @@ export const AttackGraphViewer: React.FC<AttackGraphViewerProps> = ({ graphData 
               {selectedNode.metadata && Object.keys(selectedNode.metadata).length > 0 && (
                 <div className="pt-2 border-t border-white/10">
                   <span className="text-zinc-400 font-bold uppercase text-[10px]">Metadata:</span>
-                  <pre className="mt-1.5 max-h-48 overflow-auto rounded-xl border border-white/10 bg-zinc-950 p-2.5 text-[10px] font-mono text-zinc-300">
+                  <pre className="mt-1.5 max-h-36 sm:max-h-48 overflow-auto rounded-xl border border-white/10 bg-zinc-950 p-2 text-[10px] font-mono text-zinc-300">
                     {JSON.stringify(selectedNode.metadata, null, 2)}
                   </pre>
                 </div>

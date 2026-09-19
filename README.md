@@ -65,7 +65,7 @@
         <img src="https://img.shields.io/badge/Pytest-30%2F30_Passed-4ade80?style=flat-square&logo=pytest&logoColor=white" alt="Pytest"/>
       </div>
       <div style="margin-top: 14px; padding: 10px 14px; background: #0b0f19; border-radius: 8px; border: 1px solid #21262d; font-family: monospace; font-size: 12px; color: #58a6ff;">
-        <code>$ cd audithound &amp;&amp; docker compose up --build</code> &nbsp;|&nbsp; <code><a href="audithound/README.md" style="color: #7ee787;">📖 Read AuditHound Documentation →</a></code>
+        <code>$ cd audithound &amp;&amp; docker compose up --build</code> &nbsp;|&nbsp; <code><a href="audithound/README.md" style="color: #7ee787;">📖 AuditHound Documentation →</a></code> &nbsp;|&nbsp; <code><a href="audithound/docs/SECURITY_CONCEPTS_AND_USER_GUIDE.md" style="color: #38bdf8;">📘 Security Glossary &amp; User Guide →</a></code>
       </div>
     </td>
   </tr>

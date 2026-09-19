@@ -18,9 +18,12 @@
   <b>AuditHound</b> is an enterprise-grade autonomous cloud security posture management (CSPM) and compliance auditing platform. It continuously inspects multi-cloud infrastructure configurations (AWS, Azure, Kubernetes), models privilege escalation attack graphs, maps violations to SOC2 Common Criteria and CIS Benchmarks, and automatically generates production-ready, least-privilege Terraform (<code>.tf</code>) remediation patches.
 </p>
 
-[Visual Walkthrough](#-end-to-end-audit-walkthrough-input-posture-output--ciso-report) • [Key Features](#-key-features) • [Architecture](#-architecture) • [Live Scenarios](#-mock-environments-catalog) • [Quickstart](#-quickstart-guide) • [Vercel Deployment](#-cloud--production-deployment) • [CLI Scanner](#-audithound-cli-scanner) • [Security](#-security--hardening)
+[📖 Comprehensive Security Glossary & User Guide](docs/SECURITY_CONCEPTS_AND_USER_GUIDE.md) • [Visual Walkthrough](#-end-to-end-audit-walkthrough-input-posture-output--ciso-report) • [Key Features](#-key-features) • [Architecture](#-architecture) • [Live Scenarios](#-mock-environments-catalog) • [Quickstart](#-quickstart-guide) • [Backend API Reference](#-backend-api-reference--endpoints) • [Vercel Deployment](#-cloud--production-deployment) • [CLI Scanner](#-audithound-cli-scanner) • [Security](#-security--hardening)
 
 </div>
+
+> 📘 **Looking for deep terminology definitions and operator tutorials?** Read the [**AuditHound Security Concepts, Definitions & Operator Guide**](docs/SECURITY_CONCEPTS_AND_USER_GUIDE.md) covering SOC2 CC6.1–CC6.8, CIS Benchmarks, MITRE ATT&CK techniques, eBPF kprobes, and step-by-step feature walkthroughs.
+
 
 ---
 
@@ -216,6 +219,28 @@ npm run build
 npm run dev
 ```
 Open your browser at **`http://localhost:3000`** to access the Cyber Command Center dashboard.
+
+---
+
+## 🔌 Backend API Reference & Endpoints
+
+The FastAPI backend server runs on port `8000` (interactive OpenAPI Swagger docs at `http://localhost:8000/docs`).
+
+| Category | Method | Endpoint | Description |
+| :--- | :---: | :--- | :--- |
+| **System** | `GET` | **`/`** | Health check & list of active compliance frameworks |
+| **Environments** | `GET` | **`/api/environments`** | Returns catalog of 10 pre-loaded cloud scenarios |
+| **Environments** | `GET` | **`/api/environments/{env_id}`** | Returns raw JSON configuration dump for a scenario |
+| **Environments** | `POST` | **`/api/environments/upload`** | Ingests custom user-uploaded cloud dump payload |
+| **Audit** | `GET` | **`/api/audit/{env_id}`** | Runs compliance rules and attack path analysis |
+| **Audit** | `POST` | **`/api/audit/custom`** | Audits an in-memory custom JSON cloud dump |
+| **Remediation** | `GET` | **`/api/remediation/environment/{env_id}`** | Generates batch Terraform least-privilege patches |
+| **Remediation** | `GET` | **`/api/remediation/download/{env_id}`** | Downloads combined `.tf` remediation file bundle |
+| **Reports** | `GET` | **`/api/reports/html/{env_id}`** | Generates standalone auditor-certified CISO HTML brief |
+| **Purple-Team** | `POST` | **`/api/advanced/purple-team/simulate`** | 🤖 Simulates adversary campaign & computes blast radius % |
+| **Drift Radar** | `GET` | **`/api/advanced/drift/timeline/{env_id}`** | ⏱️ Returns 4-epoch temporal drift evolution & score deltas |
+| **eBPF Telemetry** | `POST` | **`/api/advanced/telemetry/stream`** | 📡 Real-time Linux 6.8 eBPF JIT packet socket stream |
+| **Zero-Touch** | `POST` | **`/api/advanced/remediation/zero-touch`** | ⚡ 1-click zero-touch cloud auto-remediation dry-run/apply |
 
 ---
 

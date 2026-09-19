@@ -225,6 +225,57 @@ export function generateClientSideReportHtml(audit: AuditResponse): string {
       font-family: monospace;
       border-top: 1px solid #1e293b;
     }
+    
+    /* Mobile & Tablet Responsive Media Queries */
+    @media (max-width: 768px) {
+      body { padding: 12px 8px; }
+      .report-container { border-radius: 12px; }
+      .header {
+        padding: 20px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .logo-title { font-size: 20px; }
+      .report-meta { text-align: left; }
+      .content { padding: 18px 14px; }
+      .score-card {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 18px 14px;
+      }
+      .score-circle {
+        width: 100px;
+        height: 100px;
+      }
+      .score-number { font-size: 26px; }
+      .score-grade { font-size: 13px; }
+      .stats-grid {
+        width: 100%;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .stat-item { padding: 10px 8px; }
+      .stat-value { font-size: 16px; }
+      .signoff-section {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 16px;
+      }
+      .footer { padding: 16px; }
+    }
+
+    @media (max-width: 420px) {
+      body { padding: 8px 4px; }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .stat-label { font-size: 9px; }
+      .stat-value { font-size: 15px; }
+    }
+
     @media print {
       body { background-color: #ffffff !important; color: #000000 !important; padding: 0 !important; }
       .report-container { border: none !important; box-shadow: none !important; background: #ffffff !important; }

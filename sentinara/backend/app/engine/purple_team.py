@@ -1,5 +1,6 @@
 """
-AuditHound Autonomous AI Purple-Teaming & Breach Simulator Engine
+Sentinara Autonomous AI Purple-Teaming & Breach Simulator Engine
+Emulates real-world threat actors (APT-29 / Midnight Blizzard, Scattered Spider)
 Performs probabilistic graph traversal, calculates blast radius percentages,
 and simulates adversary tactics, techniques, and procedures (MITRE ATT&CK).
 """

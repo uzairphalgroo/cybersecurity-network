@@ -1,5 +1,5 @@
 """
-AuditHound eBPF Runtime Packet Telemetry & Threat Correlation Engine
+Sentinara eBPF Runtime Packet Telemetry & Threat Correlation Engine
 Correlates static IAM permission graphs with live kernel-level eBPF socket events
 and VPC Flow Logs to identify active lateral movement and C2 exfiltration in real time.
 """

@@ -34,7 +34,7 @@ class IngestionEngine:
 
     @staticmethod
     def normalize_dict(data: Dict[str, Any]) -> Dict[str, Any]:
-        """Normalizes various JSON dump schemas into AuditHound's standard schema."""
+        """Normalizes various JSON dump schemas into Sentinara's standard schema."""
         normalized: Dict[str, Any] = {}
 
         # 1. Environment ID & Name

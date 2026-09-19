@@ -18,7 +18,7 @@ This guide provides exhaustive definitions of every security term, compliance be
    - [SOC 2 Type II Common Criteria (CC6.1–CC6.8)](#soc-2-type-ii-common-criteria)
    - [CIS Foundations Benchmarks (AWS, Azure, Kubernetes)](#cis-foundations-benchmarks)
    - [MITRE ATT&CK Cloud Matrix](#mitre-attck-cloud-matrix)
-3. [Sentinara Posture Scoring Algorithm & Grading](#-audithound-posture-scoring-algorithm--grading)
+3. [Sentinara Posture Scoring Algorithm & Grading](#-sentinara-posture-scoring-algorithm--grading)
 4. [Step-by-Step Operator & User Guide](#-step-by-step-operator--user-guide)
    - [Tutorial 1: Launching & Ingesting Cloud Data (Upload vs Benchmark Scenarios)](#tutorial-1-launching--ingesting-cloud-data)
    - [Tutorial 2: Interpreting the Executive Scorecard & Findings Matrix](#tutorial-2-interpreting-the-executive-scorecard--findings-matrix)
@@ -253,7 +253,7 @@ $$\text{Posture Score} = \max\left(15, \, 100 - (22 \times N_{\text{Critical}}) 
 
 Sentinara includes an automated GitHub Action workflow that acts as a security gate on every pull request.
 
-1. Ensure [`.github/workflows/audithound-sentinel.yml`](file:///.github/workflows/audithound-sentinel.yml) is in your repository.
+1. Ensure [`.github/workflows/sentinara-sentinel.yml`](file:///.github/workflows/sentinara-sentinel.yml) is in your repository.
 2. When developers submit a pull request modifying cloud templates or JSON dumps:
    - Sentinara CLI scans the PR changes automatically.
    - If critical vulnerabilities or privilege escalation paths are detected, the PR build fails.
@@ -265,12 +265,12 @@ Sentinara includes an automated GitHub Action workflow that acts as a security g
 
 #### Standalone CLI Scanner:
 ```bash
-cd audithound
+cd sentinara
 # Run scan on local JSON dump
-python backend/audithound_cli.py --file sample_opensource_cloud_dump.json
+python backend/sentinara_cli.py --file sample_opensource_cloud_dump.json
 
 # Export executive HTML report and Terraform patches
-python backend/audithound_cli.py \
+python backend/sentinara_cli.py \
   --file sample_opensource_cloud_dump.json \
   --report executive_audit.html \
   --tf-output remediations.tf
@@ -278,7 +278,7 @@ python backend/audithound_cli.py \
 
 #### Live AWS Cloud Collector:
 ```bash
-cd audithound
+cd sentinara
 # Extract live AWS IAM and S3 configuration to JSON dump
 python scripts/aws_live_collector.py \
   --profile my-aws-profile \

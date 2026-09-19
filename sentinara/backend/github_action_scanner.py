@@ -38,7 +38,7 @@ def run_ci_scan(file_path: str, fail_severity: str = "CRITICAL", output_comment_
     attack_paths_count = len(graph_data.attack_paths)
 
     print("\n" + "="*70)
-    print(f"🛡️  AUDITHOUND CI/CD SCAN RESULTS: {data.environment_name}")
+    print(f"🛡️  SENTINARA CI/CD SCAN RESULTS: {data.environment_name}")
     print(f"📊 Posture Score : {posture.overall_score}/100 [Grade {posture.letter_grade}]")
     print(f"🚨 Findings      : {len(findings)} Total (CRITICAL: {critical_count}, HIGH: {high_count})")
     print(f"🕸️  Attack Paths  : {attack_paths_count} Exploit Chains")
@@ -60,36 +60,39 @@ def run_ci_scan(file_path: str, fail_severity: str = "CRITICAL", output_comment_
         comment_md += f"- {status_icon} **{fw.framework}**: {fw.score_percentage}% ({fw.status})\n"
 
     if findings:
-        comment_md += "\n### 🚨 Top Identified Security Findings\n"
-        for f in findings[:5]:
+        comment_md += "\n### 🚨 Detected Security Findings\n"
+        for f in findings[:8]:
             comment_md += f"- **[{f.severity}]** `{f.id}`: {f.title}\n  - *Impact*: {f.risk_impact}\n"
 
     if remediations:
         comment_md += f"\n### 🛠️ Automated Remediation\nSentinara generated **{len(remediations)} scoped Terraform (`.tf`) patches** to resolve these violations.\n"
 
-    comment_md += "\n---\n*Generated autonomously by [Sentinara Security Sentinel](https://github.com/uzairphalgroo/cybersecurity-network/tree/main/audithound)*\n"
+    comment_md += "\n---\n*Generated autonomously by [Sentinara Security Sentinel](https://github.com/uzairphalgroo/cybersecurity-network/tree/main/sentinara)*\n"
 
     if output_comment_path:
         with open(output_comment_path, "w", encoding="utf-8") as f:
             f.write(comment_md)
-        print(f"📄 PR Comment markdown written to: {output_comment_path}")
+        print(f"📝 PR comment markdown written to: {output_comment_path}")
 
-    # Determine exit code
-    if fail_severity.upper() == "CRITICAL" and critical_count > 0:
-        print(f"\n❌ BUILD FAILED: {critical_count} CRITICAL security violations found.")
+    # Determine exit code based on threshold
+    severity_rank = {"CRITICAL": 3, "HIGH": 2, "MEDIUM": 1, "NEVER": 999}
+    threshold = severity_rank.get(fail_severity, 3)
+
+    if critical_count > 0 and threshold <= 3:
+        print(f"❌ CI Gate FAILED: Detected {critical_count} CRITICAL findings exceeding threshold '{fail_severity}'.")
         return 1
-    elif fail_severity.upper() == "HIGH" and (critical_count > 0 or high_count > 0):
-        print(f"\n❌ BUILD FAILED: Security violations found above threshold '{fail_severity}'.")
+    if high_count > 0 and threshold <= 2:
+        print(f"❌ CI Gate FAILED: Detected {high_count} HIGH findings exceeding threshold '{fail_severity}'.")
         return 1
 
-    print("\n✅ Security gate passed.")
+    print("✅ CI Gate PASSED: Cloud posture meets security threshold.")
     return 0
 
 def main():
     parser = argparse.ArgumentParser(description="Sentinara CI/CD GitOps Security Sentinel")
     parser.add_argument("--file", required=True, help="Path to JSON cloud configuration dump")
     parser.add_argument("--fail-on", default="CRITICAL", choices=["CRITICAL", "HIGH", "MEDIUM", "NEVER"], help="Severity threshold to trigger non-zero exit")
-    parser.add_argument("--output-comment", default="audithound_pr_comment.md", help="Path to write GitHub PR comment markdown")
+    parser.add_argument("--output-comment", default="sentinara_pr_comment.md", help="Path to write GitHub PR comment markdown")
     args = parser.parse_args()
 
     exit_code = run_ci_scan(args.file, args.fail_on, args.output_comment)

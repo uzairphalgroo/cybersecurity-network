@@ -167,7 +167,7 @@ def collect_live_aws(output_file: str, profile: str = None, region: str = "us-ea
 
     print(f"\n[+] Successfully exported live AWS configuration to '{output_file}'!")
     print(f"[*] You can now audit this snapshot using:")
-    print(f"    python backend/audithound_cli.py {output_file} --report live_aws_report.html")
+    print(f"    python backend/sentinara_cli.py {output_file} --report live_aws_report.html")
 
 
 if __name__ == "__main__":

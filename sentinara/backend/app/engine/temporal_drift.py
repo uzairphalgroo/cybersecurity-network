@@ -1,5 +1,5 @@
 """
-AuditHound Temporal "Time-Travel" Drift Radar Engine
+Sentinara Temporal "Time-Travel" Drift Radar Engine
 Tracks infrastructure state evolution over time, computes permission diffs,
 and attributes security posture regression to specific timestamps and actions.
 """
@@ -24,7 +24,7 @@ class TemporalDriftEngine:
         t0_date = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=30)).strftime("%Y-%m-%d %H:%M UTC")
         t1_date = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=14)).strftime("%Y-%m-%d %H:%M UTC")
         t2_date = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=2)).strftime("%Y-%m-%d %H:%M UTC")
-        t3_date = "Projected (Post-AuditHound Remediation)"
+        t3_date = "Projected (Post-Sentinara Remediation)"
 
         timeline_snapshots = [
             {
@@ -88,7 +88,7 @@ class TemporalDriftEngine:
                 "letter_grade": "A+",
                 "total_findings": 0,
                 "risk_rating": "Hardened",
-                "author": "AuditHound Autonomous Remediation Sentinel",
+                "author": "Sentinara Autonomous Remediation Sentinel",
                 "commit_hash": "remediated-hcl-applied",
                 "summary": "Automated Terraform least-privilege patches applied; wildcard PassRole bounds revoked and security groups micro-segmented.",
                 "changes": [

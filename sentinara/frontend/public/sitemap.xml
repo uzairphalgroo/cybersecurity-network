@@ -59,7 +59,7 @@
 
   <!-- 1-Click Zero-Touch Terraform Auto-Remediation -->
   <url>
-    <loc>https://audithound.io/#zero-touch-remediation</loc>
+    <loc>https://sentinara.io/#zero-touch-remediation</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
@@ -67,7 +67,7 @@
 
   <!-- SOC 2 Type II & CIS Compliance Benchmarks -->
   <url>
-    <loc>https://audithound.io/#compliance-frameworks</loc>
+    <loc>https://sentinara.io/#compliance-frameworks</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
@@ -75,7 +75,7 @@
 
   <!-- Cybersecurity Knowledge Base & Operator Guide -->
   <url>
-    <loc>https://audithound.io/#security-guide</loc>
+    <loc>https://sentinara.io/#security-guide</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>

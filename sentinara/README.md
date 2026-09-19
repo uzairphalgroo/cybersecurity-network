@@ -18,7 +18,7 @@
   <b>Sentinara</b> is an enterprise-grade autonomous cloud security posture management (CSPM) and compliance auditing platform. It continuously inspects multi-cloud infrastructure configurations (AWS, Azure, Kubernetes), models privilege escalation attack graphs, maps violations to SOC2 Common Criteria and CIS Benchmarks, and automatically generates production-ready, least-privilege Terraform (<code>.tf</code>) remediation patches.
 </p>
 
-[📖 Comprehensive Security Glossary & User Guide](docs/SECURITY_CONCEPTS_AND_USER_GUIDE.md) • [Visual Walkthrough](#-end-to-end-audit-walkthrough-input-posture-output--ciso-report) • [Key Features](#-key-features) • [Architecture](#-architecture) • [Live Scenarios](#-mock-environments-catalog) • [Quickstart](#-quickstart-guide) • [Backend API Reference](#-backend-api-reference--endpoints) • [Vercel Deployment](#-cloud--production-deployment) • [CLI Scanner](#-audithound-cli-scanner) • [Security](#-security--hardening)
+[📖 Comprehensive Security Glossary & User Guide](docs/SECURITY_CONCEPTS_AND_USER_GUIDE.md) • [Visual Walkthrough](#-end-to-end-audit-walkthrough-input-posture-output--ciso-report) • [Key Features](#-key-features) • [Architecture](#-architecture) • [Live Scenarios](#-mock-environments-catalog) • [Quickstart](#-quickstart-guide) • [Backend API Reference](#-backend-api-reference--endpoints) • [Vercel Deployment](#-cloud--production-deployment) • [CLI Scanner](#-sentinara-cli-scanner) • [Security](#-security--hardening)
 
 </div>
 
@@ -120,7 +120,7 @@ Sentinara delivers an end-to-end autonomous security pipeline from raw cloud con
 ### 4. Terraform Remediation Engine
 - Generates executable, syntactically validated Terraform HCL patches for every identified violation.
 - Provides side-by-side diff previews with remediation rationale and resource ARNs.
-- Offers instant 1-click batch download of all remediations as a consolidated `.tf` bundle (`audithound_remediation_<env>.tf`).
+- Offers instant 1-click batch download of all remediations as a consolidated `.tf` bundle (`sentinara_remediation_<env>.tf`).
 
 ### 5. Executive & Printable Reporting
 - Generates auditor-ready HTML reports containing compliance radars, framework scores, finding summaries, and executive sign-off fields.
@@ -189,7 +189,7 @@ Sentinara includes 10 pre-loaded cloud scenarios demonstrating real-world cloud 
 
 ### 1. Backend Setup
 ```bash
-cd audithound/backend
+cd sentinara/backend
 python -m venv venv
 
 # Activate virtual environment
@@ -252,7 +252,7 @@ Sentinara is architected with complete client-side graph traversal and determini
 1. Import this repository into [Vercel](https://vercel.com/new).
 2. Configure project settings:
    - **Framework Preset**: `Vite`
-   - **Root Directory**: `audithound/frontend`
+   - **Root Directory**: `sentinara/frontend`
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
 3. Click **Deploy**. Vercel will automatically apply the included `vercel.json` SPA routing rewrite rules.
@@ -260,7 +260,7 @@ Sentinara is architected with complete client-side graph traversal and determini
 
 ### 2. Multi-Container Docker Deployment
 ```bash
-cd audithound
+cd sentinara
 docker compose up --build
 ```
 - **Frontend Dashboard**: `http://localhost:3000`
@@ -271,15 +271,15 @@ docker compose up --build
 
 ## 🖥️ Sentinara CLI Scanner
 
-Sentinara includes a standalone command-line scanner (`audithound_cli.py`) for automated CI/CD security pipelines.
+Sentinara includes a standalone command-line scanner (`sentinara_cli.py`) for automated CI/CD security pipelines.
 
 ```bash
-cd audithound
+cd sentinara
 # Scan a custom cloud configuration dump and output a summary table
-python backend/audithound_cli.py --file sample_opensource_cloud_dump.json
+python backend/sentinara_cli.py --file sample_opensource_cloud_dump.json
 
 # Scan and export executive HTML report + Terraform patches
-python backend/audithound_cli.py \
+python backend/sentinara_cli.py \
   --file sample_opensource_cloud_dump.json \
   --report executive_audit.html \
   --tf-output remediations.tf
@@ -292,7 +292,7 @@ python backend/audithound_cli.py \
 To extract live configurations from an actual AWS account and generate an Sentinara JSON file:
 
 ```bash
-cd audithound
+cd sentinara
 # Requires boto3 and configured AWS credentials (AWS_PROFILE or environment keys)
 python scripts/aws_live_collector.py \
   --profile my-aws-profile \
@@ -316,7 +316,7 @@ Sentinara is built with security-first engineering practices:
 ## 🧪 Automated Testing
 
 ```bash
-cd audithound/backend
+cd sentinara/backend
 pytest tests -v
 ```
 

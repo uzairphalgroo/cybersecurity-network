@@ -16,7 +16,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s - %(message)s"
 )
-logger = logging.getLogger("audithound")
+logger = logging.getLogger("sentinara")
 
 app = FastAPI(
     title=API_TITLE,

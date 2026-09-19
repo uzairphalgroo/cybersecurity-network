@@ -109,44 +109,51 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="space-y-1.5">
-                  <h5 className="font-bold text-white font-orbitron text-xs">1. Acceptance of Terms</h5>
-                  <p>
-                    By accessing or using Sentinara, including our cloud dashboard, command-line interface (<code className="text-cyan-300 font-mono">sentinara_cli</code>), API endpoints, and GitHub Action security gates, you agree to be bound by these Terms of Service.
+                <div className="p-3.5 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-cyan-200 text-xs flex items-start gap-2.5">
+                  <span className="font-mono font-bold text-cyan-400 bg-cyan-500/20 px-1.5 py-0.5 rounded text-[10px] shrink-0 uppercase">Open Source</span>
+                  <p className="leading-snug text-zinc-300">
+                    <strong className="text-white">Independent Open Source Notice:</strong> Sentinara is an independent open-source cybersecurity project and is not affiliated with, sponsored by, or part of any commercial company having a similar or identical name.
                   </p>
                 </div>
 
-                <div className="space-y-1.5">
-                  <h5 className="font-bold text-white font-orbitron text-xs">2. Scope of Service &amp; Zero-Storage Architecture</h5>
-                  <p>
-                    Sentinara provides automated CSPM evaluation, multi-hop mathematical attack graph generation, AI purple-teaming adversarial simulation, and 1-click Terraform least-privilege patch generation. Static graph evaluation executes in-memory with zero persistent retention of customer payload data.
-                  </p>
-                </div>
+                <div className="space-y-4">
+                  <div className="space-y-1.5">
+                    <h5 className="font-bold text-white font-orbitron text-xs">1. Acceptance of Terms</h5>
+                    <p>
+                      By accessing or using Sentinara, including our cloud dashboard, command-line interface (<code className="text-cyan-300 font-mono">sentinara_cli</code>), API endpoints, and GitHub Action security gates, you agree to be bound by these Terms of Service.
+                    </p>
+                  </div>
 
-                <div className="space-y-1.5">
-                  <h5 className="font-bold text-white font-orbitron text-xs">3. Synthetic Dry-Run &amp; Cryptographic Rollback</h5>
-                  <p>
-                    All automated remediation patches provide synthetic dry-run verification and generate cryptographically signed rollback tokens (<code className="text-emerald-300 font-mono">rbk-xxxx</code>) ensuring operational safety and immediate reversion capabilities.
-                  </p>
-                </div>
+                  <div className="space-y-1.5">
+                    <h5 className="font-bold text-white font-orbitron text-xs">2. Scope of Service &amp; Zero-Storage Architecture</h5>
+                    <p>
+                      Sentinara provides automated CSPM evaluation, multi-hop mathematical attack graph generation, AI purple-teaming adversarial simulation, and 1-click Terraform least-privilege patch generation. Static graph evaluation executes in-memory with zero persistent retention of customer payload data.
+                    </p>
+                  </div>
 
-                <div className="space-y-1.5">
-                  <h5 className="font-bold text-white font-orbitron text-xs">4. Prohibited Uses</h5>
-                  <p>
-                    You agree NOT to use Sentinara to probe or scan cloud environments without explicit written authorization, or attempt to extract proprietary engine algorithms.
-                  </p>
-                </div>
+                  <div className="space-y-1.5">
+                    <h5 className="font-bold text-white font-orbitron text-xs">3. Synthetic Dry-Run &amp; Cryptographic Rollback</h5>
+                    <p>
+                      All automated remediation patches provide synthetic dry-run verification and generate cryptographically signed rollback tokens (<code className="text-emerald-300 font-mono">rbk-xxxx</code>) ensuring operational safety and immediate reversion capabilities.
+                    </p>
+                  </div>
 
-                <div className="space-y-1.5">
-                  <h5 className="font-bold text-white font-orbitron text-xs">5. Limitation of Liability</h5>
-                  <p>
-                    Sentinara is provided on an "AS IS" basis. While our deterministic algorithms rigorously identify known compliance violations (SOC 2, CIS, MITRE ATT&amp;CK), cybersecurity requires defense-in-depth across all organizational layers.
-                  </p>
+                  <div className="space-y-1.5">
+                    <h5 className="font-bold text-white font-orbitron text-xs">4. Prohibited Uses</h5>
+                    <p>
+                      You agree NOT to use Sentinara to probe or scan cloud environments without explicit written authorization, or attempt to extract proprietary engine algorithms.
+                    </p>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <h5 className="font-bold text-white font-orbitron text-xs">5. Limitation of Liability</h5>
+                    <p>
+                      Sentinara is provided on an "AS IS" basis. While our deterministic algorithms rigorously identify known compliance violations (SOC 2, CIS, MITRE ATT&amp;CK), cybersecurity requires defense-in-depth across all organizational layers.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* TAB 2: PRIVACY POLICY */}
           {activeTab === 'privacy' && (

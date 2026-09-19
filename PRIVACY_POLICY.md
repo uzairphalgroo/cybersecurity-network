@@ -2,7 +2,10 @@
 
 **Effective Date: September 20, 2026**
 
-At **Sentinara**, we respect and protect the privacy of our users, developers, and enterprise security teams. This Privacy Policy details our data collection, processing, and zero-retention security practices in full alignment with GDPR, CCPA, and SOC 2 Type II privacy guidelines.
+At **Sentinara**, we respect and protect the privacy of our open-source users, developers, and security research teams. This Privacy Policy details our data collection, processing, and zero-retention security practices in full alignment with GDPR, CCPA, and SOC 2 Type II privacy principles.
+
+> [!NOTE]
+> **Open Source Project Notice**: Sentinara is an independent open-source security project and is not part of or affiliated with any commercial corporation or entity operating under a similar or identical name.
 
 ---
 

@@ -1,6 +1,6 @@
 # 🛡️ Sentinara Security & Vulnerability Disclosure Policy
 
-At **Sentinara**, security is our core foundation. We are committed to conducting rigorous security research and maintaining transparency across our autonomous cloud security engine.
+At **Sentinara**, security is our core foundation. Sentinara is an independent **open-source security engineering project** (not affiliated with or part of any commercial company possessing a similar name). We are committed to conducting rigorous security research and maintaining transparency across our autonomous cloud security engine.
 
 ---
 

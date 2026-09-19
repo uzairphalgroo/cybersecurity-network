@@ -2,9 +2,10 @@
 
 **Last Updated: September 20, 2026**
 
-Welcome to **Sentinara** ("Platform", "Service", "we", "us", or "our"), the Autonomous Multi-Cloud Security Posture Management (CSPM), Attack Graph Engine, and Zero-Touch Auto-Remediation Platform.
+Welcome to **Sentinara** ("Platform", "Service", "Project", "we", "us", or "our"), the Autonomous Multi-Cloud Security Posture Management (CSPM), Attack Graph Engine, and Zero-Touch Auto-Remediation Platform.
 
-By accessing or using Sentinara, including our cloud dashboard, command-line interface (`sentinara_cli`), API endpoints, and GitHub Action security gates, you agree to be bound by these Terms of Service.
+> [!IMPORTANT]
+> **Open Source Project & Independent Entity Notice**: Sentinara is an independent, community-driven **open-source project** developed and distributed for cloud security research, educational exploration, and autonomous posture management. **Sentinara is not affiliated with, associated with, sponsored by, endorsed by, or part of any commercial company, enterprise, or entity bearing a similar or identical name.** All external product names, logos, benchmarks, and trademarks referenced across this platform are the property of their respective owners.
 
 ---
 

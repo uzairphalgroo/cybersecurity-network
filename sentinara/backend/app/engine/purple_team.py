@@ -45,13 +45,13 @@ class PurpleTeamSimulator:
             )
         return G
 
-    def simulate_compromise(self, entry_node_id: Optional[str] = None) -> Dict[str, Any]:
+    def simulate_compromise(self, entry_node_id: Optional[str] = None, objective_type: str = "exfiltrate_customer_pii") -> Dict[str, Any]:
         """
         Simulates adversary breach starting from a specific node or the highest risk entry point.
-        Calculates blast radius, reachable crown jewels, and breach likelihood.
+        Calculates blast radius, reachable crown jewels, and breach likelihood tailored to objective.
         """
         if not self.G.nodes:
-            return self._generate_fallback_simulation(entry_node_id)
+            return self._generate_fallback_simulation(entry_node_id, objective_type)
 
         # Determine Entry Point
         if not entry_node_id or entry_node_id not in self.G:
@@ -73,36 +73,188 @@ class PurpleTeamSimulator:
         overall_score = float(self.posture.get("overall_score", 50.0))
         breach_probability = round(max(5.0, min(99.0, (100.0 - overall_score) * 1.15 + (len(target_nodes) * 12.0))), 1)
 
-        # Compute Shortest Path to High-Value Target
-        attack_chains = []
-        for target in target_nodes[:3]:
-            try:
-                path = nx.shortest_path(self.G, source=entry_node_id, target=target)
-                hop_descriptions = []
-                for i in range(len(path) - 1):
-                    src_label = self.G.nodes[path[i]].get("label", path[i])
-                    dst_label = self.G.nodes[path[i+1]].get("label", path[i+1])
-                    edge_data = self.G.get_edge_data(path[i], path[i+1], {})
-                    hop_descriptions.append(f"Adversary traverses via '{edge_data.get('label', 'Exploitation')}' from [{src_label}] to [{dst_label}]")
+        # Extract actual node labels
+        entry_label = self.G.nodes[entry_node_id].get("label", entry_node_id)
+        first_hop = reachable_nodes[0] if reachable_nodes else entry_node_id
+        first_hop_label = self.G.nodes[first_hop].get("label", first_hop)
+        target_label = self.G.nodes[target_nodes[0]].get("label", target_nodes[0]) if target_nodes else "Cloud Crown-Jewel Asset"
 
-                attack_chains.append({
-                    "target_id": target,
-                    "target_name": self.G.nodes[target].get("label", target),
-                    "hop_count": len(path) - 1,
-                    "path_nodes": path,
-                    "tactical_steps": hop_descriptions,
-                    "mitre_technique": "T1078.004 (Valid Accounts: Cloud) & T1068 (Privilege Escalation)",
-                    "estimated_time_to_compromise": f"{max(1, (len(path) - 1) * 4)} minutes"
-                })
-            except (nx.NetworkXNoPath, nx.NodeNotFound):
-                continue
+        # Objective-specific adversary profiles and kill-chains
+        profiles = {
+            "exfiltrate_customer_pii": {
+                "name": "APT-29 (Midnight Blizzard / Cozy Bear)",
+                "origin": "Nation-State Cyber Syndicate",
+                "primary_technique": "MITRE ATT&CK T1078, T1068, T1530",
+                "motivation": "Lateral cloud traversal, credentials theft, and unencrypted customer data lake exfiltration",
+                "phases": [
+                    {
+                        "step": 1,
+                        "phase": "Initial Access & Boundary Recon",
+                        "mitre_technique": "T1190: Exploit Public-Facing Application",
+                        "source_node": entry_label,
+                        "target_node": first_hop_label,
+                        "action_taken": f"Scans public ingress perimeter on {entry_label} for exposed ports and permissive ACL boundaries.",
+                        "status": "SUCCESSFUL_BREACH" if breach_probability > 40 else "CONTAINED_BY_WAF",
+                        "exploitability_score": "9.8 / 10" if breach_probability > 40 else "2.1 / 10"
+                    },
+                    {
+                        "step": 2,
+                        "phase": "Privilege Escalation & Identity Pivoting",
+                        "mitre_technique": "T1068: Exploitation for Privilege Escalation",
+                        "source_node": first_hop_label,
+                        "target_node": "Overprivileged IAM Role / Service Principal",
+                        "action_taken": "Harvests temporary STS token and discovers unconstrained iam:PassRole or wildcard action permissions.",
+                        "status": "PRIVILEGE_ELEVATED" if breach_probability > 40 else "BLOCKED_BY_SCP",
+                        "exploitability_score": "9.2 / 10" if breach_probability > 40 else "1.5 / 10"
+                    },
+                    {
+                        "step": 3,
+                        "phase": "Data Exfiltration & Objective Impact",
+                        "mitre_technique": "T1530: Data from Cloud Storage Object",
+                        "source_node": "Elevated Administrative Session",
+                        "target_node": target_label,
+                        "action_taken": f"Executes unauthenticated bulk GetObject / SQL query stream against {target_label} to siphon sensitive records.",
+                        "status": "OBJECTIVE_ACHIEVED" if breach_probability > 40 else "ACCESS_DENIED",
+                        "exploitability_score": "10.0 / 10" if breach_probability > 40 else "0.0 / 10"
+                    }
+                ],
+                "cut_point_target": f"IAM Boundary on {first_hop_label} & S3 Block Public Access",
+                "cut_point_action": "Revoke wildcard Action '*' and restrict security group ingress CIDR to private corporate subnets.",
+                "cut_point_reduction": "Reduces adversary breach probability by 100%"
+            },
+            "ransomware_encryption": {
+                "name": "LockBit 3.0 / BlackCat Cloud Ransomware Group",
+                "origin": "Organized Cyber Extortion Syndicate",
+                "primary_technique": "MITRE ATT&CK T1486, T1485, T1078.004",
+                "motivation": "Automated cloud asset encryption, volume snapshot deletion, and multi-million dollar extortion",
+                "phases": [
+                    {
+                        "step": 1,
+                        "phase": "Initial Perimeter Penetration",
+                        "mitre_technique": "T1078: Valid Accounts (Cloud Credentials)",
+                        "source_node": entry_label,
+                        "target_node": first_hop_label,
+                        "action_taken": f"Compromises credentials and establishes persistent beachhead on {first_hop_label}.",
+                        "status": "BEACHHEAD_ESTABLISHED",
+                        "exploitability_score": "9.5 / 10"
+                    },
+                    {
+                        "step": 2,
+                        "phase": "KMS Key Tampering & Backup Destruction",
+                        "mitre_technique": "T1485: Data Destruction & Backup Erasure",
+                        "source_node": first_hop_label,
+                        "target_node": "Cloud KMS Keyring & Volume Snapshots",
+                        "action_taken": "Issues KMS DisableKey / DeleteAlias API calls to permanently invalidate enterprise disaster recovery replicas.",
+                        "status": "BACKUPS_NEUTRALIZED",
+                        "exploitability_score": "9.4 / 10"
+                    },
+                    {
+                        "step": 3,
+                        "phase": "Mass Cryptographic Lockout",
+                        "mitre_technique": "T1486: Data Encrypted for Impact",
+                        "source_node": "Ransomware Execution Daemon",
+                        "target_node": target_label,
+                        "action_taken": f"Encrypts production EBS volumes and datastores on {target_label} with AES-256 attacker-controlled key.",
+                        "status": "INFRASTRUCTURE_LOCKED",
+                        "exploitability_score": "9.9 / 10"
+                    }
+                ],
+                "cut_point_target": "KMS Key Policy Scoping & IAM DeleteSnapshot Prevention",
+                "cut_point_action": "Enable AWS Backup Vault Lock with Compliance Mode and deny kms:ScheduleKeyDeletion on production roles.",
+                "cut_point_reduction": "Prevents catastrophic volume encryption and immutable backup deletion."
+            },
+            "k8s_control_plane_takeover": {
+                "name": "TeamTNT / Siloscape K8s Threat Group",
+                "origin": "Advanced Container Exploitation Group",
+                "primary_technique": "MITRE ATT&CK T1610, T1611, T1078.004",
+                "motivation": "Kubernetes cluster-admin takeover, cryptomining daemonset deployment, and node hopping",
+                "phases": [
+                    {
+                        "step": 1,
+                        "phase": "Container Ingress Vector",
+                        "mitre_technique": "T1610: Deploy Container with Insecure Capabilities",
+                        "source_node": entry_label,
+                        "target_node": first_hop_label,
+                        "action_taken": f"Exploits unauthenticated K8s API server or exposed NodePort service on {first_hop_label}.",
+                        "status": "CONTAINER_BREACHED",
+                        "exploitability_score": "9.1 / 10"
+                    },
+                    {
+                        "step": 2,
+                        "phase": "Container Breakout & Host Escape",
+                        "mitre_technique": "T1611: Escape to Host via HostPath Mount",
+                        "source_node": first_hop_label,
+                        "target_node": "Underlying Node Kernel & Default Service Account",
+                        "action_taken": "Extracts `/var/run/secrets/kubernetes.io/serviceaccount/token` to authenticate to K8s Control Plane.",
+                        "status": "POD_ESCAPED",
+                        "exploitability_score": "9.6 / 10"
+                    },
+                    {
+                        "step": 3,
+                        "phase": "Cluster-Admin RBAC Elevation",
+                        "mitre_technique": "T1078.004: Cloud Accounts: Cluster Admin",
+                        "source_node": "Host Node Root Shell",
+                        "target_node": target_label,
+                        "action_taken": f"Creates rogue ClusterRoleBinding bound to cluster-admin and launches cryptomining pods across all worker nodes in {target_label}.",
+                        "status": "CLUSTER_COMPROMISED",
+                        "exploitability_score": "9.8 / 10"
+                    }
+                ],
+                "cut_point_target": "Default ServiceAccount AutoMountTokens & Pod Security Standards",
+                "cut_point_action": "Set `automountServiceAccountToken: false` and enforce Kubernetes Restricted Pod Security Standards.",
+                "cut_point_reduction": "Completely isolates pod runtime escapes from reaching the K8s API server."
+            },
+            "cloud_root_takeover": {
+                "name": "Scattered Spider (UNC3944 / Muddled Libra)",
+                "origin": "Social Engineering & Identity Sprawl Syndicate",
+                "primary_technique": "MITRE ATT&CK T1078, T1098, T1548",
+                "motivation": "IAM credential harvesting, organization root account takeover, and full multi-cloud control",
+                "phases": [
+                    {
+                        "step": 1,
+                        "phase": "Credential Compromise via MFA Bypass",
+                        "mitre_technique": "T1078: Valid Accounts (MFA Fatigue)",
+                        "source_node": entry_label,
+                        "target_node": first_hop_label,
+                        "action_taken": f"Acquires stale developer access key on {first_hop_label} lacking hardware-bound FIDO2 MFA.",
+                        "status": "SESSION_HIJACKED",
+                        "exploitability_score": "9.7 / 10"
+                    },
+                    {
+                        "step": 2,
+                        "phase": "IAM Policy Modification & Account Manipulation",
+                        "mitre_technique": "T1098: Account Manipulation (iam:CreateAccessKey)",
+                        "source_node": first_hop_label,
+                        "target_node": "Administrative IAM Role & Group Policies",
+                        "action_taken": "Exploits iam:AttachRolePolicy to attach AdministratorAccess policy to adversary principal.",
+                        "status": "IAM_PRIVILEGE_ESCALATED",
+                        "exploitability_score": "9.9 / 10"
+                    },
+                    {
+                        "step": 3,
+                        "phase": "Organization Management Root Control",
+                        "mitre_technique": "T1548: Abuse Elevation Control Mechanism",
+                        "source_node": "Administrator IAM Session",
+                        "target_node": target_label,
+                        "action_taken": f"Assumes OrganizationAccountAccessRole on root master account {target_label}, modifying SCPs and disabling CloudTrail audit logging.",
+                        "status": "ROOT_TAKEOVER_COMPLETE",
+                        "exploitability_score": "10.0 / 10"
+                    }
+                ],
+                "cut_point_target": "IAM Permission Boundaries & AWS Service Control Policies (SCPs)",
+                "cut_point_action": "Implement strict IAM Permission Boundaries bar-coding iam:* actions and enforce root MFA locks.",
+                "cut_point_reduction": "Severs privilege escalation path to Organization Root Account."
+            }
+        }
+
+        selected_profile = profiles.get(objective_type, profiles["exfiltrate_customer_pii"])
 
         return {
             "adversary_profile": {
-                "name": "APT-29 (Midnight Blizzard / Cozy Bear)",
-                "origin": "Nation-State Threat Group",
-                "primary_technique": "MITRE ATT&CK T1078, T1068, T1190",
-                "motivation": "Lateral traversal, credentials theft, and sensitive cloud data lake exfiltration"
+                "name": selected_profile["name"],
+                "origin": selected_profile["origin"],
+                "primary_technique": selected_profile["primary_technique"],
+                "motivation": selected_profile["motivation"]
             },
             "blast_radius_summary": {
                 "total_cloud_nodes": total_assets,
@@ -112,43 +264,12 @@ class PurpleTeamSimulator:
                 "simulated_hops_to_root": 3 if target_nodes else 1,
                 "containment_rating": "CRITICAL_EXPOSURE" if breach_probability > 70 else "VULNERABLE_CHAIN" if breach_probability > 40 else "HARDENED"
             },
-            "adversary_attack_chain": [
-                {
-                    "step": 1,
-                    "phase": "Initial Access",
-                    "mitre_technique": "T1190: Exploit Public-Facing Application",
-                    "source_node": entry_node_id,
-                    "target_node": "Public Ingress / Cloud Boundary",
-                    "action_taken": "Scans exposed endpoints for unauthenticated access vectors and permissive ACLs.",
-                    "status": "SUCCESSFUL_BREACH",
-                    "exploitability_score": "9.8 / 10"
-                },
-                {
-                    "step": 2,
-                    "phase": "Privilege Escalation",
-                    "mitre_technique": "T1068: Exploitation for Privilege Escalation",
-                    "source_node": "Compromised Asset Beachhead",
-                    "target_node": "IAM Role with PassRole & Wildcard Policy",
-                    "action_taken": "Leverages unconstrained IAM policies to elevate runtime credentials.",
-                    "status": "PRIVILEGE_ELEVATED",
-                    "exploitability_score": "9.2 / 10"
-                },
-                {
-                    "step": 3,
-                    "phase": "Impact & Objective Completion",
-                    "mitre_technique": "T1530: Data from Cloud Storage Object",
-                    "source_node": "Elevated Admin Session",
-                    "target_node": "Production Customer PII Data Lake",
-                    "action_taken": "Extracts customer records and database backups.",
-                    "status": "OBJECTIVE_ACHIEVED",
-                    "exploitability_score": "10.0 / 10"
-                }
-            ],
+            "adversary_attack_chain": selected_profile["phases"],
             "critical_cut_points": [
                 {
-                    "target_resource": "IAM Policy Wildcard Bounds & Ingress Security Groups",
-                    "action": "Revoke wildcard Action '*' and restrict security group ingress CIDR to private corporate subnets.",
-                    "blast_reduction": "Reduces adversary breach probability to 0%"
+                    "target_resource": selected_profile["cut_point_target"],
+                    "action": selected_profile["cut_point_action"],
+                    "blast_reduction": selected_profile["cut_point_reduction"]
                 }
             ]
         }
@@ -172,9 +293,9 @@ class PurpleTeamSimulator:
         }
 
         simulator = cls(audit_dict)
-        return simulator.simulate_compromise(start_node_id)
+        return simulator.simulate_compromise(start_node_id, objective_type or "exfiltrate_customer_pii")
 
-    def _generate_fallback_simulation(self, entry_node_id: Optional[str]) -> Dict[str, Any]:
+    def _generate_fallback_simulation(self, entry_node_id: Optional[str], objective_type: str = "exfiltrate_customer_pii") -> Dict[str, Any]:
         return {
             "adversary_profile": {
                 "name": "APT-29 (Midnight Blizzard)",
@@ -198,7 +319,8 @@ class PurpleTeamSimulator:
                     "source_node": entry_node_id or "0.0.0.0/0",
                     "target_node": "Cloud Ingress",
                     "action_taken": "Scans exposed endpoint.",
-                    "status": "BREACHED"
+                    "status": "BREACHED",
+                    "exploitability_score": "9.5 / 10"
                 }
             ],
             "critical_cut_points": [

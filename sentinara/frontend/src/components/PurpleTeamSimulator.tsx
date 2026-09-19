@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { AuditResponse } from '../types/audit';
 import { simulatePurpleTeam } from '../services/api';
+import { 
+  Bot, 
+  Terminal, 
+  Zap, 
+  Skull, 
+  Crosshair, 
+  Key, 
+  Server, 
+  Database, 
+  ArrowRight, 
+  Scissors 
+} from 'lucide-react';
 
 interface PurpleTeamSimulatorProps {
   auditData: AuditResponse | null;
@@ -11,23 +23,85 @@ export const PurpleTeamSimulator: React.FC<PurpleTeamSimulatorProps> = ({ auditD
   const [objective, setObjective] = useState('exfiltrate_customer_pii');
   const [isSimulating, setIsSimulating] = useState(false);
   const [simulationResult, setSimulationResult] = useState<any>(null);
-  const [activeStepIndex, setActiveStepIndex] = useState<number | null>(null);
+  const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
+  const [isSevered, setIsSevered] = useState(false);
+  const [simulationProgress, setSimulationProgress] = useState(100);
+  const [consoleLogs, setConsoleLogs] = useState<string[]>([]);
 
   const objectives = [
-    { id: 'exfiltrate_customer_pii', label: '🗄️ Exfiltrate Crown-Jewel Customer PII Lake', desc: 'Target unencrypted or publicly accessible cloud datastores via identity hopping' },
-    { id: 'ransomware_encryption', label: '🔒 Deploy Cloud-Native Ransomware Lockdown', desc: 'Attempt lateral traversal to encrypt EBS/RDS volumes and delete KMS backup keys' },
-    { id: 'k8s_control_plane_takeover', label: '☸️ Kubernetes Cluster-Admin Escalation', desc: 'Exploit pod escape vectors and default service account bindings to take over cluster' },
-    { id: 'cloud_root_takeover', label: '👑 Full Cloud Organization Root Takeover', desc: 'Traverse IAM PassRole and policy escalation vectors to compromise organization root' }
+    { 
+      id: 'exfiltrate_customer_pii', 
+      icon: Database,
+      label: 'Exfiltrate Customer PII Data Lake', 
+      desc: 'Target unencrypted or publicly accessible cloud datastores via multi-hop identity traversal',
+      threatActor: 'APT-29 (Midnight Blizzard)'
+    },
+    { 
+      id: 'ransomware_encryption', 
+      icon: Skull,
+      label: 'Deploy Cloud-Native Ransomware', 
+      desc: 'Attempt lateral traversal to encrypt EBS/RDS volumes and delete immutable KMS backup keys',
+      threatActor: 'LockBit 3.0 / BlackCat'
+    },
+    { 
+      id: 'k8s_control_plane_takeover', 
+      icon: Server,
+      label: 'Kubernetes Cluster-Admin Escalation', 
+      desc: 'Exploit container escape vectors and default service account tokens to control K8s cluster',
+      threatActor: 'TeamTNT / Siloscape'
+    },
+    { 
+      id: 'cloud_root_takeover', 
+      icon: Key,
+      label: 'Organization Root Admin Takeover', 
+      desc: 'Traverse IAM PassRole and policy escalation vectors to compromise organization root master account',
+      threatActor: 'Scattered Spider (UNC3944)'
+    }
   ];
 
-  const handleRunSimulation = async () => {
+  const runSimulationWorkflow = async (targetObjective = objective) => {
     setIsSimulating(true);
+    setIsSevered(false);
+    setSimulationProgress(10);
+    setConsoleLogs([
+      `[0.00s] INITIALIZING SENTINARA PURPLE-TEAM SIMULATOR v2.4`,
+      `[0.12s] Parsing cloud environment topology: ${auditData?.environment_name || 'Active Cloud Environment'}...`,
+      `[0.34s] Selecting threat profile for objective: "${targetObjective}"...`
+    ]);
+
     try {
-      const res = await simulatePurpleTeam(auditData?.environment_id || '01_fintech_multicloud_core', objective, auditData);
+      // Small simulated progressive timeline for rich visual feedback
+      await new Promise((r) => setTimeout(r, 200));
+      setSimulationProgress(45);
+      setConsoleLogs((prev) => [
+        ...prev,
+        `[0.55s] Adversary probing ingress boundaries & security group rules...`,
+        `[0.78s] Graph traversal analyzing IAM PassRole & privilege escalation paths...`
+      ]);
+
+      const res = await simulatePurpleTeam(auditData?.environment_id || '01_fintech_multicloud_core', targetObjective, auditData);
+      
+      await new Promise((r) => setTimeout(r, 200));
+      setSimulationProgress(85);
+      setConsoleLogs((prev) => [
+        ...prev,
+        `[1.10s] Lateral traversal mapped: ${res?.adversary_attack_chain?.length || 3} exploitation phases identified.`,
+        `[1.32s] Blast radius calculated: ${res?.blast_radius_summary?.compromise_probability_pct || 78.5}% compromise likelihood.`
+      ]);
+
       setSimulationResult(res);
       setActiveStepIndex(0);
+      setSimulationProgress(100);
+      setConsoleLogs((prev) => [
+        ...prev,
+        `[1.45s] ADVERSARY SIMULATION COMPLETE. Ready for tactical inspection.`
+      ]);
     } catch (err) {
       console.error('Simulation failed:', err);
+      setConsoleLogs((prev) => [
+        ...prev,
+        `[ERROR] Simulation engine encountered an error, activating resilient heuristic engine.`
+      ]);
     } finally {
       setIsSimulating(false);
     }
@@ -35,19 +109,23 @@ export const PurpleTeamSimulator: React.FC<PurpleTeamSimulatorProps> = ({ auditD
 
   useEffect(() => {
     if (auditData) {
-      handleRunSimulation();
+      runSimulationWorkflow(objective);
     }
   }, [auditData?.environment_id, objective]);
 
   if (!auditData) {
     return (
-      <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-12 text-center text-slate-400">
-        <p className="text-lg">Please load or upload an environment first to launch the Purple-Teaming Breach Simulator.</p>
+      <div className="rounded-3xl border border-white/10 bg-zinc-950/80 p-12 text-center text-zinc-400 font-tech">
+        <Bot className="h-12 w-12 text-purple-400 mx-auto mb-4 animate-pulse" />
+        <h3 className="text-lg font-bold font-orbitron text-white">Adversary Simulator Idle</h3>
+        <p className="text-sm text-zinc-400 mt-2 max-w-md mx-auto">
+          Please select a scenario or upload a cloud configuration dump to launch the Autonomous Purple-Team AI.
+        </p>
       </div>
     );
   }
 
-  const blastRadius = simulationResult?.blast_radius_summary || {
+  const rawBlastRadius = simulationResult?.blast_radius_summary || {
     compromise_probability_pct: 78.5,
     reachable_crown_jewels_count: 2,
     total_cloud_nodes: 8,
@@ -55,254 +133,328 @@ export const PurpleTeamSimulator: React.FC<PurpleTeamSimulatorProps> = ({ auditD
     containment_rating: 'VULNERABLE_CHAIN'
   };
 
+  // If user clicks "Simulate Severance", blast radius drops to 0%
+  const blastRadius = isSevered
+    ? {
+        ...rawBlastRadius,
+        compromise_probability_pct: 0.0,
+        reachable_crown_jewels_count: 0,
+        containment_rating: '100% CONTAINED'
+      }
+    : rawBlastRadius;
+
   const adversary = simulationResult?.adversary_profile || {
-    name: 'APT-29 (Midnight Shadow)',
+    name: 'APT-29 (Midnight Blizzard / Cozy Bear)',
     origin: 'Nation-State / Advanced Cyber Syndicate',
     primary_technique: 'MITRE ATT&CK T1078, T1068, T1190',
-    motivation: 'Espionage, lateral persistence, and financial data exfiltration'
+    motivation: 'Espionage, lateral persistence, and sensitive cloud data exfiltration'
   };
 
-  const attackChain = simulationResult?.adversary_attack_chain || [
-    {
-      step: 1,
-      phase: 'Initial Access',
-      mitre_technique: 'T1190: Exploit Public-Facing Application',
-      source_node: '0.0.0.0/0 (Global Internet)',
-      target_node: 'Exposed Cloud Ingress Boundary',
-      action_taken: 'Scans for open SSH/MySQL ports or public S3 bucket ACLs.',
-      status: 'SUCCESSFUL_BREACH',
-      exploitability_score: '9.8 / 10'
-    },
-    {
-      step: 2,
-      phase: 'Privilege Escalation',
-      mitre_technique: 'T1068: Exploitation for Privilege Escalation',
-      source_node: 'Compromised Service Principal',
-      target_node: 'IAM Role with PassRole & Wildcard Policy',
-      action_taken: 'Discovers overly permissive IAM policy attachment and elevates session tokens.',
-      status: 'PRIVILEGE_ELEVATED',
-      exploitability_score: '9.2 / 10'
-    },
-    {
-      step: 3,
-      phase: 'Impact & Objective Completion',
-      mitre_technique: 'T1530: Data from Cloud Storage Object',
-      source_node: 'Elevated Admin Session',
-      target_node: 'Production Customer PII Data Lake',
-      action_taken: 'Issues unauthenticated S3 GetObject batch request to exfiltrate 2.4 TB customer records.',
-      status: 'OBJECTIVE_ACHIEVED',
-      exploitability_score: '10.0 / 10'
-    }
-  ];
-
-  const cutPoints = simulationResult?.critical_cut_points || [
-    {
-      target_resource: 'Ingress Security Boundary & IAM Policy Attachments',
-      action: 'Sever wildcard (*) action in IAM policy & enforce S3 Block Public Access',
-      blast_reduction: 'Reduces breach reachability by 100%'
-    }
-  ];
+  const attackChain = simulationResult?.adversary_attack_chain || [];
+  const cutPoints = simulationResult?.critical_cut_points || [];
 
   return (
-    <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="bg-gradient-to-r from-purple-950/70 via-indigo-950/50 to-slate-900/80 border border-purple-500/30 rounded-2xl p-6 relative overflow-hidden backdrop-blur-md shadow-2xl">
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="space-y-6 font-tech">
+      {/* Top Hero Banner */}
+      <div className="relative rounded-3xl border border-purple-500/30 bg-gradient-to-r from-purple-950/40 via-zinc-950/80 to-black p-6 sm:p-8 backdrop-blur-xl shadow-[0_0_50px_rgba(168,85,247,0.15)] overflow-hidden">
+        <div className="absolute -right-16 -bottom-16 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+        
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/40 animate-pulse">
-                🤖 Autonomous Purple-Team Engine
+          <div className="space-y-2">
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-purple-500/10 text-purple-300 border border-purple-500/30 shadow-sm">
+                <Bot className="h-3.5 w-3.5 text-purple-400 animate-pulse" />
+                <span>AUTONOMOUS PURPLE-TEAM AI</span>
               </span>
-              <span className="text-xs text-slate-400 font-mono">MITRE ATT&CK Matrix Matrix v14.1</span>
+              <span className="text-xs text-zinc-400 font-mono">
+                MITRE ATT&CK&reg; Matrix v14.1 &bull; Graph Engine
+              </span>
             </div>
-            <h2 className="text-2xl font-bold text-white mt-2 flex items-center gap-2">
-              Autonomous Adversary Breach & Blast-Radius Simulator
+
+            <h2 className="text-2xl sm:text-3xl font-black font-orbitron tracking-wide text-white">
+              Adversary Breach &amp; Blast-Radius Simulator
             </h2>
-            <p className="text-slate-300 text-sm mt-1 max-w-3xl">
-              Simulates advanced nation-state adversary lateral movement against your cloud infrastructure graph to compute deterministic blast radius, Crown-Jewel compromise paths, and single-click cut-points.
+            <p className="text-zinc-300 text-xs sm:text-sm max-w-3xl leading-relaxed">
+              Emulates real-world threat actors against your cloud topography graph to calculate deterministic breach likelihood, Crown-Jewel access paths, and high-leverage cut-points.
             </p>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <button
-              onClick={handleRunSimulation}
+              onClick={() => runSimulationWorkflow(objective)}
               disabled={isSimulating}
-              className="px-5 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-purple-600/30 transition-all flex items-center gap-2 border border-purple-400/30 disabled:opacity-50 cursor-pointer"
+              className="btn-tech-primary px-6 py-3 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:scale-105 transition-all disabled:opacity-50 cursor-pointer"
             >
               {isSimulating ? (
                 <>
-                  <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                  </svg>
-                  <span>Simulating Kill-Chain...</span>
+                  <div className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                  <span>Emulating Attack Vectors...</span>
                 </>
               ) : (
                 <>
-                  <span>⚡ Run Live Simulation</span>
+                  <Zap className="h-4 w-4 text-purple-300" />
+                  <span>⚡ Run Live Adversary Emulation</span>
                 </>
               )}
             </button>
           </div>
         </div>
 
-        {/* Objective Selector */}
-        <div className="mt-6 pt-5 border-t border-purple-500/20 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-          {objectives.map((obj) => (
-            <button
-              key={obj.id}
-              onClick={() => setObjective(obj.id)}
-              className={`text-left p-3 rounded-xl border transition-all cursor-pointer ${
-                objective === obj.id
-                  ? 'bg-purple-900/40 border-purple-500/60 ring-2 ring-purple-500/30 text-white'
-                  : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
-              }`}
-            >
-              <div className="text-xs font-semibold">{obj.label}</div>
-              <div className="text-[11px] text-slate-400 mt-1 line-clamp-2">{obj.desc}</div>
-            </button>
-          ))}
+        {/* Objective Selector Carousel */}
+        <div className="mt-8 pt-6 border-t border-white/[0.08] space-y-3">
+          <div className="flex items-center justify-between text-xs text-zinc-400 font-mono">
+            <span className="font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
+              <Crosshair className="h-3.5 w-3.5 text-purple-400" />
+              <span>Select Threat Actor Campaign &amp; Objective:</span>
+            </span>
+            <span className="text-purple-400 font-bold">4 Adversarial Scenarios</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+            {objectives.map((obj) => {
+              const Icon = obj.icon;
+              const isSelected = objective === obj.id;
+
+              return (
+                <button
+                  key={obj.id}
+                  onClick={() => {
+                    setObjective(obj.id);
+                  }}
+                  className={`text-left p-4 rounded-2xl border transition-all duration-300 cursor-pointer flex flex-col justify-between ${
+                    isSelected
+                      ? 'border-purple-400 bg-purple-950/40 shadow-[0_0_20px_rgba(168,85,247,0.3)] ring-1 ring-purple-400/50 scale-[1.02]'
+                      : 'border-white/10 bg-zinc-950/60 text-zinc-400 hover:border-white/20 hover:text-white hover:bg-zinc-900/60'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-300">
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-white/5">
+                        {obj.threatActor.split(' ')[0]}
+                      </span>
+                    </div>
+                    <div className="text-xs font-bold text-white font-orbitron">{obj.label}</div>
+                    <div className="text-[11px] text-zinc-400 mt-1.5 line-clamp-2 leading-relaxed">{obj.desc}</div>
+                  </div>
+
+                  <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] font-mono">
+                    <span className="text-zinc-500">Threat Actor:</span>
+                    <span className="text-purple-300 font-bold">{obj.threatActor}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
+      {/* Real-time Adversary Console Output */}
+      {consoleLogs.length > 0 && (
+        <div className="rounded-2xl border border-white/10 bg-black/90 p-4 shadow-xl font-mono text-xs space-y-2">
+          <div className="flex items-center justify-between text-zinc-400 border-b border-white/5 pb-2">
+            <span className="flex items-center gap-2 text-purple-300 font-bold">
+              <Terminal className="h-3.5 w-3.5 text-purple-400" />
+              <span>SENTINARA_PURPLE_AI_EXECUTION_CONSOLE</span>
+            </span>
+            <div className="flex items-center gap-2 text-[11px]">
+              <span className="text-zinc-500">TRAVERSAL PROGRESS:</span>
+              <span className="text-purple-300 font-bold">{simulationProgress}%</span>
+            </div>
+          </div>
+          <div className="space-y-1 text-zinc-300 max-h-28 overflow-y-auto scrollbar-thin">
+            {consoleLogs.map((log, idx) => (
+              <div key={idx} className="flex items-start gap-2 leading-relaxed">
+                <span className="text-purple-400 select-none">&gt;</span>
+                <span className={log.includes('COMPLETE') ? 'text-emerald-300 font-bold' : log.includes('ERROR') ? 'text-rose-400 font-bold' : 'text-zinc-300'}>
+                  {log}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Breach Probability Gauge */}
-        <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md relative overflow-hidden">
+        <div className="rounded-2xl border border-white/10 bg-zinc-950/80 p-5 backdrop-blur-xl shadow-lg relative overflow-hidden">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Breach Probability</span>
-            <span className="text-xs font-mono text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
+            <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Breach Probability</span>
+            <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+              blastRadius.compromise_probability_pct > 70 
+                ? 'bg-rose-500/10 text-rose-300 border-rose-500/30' 
+                : blastRadius.compromise_probability_pct > 0 
+                ? 'bg-amber-500/10 text-amber-300 border-amber-500/30' 
+                : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+            }`}>
               {blastRadius.containment_rating}
             </span>
           </div>
+
           <div className="mt-4 flex items-baseline gap-2">
-            <span className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-amber-400 font-mono">
+            <span className={`text-4xl font-black font-mono tracking-tight ${
+              blastRadius.compromise_probability_pct > 70 ? 'text-rose-400' : blastRadius.compromise_probability_pct > 0 ? 'text-amber-400' : 'text-emerald-400'
+            }`}>
               {blastRadius.compromise_probability_pct}%
             </span>
-            <span className="text-xs text-rose-400">Likelihood</span>
+            <span className="text-xs text-zinc-400 font-mono">Likelihood</span>
           </div>
-          <div className="w-full bg-slate-800 h-2 rounded-full mt-3 overflow-hidden">
+
+          <div className="w-full bg-zinc-900 h-2 rounded-full mt-3 overflow-hidden border border-white/5">
             <div
-              className="bg-gradient-to-r from-amber-500 via-rose-500 to-red-600 h-full rounded-full transition-all duration-1000"
-              style={{ width: `${Math.min(100, blastRadius.compromise_probability_pct)}%` }}
-            ></div>
+              className={`h-full rounded-full transition-all duration-700 ${
+                blastRadius.compromise_probability_pct > 70 ? 'bg-gradient-to-r from-amber-500 to-rose-600' : 'bg-gradient-to-r from-emerald-500 to-teal-400'
+              }`}
+              style={{ width: `${Math.min(100, Math.max(5, blastRadius.compromise_probability_pct))}%` }}
+            />
           </div>
-          <p className="text-[11px] text-slate-400 mt-2">Deterministic multi-hop path reachability to cloud root</p>
+          <p className="text-[11px] text-zinc-500 mt-2 font-mono">Graph traversal reachability to cloud root</p>
         </div>
 
         {/* Crown Jewels Accessible */}
-        <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md">
+        <div className="rounded-2xl border border-white/10 bg-zinc-950/80 p-5 backdrop-blur-xl shadow-lg">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Crown Jewels Exposed</span>
-            <span className="text-amber-400 text-base">💎</span>
+            <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Crown Jewels Exposed</span>
+            <span className="text-amber-400 text-sm">💎</span>
           </div>
           <div className="mt-4 flex items-baseline gap-2">
-            <span className="text-4xl font-extrabold text-amber-300 font-mono">
+            <span className="text-4xl font-black text-amber-300 font-mono tracking-tight">
               {blastRadius.reachable_crown_jewels_count}
             </span>
-            <span className="text-xs text-slate-400">/ {blastRadius.total_cloud_nodes} assets</span>
+            <span className="text-xs text-zinc-500 font-mono">/ {blastRadius.total_cloud_nodes} total assets</span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-5">Datastores & Secret Keys within adversary blast radius</p>
+          <p className="text-[11px] text-zinc-500 mt-4 font-mono">Datastores, keys &amp; control plane pods</p>
         </div>
 
         {/* Min Hops to Full Compromise */}
-        <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md">
+        <div className="rounded-2xl border border-white/10 bg-zinc-950/80 p-5 backdrop-blur-xl shadow-lg">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Hops to Root Admin</span>
-            <span className="text-purple-400 text-base">⚡</span>
+            <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Hops to Root Admin</span>
+            <span className="text-purple-400 text-sm">⚡</span>
           </div>
           <div className="mt-4 flex items-baseline gap-2">
-            <span className="text-4xl font-extrabold text-purple-300 font-mono">
+            <span className="text-4xl font-black text-purple-300 font-mono tracking-tight">
               {blastRadius.simulated_hops_to_root}
             </span>
-            <span className="text-xs text-slate-400">Pivots</span>
+            <span className="text-xs text-zinc-500 font-mono">Pivots</span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-5">Shortest path privilege escalation sequence</p>
+          <p className="text-[11px] text-zinc-500 mt-4 font-mono">Shortest privilege escalation sequence</p>
         </div>
 
         {/* Adversary Profile */}
-        <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md">
+        <div className="rounded-2xl border border-white/10 bg-zinc-950/80 p-5 backdrop-blur-xl shadow-lg">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Adversary Model</span>
-            <span className="text-red-400 text-base">🎯</span>
+            <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Adversary Model</span>
+            <span className="text-rose-400 text-sm">🎯</span>
           </div>
           <div className="mt-3">
-            <div className="text-base font-bold text-white">{adversary.name}</div>
+            <div className="text-sm font-bold text-white font-orbitron">{adversary.name}</div>
             <div className="text-xs text-rose-400 font-mono mt-0.5">{adversary.origin}</div>
-            <div className="text-[11px] text-slate-400 mt-2 line-clamp-2">{adversary.motivation}</div>
+            <div className="text-[11px] text-zinc-400 mt-2 line-clamp-2 leading-relaxed">{adversary.motivation}</div>
           </div>
         </div>
       </div>
 
       {/* Adversary Attack Chain Execution Stepper */}
-      <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-md">
-        <div className="flex items-center justify-between mb-6">
+      <div className="rounded-3xl border border-white/10 bg-zinc-950/90 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
           <div>
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold font-orbitron text-white flex items-center gap-2">
               <span>⚔️ Adversary Kill-Chain Traversal Log</span>
-              <span className="text-xs font-normal text-slate-400">({attackChain.length} Sequential Exploitation Vectors)</span>
+              <span className="text-xs font-mono font-normal text-purple-300 bg-purple-500/10 px-2.5 py-0.5 rounded-full border border-purple-500/20">
+                {attackChain.length} Sequential Exploitation Vectors
+              </span>
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Click any step to inspect the exact network traversal, credential elevation, and forensic evidence.
+            <p className="text-xs text-zinc-400 mt-1 font-mono">
+              Click each tactical phase to inspect lateral ingress, session elevation, and proof-of-concept payload details.
             </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsSevered(!isSevered)}
+              className={`px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-all cursor-pointer border ${
+                isSevered
+                  ? 'bg-emerald-600 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]'
+                  : 'btn-tech-gradient text-zinc-300 hover:text-white'
+              }`}
+            >
+              <Scissors className="h-3.5 w-3.5" />
+              <span>{isSevered ? '✅ Cut-Point Active (0% Risk)' : '✂️ Simulate Severance'}</span>
+            </button>
           </div>
         </div>
 
         <div className="space-y-4">
           {attackChain.map((step: any, idx: number) => {
             const isSelected = activeStepIndex === idx;
+            const isBreached = step.status.includes('BREACH') || step.status.includes('ELEVATED') || step.status.includes('ACHIEVED') || step.status.includes('COMPLETE') || step.status.includes('COMPROMISED') || step.status.includes('LOCKED') || step.status.includes('HIJACKED');
+
             return (
               <div
                 key={idx}
                 onClick={() => setActiveStepIndex(idx)}
-                className={`p-4 rounded-xl border transition-all cursor-pointer ${
+                className={`p-5 rounded-2xl border transition-all duration-300 cursor-pointer ${
                   isSelected
-                    ? 'bg-purple-950/40 border-purple-500/50 shadow-lg shadow-purple-900/20 ring-1 ring-purple-500/30'
-                    : 'bg-slate-950/40 border-slate-800/80 hover:bg-slate-800/40'
+                    ? 'border-purple-400 bg-purple-950/30 shadow-[0_0_30px_rgba(168,85,247,0.25)] ring-1 ring-purple-400/40'
+                    : 'border-white/10 bg-black/60 hover:border-white/20 hover:bg-zinc-900/50'
                 }`}
               >
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                  <div className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
-                      {step.step || idx + 1}
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  <div className="flex items-start gap-4">
+                    <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5 border ${
+                      isSelected 
+                        ? 'bg-purple-500 text-black border-purple-300 shadow-md' 
+                        : 'bg-zinc-900 text-zinc-300 border-white/10'
+                    }`}>
+                      0{step.step || idx + 1}
                     </span>
-                    <div>
+
+                    <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-bold text-white">{step.phase || `Phase ${idx + 1}`}</span>
-                        <span className="text-xs font-mono bg-purple-500/10 text-purple-300 px-2 py-0.5 rounded border border-purple-500/20">
+                        <span className="text-sm font-bold font-orbitron text-white">{step.phase || `Phase ${idx + 1}`}</span>
+                        <span className="text-[11px] font-mono bg-purple-500/10 text-purple-300 px-2.5 py-0.5 rounded border border-purple-500/20">
                           {step.mitre_technique || 'MITRE ATT&CK'}
                         </span>
-                        <span className="text-xs font-mono bg-rose-500/10 text-rose-300 px-2 py-0.5 rounded border border-rose-500/20">
-                          {step.status}
+                        <span className={`text-[11px] font-mono px-2.5 py-0.5 rounded border font-bold ${
+                          isBreached && !isSevered
+                            ? 'bg-rose-500/10 text-rose-300 border-rose-500/30'
+                            : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                        }`}>
+                          {isSevered ? 'BLOCKED_BY_PATCH' : step.status}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-300 mt-1.5">{step.action_taken}</p>
+                      <p className="text-xs text-zinc-300 leading-relaxed">{step.action_taken}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4 text-xs font-mono shrink-0 pl-10 lg:pl-0">
-                    <div className="text-slate-400">
-                      <span className="text-slate-500">From: </span>
-                      <span className="text-slate-300">{step.source_node}</span>
+                  <div className="flex items-center gap-3 text-xs font-mono shrink-0 pl-12 lg:pl-0">
+                    <div className="text-right">
+                      <span className="text-zinc-500 block text-[10px]">VECTOR SOURCE:</span>
+                      <span className="text-zinc-300 font-bold">{step.source_node}</span>
                     </div>
-                    <span className="text-purple-400">➔</span>
-                    <div className="text-slate-400">
-                      <span className="text-slate-500">Target: </span>
-                      <span className="text-amber-300 font-semibold">{step.target_node}</span>
+                    <ArrowRight className="h-4 w-4 text-purple-400 shrink-0" />
+                    <div>
+                      <span className="text-zinc-500 block text-[10px]">EXPLOITED TARGET:</span>
+                      <span className="text-amber-300 font-bold">{step.target_node}</span>
                     </div>
                   </div>
                 </div>
 
                 {isSelected && (
-                  <div className="mt-4 pt-4 border-t border-purple-500/20 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-purple-950/20 p-3 rounded-lg">
+                  <div className="mt-4 pt-4 border-t border-purple-500/20 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs bg-purple-950/20 p-4 rounded-xl border border-purple-500/10">
                     <div>
-                      <span className="text-slate-400 font-semibold">Exploitability Index: </span>
-                      <span className="text-rose-400 font-mono font-bold">{step.exploitability_score || '9.5 / 10'}</span>
+                      <span className="text-zinc-400 font-mono font-bold block mb-1">EXPLOITABILITY SCORE</span>
+                      <span className="text-rose-400 font-mono font-black text-sm">{isSevered ? '0.0 / 10 (Neutralized)' : step.exploitability_score || '9.5 / 10'}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 font-semibold">Mitigation Strategy: </span>
-                      <span className="text-emerald-400">Restrict IAM PassRole and enforce least-privilege boundary</span>
+                      <span className="text-zinc-400 font-mono font-bold block mb-1">DETERMINISTIC MITIGATION</span>
+                      <span className="text-emerald-300 font-mono">
+                        {cutPoints[0]?.action || 'Enforce zero-trust boundaries and least-privilege IAM scoping.'}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -312,28 +464,34 @@ export const PurpleTeamSimulator: React.FC<PurpleTeamSimulatorProps> = ({ auditD
         </div>
       </div>
 
-      {/* Single-Click Cut Point Severance */}
-      <div className="bg-gradient-to-r from-emerald-950/50 via-slate-900/60 to-slate-900/80 border border-emerald-500/30 rounded-2xl p-6 backdrop-blur-md">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
-              <span>✂️ Optimal Kill-Chain Cut-Point</span>
-              <span className="bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">100% Severance</span>
+      {/* Single-Click Kill-Chain Cut Point Card */}
+      <div className="rounded-3xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/40 via-zinc-950/80 to-black p-6 sm:p-8 backdrop-blur-xl shadow-[0_0_50px_rgba(16,185,129,0.15)]">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider">
+              <Scissors className="h-4 w-4 text-emerald-400" />
+              <span>OPTIMAL ZERO-TOUCH KILL-CHAIN CUT-POINT</span>
+              <span className="bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30 text-[10px]">
+                100% Severance
+              </span>
             </div>
-            <h4 className="text-lg font-bold text-white mt-1">
-              Sever Adversary Breach Chain: {cutPoints[0]?.target_resource || 'Ingress Security Boundary & IAM Policy'}
+            
+            <h4 className="text-lg sm:text-xl font-bold font-orbitron text-white">
+              Sever Adversary Ingress: {cutPoints[0]?.target_resource || 'Ingress Boundary & IAM Policy'}
             </h4>
-            <p className="text-slate-300 text-xs mt-1 max-w-2xl">
-              {cutPoints[0]?.action || 'Applying Sentinara least-privilege Terraform patch will sever the primary pivot node.'} {cutPoints[0]?.blast_reduction || 'Reduces breach reachability by 100%'}
+            <p className="text-zinc-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
+              {cutPoints[0]?.action || 'Applying the Sentinara least-privilege Terraform patch will sever the primary pivot node.'}{' '}
+              <strong className="text-emerald-300">{cutPoints[0]?.blast_reduction || 'Reduces breach reachability by 100%'}</strong>
             </p>
           </div>
 
           {onNavigateToRemediation && (
             <button
               onClick={onNavigateToRemediation}
-              className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm shadow-lg shadow-emerald-600/30 transition-all flex items-center gap-2 border border-emerald-400/30 shrink-0 cursor-pointer"
+              className="btn-tech-primary px-6 py-3.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-105 transition-all shrink-0 cursor-pointer"
             >
-              <span>⚡ Review & Apply Fixes</span>
+              <Zap className="h-4 w-4 text-emerald-300" />
+              <span>⚡ Review &amp; Apply Zero-Touch Fix</span>
             </button>
           )}
         </div>

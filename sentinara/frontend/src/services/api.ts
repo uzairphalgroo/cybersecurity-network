@@ -805,61 +805,218 @@ export async function simulatePurpleTeam(
   }
 
   // Client-side fallback engine for Vercel static deployment
-  const isHighRisk = envId.includes('breach') || envId.includes('leaky') || envId.includes('takeover') || envId.includes('crypto') || (auditData?.posture_score.overall_score || 100) < 70;
-  const breachProb = isHighRisk ? 82.4 : 12.0;
+  const overallScore = auditData?.posture_score?.overall_score ?? 60.0;
+  const isHighRisk = envId.includes('breach') || envId.includes('leaky') || envId.includes('takeover') || envId.includes('ransomware') || envId.includes('crypto') || overallScore < 70;
+  const breachProb = isHighRisk ? Math.min(99.0, Math.max(72.0, Math.round((100.0 - overallScore) * 1.25))) : Math.max(5.0, Math.round((100.0 - overallScore) * 0.4));
+  
+  // Extract real nodes and findings if available
+  const nodes = auditData?.graph_data?.nodes || [];
+  const entryNode = nodes.find((n) => n.type === 'internet' || n.type === 'user') || nodes[0] || { label: '0.0.0.0/0 (Public Internet)' };
+  const targetNode = nodes.find((n) => n.is_target || n.severity === 'CRITICAL' || n.severity === 'HIGH') || nodes[nodes.length - 1] || { label: 'Crown-Jewel Production Datastore' };
+  const firstHop = nodes.find((n) => n.id !== entryNode.id && n.id !== targetNode.id) || { label: 'Exposed Ingress Security Boundary' };
+
+  const totalNodes = Math.max(nodes.length, 6);
+  const reachableCount = isHighRisk ? Math.max(3, totalNodes - 1) : 1;
+  const crownCount = isHighRisk ? Math.max(1, nodes.filter((n) => n.is_target || n.severity === 'CRITICAL').length) : 0;
+
+  const profilesMap: Record<string, any> = {
+    exfiltrate_customer_pii: {
+      name: 'APT-29 (Midnight Blizzard / Cozy Bear)',
+      origin: 'Nation-State Advanced Cyber Syndicate',
+      primary_technique: 'MITRE ATT&CK T1078, T1068, T1530',
+      motivation: 'Lateral cloud traversal, credentials theft, and customer PII exfiltration',
+      phases: [
+        {
+          step: 1,
+          phase: 'Initial Reconnaissance & Ingress Probe',
+          mitre_technique: 'T1190: Exploit Public-Facing Application',
+          source_node: entryNode.label,
+          target_node: firstHop.label,
+          action_taken: `Scans public perimeter on ${entryNode.label} for open ports (SSH 22, DB 3306) and misconfigured security groups.`,
+          status: isHighRisk ? 'SUCCESSFUL_BREACH' : 'BLOCKED_BY_WAF',
+          exploitability_score: isHighRisk ? '9.8 / 10' : '1.2 / 10'
+        },
+        {
+          step: 2,
+          phase: 'Privilege Escalation & Session Pivoting',
+          mitre_technique: 'T1068: Exploitation for Privilege Escalation',
+          source_node: firstHop.label,
+          target_node: 'IAM Role with PassRole & Wildcard Policy',
+          action_taken: 'Harvests STS session tokens and leverages unconstrained wildcard IAM policy to elevate privilege boundary.',
+          status: isHighRisk ? 'PRIVILEGE_ELEVATED' : 'ACCESS_DENIED',
+          exploitability_score: isHighRisk ? '9.2 / 10' : '0.5 / 10'
+        },
+        {
+          step: 3,
+          phase: 'Objective Completion & Exfiltration',
+          mitre_technique: 'T1530: Data from Cloud Storage Object',
+          source_node: 'Elevated Admin Session',
+          target_node: targetNode.label,
+          action_taken: `Executes unauthenticated bulk GetObject / SQL query stream against ${targetNode.label} to siphon sensitive customer data.`,
+          status: isHighRisk ? 'OBJECTIVE_ACHIEVED' : 'CONTAINED',
+          exploitability_score: isHighRisk ? '10.0 / 10' : '0.0 / 10'
+        }
+      ],
+      cut_point: {
+        target_resource: `IAM Least-Privilege Scoping on ${firstHop.label} & S3 Block Public Access`,
+        action: 'Revoke wildcard Action * and restrict security group ingress CIDR to internal VPC CIDRs.',
+        blast_reduction: 'Reduces adversary breach probability by 100%'
+      }
+    },
+    ransomware_encryption: {
+      name: 'LockBit 3.0 / BlackCat Cloud Extortion Syndicate',
+      origin: 'Organized Cyber Extortion Syndicate',
+      primary_technique: 'MITRE ATT&CK T1486, T1485, T1078.004',
+      motivation: 'Automated cloud asset encryption, volume snapshot deletion, and multi-million dollar extortion',
+      phases: [
+        {
+          step: 1,
+          phase: 'Initial Perimeter Penetration',
+          mitre_technique: 'T1078: Valid Accounts (Cloud Credentials)',
+          source_node: entryNode.label,
+          target_node: firstHop.label,
+          action_taken: `Compromises stale credentials and establishes persistent beachhead on ${firstHop.label}.`,
+          status: isHighRisk ? 'BEACHHEAD_ESTABLISHED' : 'BLOCKED_BY_MFA',
+          exploitability_score: isHighRisk ? '9.5 / 10' : '1.0 / 10'
+        },
+        {
+          step: 2,
+          phase: 'KMS Key Tampering & Backup Destruction',
+          mitre_technique: 'T1485: Data Destruction & Backup Erasure',
+          source_node: firstHop.label,
+          target_node: 'Cloud KMS Keyring & Volume Snapshots',
+          action_taken: 'Issues KMS DisableKey / DeleteAlias API calls to permanently invalidate disaster recovery backups.',
+          status: isHighRisk ? 'BACKUPS_NEUTRALIZED' : 'DENIED_BY_SCP',
+          exploitability_score: isHighRisk ? '9.4 / 10' : '0.8 / 10'
+        },
+        {
+          step: 3,
+          phase: 'Mass Cryptographic Lockout',
+          mitre_technique: 'T1486: Data Encrypted for Impact',
+          source_node: 'Ransomware Execution Daemon',
+          target_node: targetNode.label,
+          action_taken: `Encrypts production EBS volumes and RDS datastores on ${targetNode.label} with attacker-controlled AES-256 key.`,
+          status: isHighRisk ? 'INFRASTRUCTURE_LOCKED' : 'PROTECTED_BY_VAULT_LOCK',
+          exploitability_score: isHighRisk ? '9.9 / 10' : '0.0 / 10'
+        }
+      ],
+      cut_point: {
+        target_resource: 'KMS Key Policy Scoping & AWS Backup Vault Lock',
+        action: 'Enable AWS Backup Vault Lock in Compliance Mode and deny kms:ScheduleKeyDeletion on production roles.',
+        blast_reduction: 'Prevents catastrophic volume encryption and backup deletion.'
+      }
+    },
+    k8s_control_plane_takeover: {
+      name: 'TeamTNT / Siloscape Container Threat Group',
+      origin: 'Advanced Container Exploitation Group',
+      primary_technique: 'MITRE ATT&CK T1610, T1611, T1078.004',
+      motivation: 'Kubernetes cluster-admin takeover, cryptomining daemonset deployment, and node hopping',
+      phases: [
+        {
+          step: 1,
+          phase: 'Container Ingress & Microservice Probe',
+          mitre_technique: 'T1610: Deploy Container with Insecure Capabilities',
+          source_node: entryNode.label,
+          target_node: firstHop.label,
+          action_taken: `Exploits unauthenticated K8s API server or exposed NodePort service on ${firstHop.label}.`,
+          status: isHighRisk ? 'CONTAINER_BREACHED' : 'REJECTED_BY_NETWORK_POLICY',
+          exploitability_score: isHighRisk ? '9.1 / 10' : '1.4 / 10'
+        },
+        {
+          step: 2,
+          phase: 'Container Breakout & Host Escape',
+          mitre_technique: 'T1611: Escape to Host via HostPath Mount',
+          source_node: firstHop.label,
+          target_node: 'Underlying Node Kernel & Default Service Account',
+          action_taken: 'Extracts service account token from `/var/run/secrets/kubernetes.io/serviceaccount/token`.',
+          status: isHighRisk ? 'POD_ESCAPED' : 'ISOLATED_BY_SECCOMP',
+          exploitability_score: isHighRisk ? '9.6 / 10' : '0.6 / 10'
+        },
+        {
+          step: 3,
+          phase: 'Cluster-Admin RBAC Elevation',
+          mitre_technique: 'T1078.004: Cloud Accounts: Cluster Admin',
+          source_node: 'Host Node Root Shell',
+          target_node: targetNode.label,
+          action_taken: `Creates rogue ClusterRoleBinding to cluster-admin and launches persistence daemonsets on ${targetNode.label}.`,
+          status: isHighRisk ? 'CLUSTER_COMPROMISED' : 'BLOCKED_BY_OPA_GATEKEEPER',
+          exploitability_score: isHighRisk ? '9.8 / 10' : '0.0 / 10'
+        }
+      ],
+      cut_point: {
+        target_resource: 'Default ServiceAccount AutoMountTokens & Pod Security Standards',
+        action: 'Set automountServiceAccountToken: false and enforce Kubernetes Restricted Pod Security profile.',
+        blast_reduction: 'Completely isolates pod runtime escapes from reaching the K8s API server.'
+      }
+    },
+    cloud_root_takeover: {
+      name: 'Scattered Spider (UNC3944 / Muddled Libra)',
+      origin: 'Social Engineering & Identity Sprawl Syndicate',
+      primary_technique: 'MITRE ATT&CK T1078, T1098, T1548',
+      motivation: 'IAM credential harvesting, organization root account takeover, and full multi-cloud control',
+      phases: [
+        {
+          step: 1,
+          phase: 'Credential Compromise via MFA Fatigue',
+          mitre_technique: 'T1078: Valid Accounts (MFA Bypass)',
+          source_node: entryNode.label,
+          target_node: firstHop.label,
+          action_taken: `Acquires developer access key on ${firstHop.label} lacking hardware-bound FIDO2 MFA.`,
+          status: isHighRisk ? 'SESSION_HIJACKED' : 'BLOCKED_BY_FIDO2',
+          exploitability_score: isHighRisk ? '9.7 / 10' : '1.1 / 10'
+        },
+        {
+          step: 2,
+          phase: 'IAM Policy Modification & Account Manipulation',
+          mitre_technique: 'T1098: Account Manipulation (iam:AttachRolePolicy)',
+          source_node: firstHop.label,
+          target_node: 'Administrative IAM Role & Group Policies',
+          action_taken: 'Exploits iam:AttachRolePolicy to attach AdministratorAccess policy to adversary principal.',
+          status: isHighRisk ? 'IAM_PRIVILEGE_ESCALATED' : 'BLOCKED_BY_BOUNDARY',
+          exploitability_score: isHighRisk ? '9.9 / 10' : '0.4 / 10'
+        },
+        {
+          step: 3,
+          phase: 'Organization Management Root Control',
+          mitre_technique: 'T1548: Abuse Elevation Control Mechanism',
+          source_node: 'Administrator IAM Session',
+          target_node: targetNode.label,
+          action_taken: `Assumes OrganizationAccountAccessRole on root master account ${targetNode.label} and disables CloudTrail audit logging.`,
+          status: isHighRisk ? 'ROOT_TAKEOVER_COMPLETE' : 'PROTECTED_BY_ROOT_SCP',
+          exploitability_score: isHighRisk ? '10.0 / 10' : '0.0 / 10'
+        }
+      ],
+      cut_point: {
+        target_resource: 'IAM Permission Boundaries & AWS Service Control Policies (SCPs)',
+        action: 'Implement strict IAM Permission Boundaries bar-coding iam:* actions and enforce root MFA locks.',
+        blast_reduction: 'Severs privilege escalation path to Organization Root Account.'
+      }
+    }
+  };
+
+  const selected = profilesMap[objective] || profilesMap.exfiltrate_customer_pii;
 
   return {
     adversary_profile: {
-      name: 'APT-29 (Midnight Shadow / Cozy Bear)',
-      origin: 'Nation-State Advanced Cyber Syndicate',
-      primary_technique: 'MITRE ATT&CK T1078, T1068, T1190',
-      motivation: 'Lateral cloud traversal, credentials theft, and customer PII exfiltration'
+      name: selected.name,
+      origin: selected.origin,
+      primary_technique: selected.primary_technique,
+      motivation: selected.motivation
     },
     blast_radius_summary: {
-      total_cloud_nodes: auditData?.graph_data.total_nodes || 6,
-      reachable_nodes_count: isHighRisk ? Math.max(3, (auditData?.graph_data.total_nodes || 6) - 1) : 1,
+      total_cloud_nodes: totalNodes,
+      reachable_nodes_count: reachableCount,
       compromise_probability_pct: breachProb,
-      reachable_crown_jewels_count: isHighRisk ? 2 : 0,
+      reachable_crown_jewels_count: crownCount,
       simulated_hops_to_root: isHighRisk ? 3 : 1,
       containment_rating: isHighRisk ? 'CRITICAL_EXPOSURE' : 'HARDENED'
     },
-    adversary_attack_chain: [
-      {
-        step: 1,
-        phase: 'Initial Reconnaissance & Ingress Probe',
-        mitre_technique: 'T1190: Exploit Public-Facing Application',
-        source_node: '0.0.0.0/0 (Global Internet)',
-        target_node: 'Exposed Ingress Security Boundary',
-        action_taken: 'Scans for unauthenticated access vectors and public ingress ports.',
-        status: isHighRisk ? 'SUCCESSFUL_BREACH' : 'BLOCKED_BY_WAF',
-        exploitability_score: isHighRisk ? '9.8 / 10' : '1.2 / 10'
-      },
-      {
-        step: 2,
-        phase: 'Privilege Escalation & Session Pivoting',
-        mitre_technique: 'T1068: Exploitation for Privilege Escalation',
-        source_node: 'Compromised Asset Beachhead',
-        target_node: 'IAM Role with PassRole & Wildcard Policy',
-        action_taken: 'Discovers overly permissive IAM permissions and elevates session tokens.',
-        status: isHighRisk ? 'PRIVILEGE_ELEVATED' : 'ACCESS_DENIED',
-        exploitability_score: isHighRisk ? '9.2 / 10' : '0.5 / 10'
-      },
-      {
-        step: 3,
-        phase: 'Objective Completion & Exfiltration',
-        mitre_technique: 'T1530: Data from Cloud Storage Object',
-        source_node: 'Elevated Admin Session',
-        target_node: 'Production Customer PII Data Lake',
-        action_taken: 'Executes unauthenticated S3 GetObject batch request to exfiltrate database records.',
-        status: isHighRisk ? 'OBJECTIVE_ACHIEVED' : 'CONTAINED',
-        exploitability_score: isHighRisk ? '10.0 / 10' : '0.0 / 10'
-      }
-    ],
+    adversary_attack_chain: selected.phases,
     critical_cut_points: [
       {
-        target_resource: 'IAM Policy Wildcard Bounds & Ingress Security Groups',
-        action: 'Revoke wildcard Action * and restrict security group ingress CIDR to internal VPC CIDRs.',
-        blast_reduction: 'Reduces adversary breach probability to 0%'
+        target_resource: selected.cut_point.target_resource,
+        action: selected.cut_point.action,
+        blast_reduction: selected.cut_point.blast_reduction
       }
     ]
   };

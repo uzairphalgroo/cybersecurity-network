@@ -18,7 +18,7 @@
   <b>AuditHound</b> is an enterprise-grade autonomous cloud security posture management (CSPM) and compliance auditing platform. It continuously inspects multi-cloud infrastructure configurations (AWS, Azure, Kubernetes), models privilege escalation attack graphs, maps violations to SOC2 Common Criteria and CIS Benchmarks, and automatically generates production-ready, least-privilege Terraform (<code>.tf</code>) remediation patches.
 </p>
 
-[Visual Walkthrough](#-end-to-end-audit-walkthrough-input-posture-output--ciso-report) • [Key Features](#-key-features) • [Architecture](#-architecture) • [Live Scenarios](#-mock-environments-catalog) • [Quickstart](#-quickstart-guide) • [CLI Scanner](#-audithound-cli-scanner) • [REST API](#-api-specification) • [Security](#-security--hardening)
+[Visual Walkthrough](#-end-to-end-audit-walkthrough-input-posture-output--ciso-report) • [Key Features](#-key-features) • [Architecture](#-architecture) • [Live Scenarios](#-mock-environments-catalog) • [Quickstart](#-quickstart-guide) • [Vercel Deployment](#-cloud--production-deployment) • [CLI Scanner](#-audithound-cli-scanner) • [Security](#-security--hardening)
 
 </div>
 
@@ -40,22 +40,22 @@ Modern multi-cloud environments suffer from fragmented identity silos, sprawling
 
 AuditHound delivers an end-to-end autonomous security pipeline from raw cloud configuration ingestion to mathematical attack graph analysis, posture grading, and CISO audit sign-off:
 
-### 1️⃣ Initial Input — Scenario Telemetry & Threat Ingestion
-> Ingests multi-cloud configuration dumps (AWS IAM policies, trust relationships, security groups, and storage ACLs) and identifies latent risk boundaries.
+### 1️⃣ Initial Input & Baseline Telemetry Ingestion
+> Ingests multi-cloud configuration dumps (AWS IAM policies, trust relationships, security groups, and storage ACLs) and benchmarks them against SOC2 & CIS foundations.
 
 <div align="center">
-  <img src="docs/images/01_crypto_miner_input_dashboard.png" alt="AuditHound Initial Input & Scenario Dashboard" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
-  <p><i>Figure 1: Initial Telemetry Ingestion — Scenario <code>04_crypto_miner_breach_vector</code> (PassRole Escalation) loaded with active IAM and network boundaries.</i></p>
+  <img src="docs/images/01_fintech_banking_input_dashboard.png" alt="AuditHound Fintech Banking Baseline Dashboard" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
+  <p><i>Figure 1: Baseline Telemetry Ingestion — Scenario <code>01_fintech_prod_banking</code> (Tier-1 Banking Enclave) evaluated with <b>Posture Index 96 (Auditor Grade A+)</b>, zero exploit paths, and 100% compliance across SOC2 CC6.1, CC6.3, CC6.6, and CC6.7.</i></p>
 </div>
 
 <br/>
 
-### 2️⃣ Engine Output — Posture Index & Attack Path Graph
-> Computes deterministic compliance grades (0–100) using weighted penalty algorithms and traverses multi-hop lateral movement chains with NetworkX.
+### 2️⃣ Engine Output — Attack Path Graph & Risk Degradation
+> When evaluating misconfigured environments (e.g., PassRole escalation or unauthenticated S3 access), the engine traverses multi-hop lateral movement chains with NetworkX and calculates risk degradation.
 
 <div align="center">
   <img src="docs/images/02_executive_posture_scorecard.png" alt="AuditHound Posture Scorecard & Attack Graph" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
-  <p><i>Figure 2: Executive Scorecard Output — Posture Index <b>58 (Auditor Grade D)</b> with 1 Critical Exploit Path, 1 High-Risk Finding, and SOC2/CIS compliance radars.</i></p>
+  <p><i>Figure 2: Exploit Path Detection — Scenario <code>04_crypto_miner_breach_vector</code> evaluated with <b>Posture Index 58 (Auditor Grade D)</b>, isolating 1 Critical Exploit Path, 1 High-Risk Finding, and CIS AWS non-compliance.</i></p>
 </div>
 
 <br/>
@@ -211,6 +211,31 @@ npm run build
 npm run dev
 ```
 Open your browser at **`http://localhost:3000`** to access the Cyber Command Center dashboard.
+
+---
+
+## 🚀 Cloud & Production Deployment
+
+### 1. Instant Vercel Web Deployment (Zero-Server SPA)
+AuditHound is architected with complete client-side graph traversal and deterministic compliance rules, enabling **100% standalone deployment on Vercel**:
+
+1. Import this repository into [Vercel](https://vercel.com/new).
+2. Configure project settings:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: `audithound/frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+3. Click **Deploy**. Vercel will automatically apply the included `vercel.json` SPA routing rewrite rules.
+4. **Zero-Setup Testing**: On the live deployment, users can instantly click the **`⚡ Test Free Open-Source Data`** button or choose from 10 benchmark scenarios with zero configuration required.
+
+### 2. Multi-Container Docker Deployment
+```bash
+cd audithound
+docker compose up --build
+```
+- **Frontend Dashboard**: `http://localhost:3000`
+- **FastAPI Backend API**: `http://localhost:8000`
+- **Swagger Documentation**: `http://localhost:8000/docs`
 
 ---
 

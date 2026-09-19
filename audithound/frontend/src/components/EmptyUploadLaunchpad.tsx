@@ -71,6 +71,82 @@ export const EmptyUploadLaunchpad: React.FC<EmptyUploadLaunchpadProps> = ({
     }
   };
 
+  const handleLoadSampleDirectly = async () => {
+    setUploading(true);
+    setError(null);
+    try {
+      const sampleDump = {
+        environment_id: "sample_opensource_cloud_dump",
+        environment_name: "Open-Source Multi-Cloud Telemetry Sample",
+        cloud_provider: "AWS",
+        timestamp: new Date().toISOString(),
+        iam_users: [
+          {
+            user_name: "security-auditor",
+            arn: "arn:aws:iam::123456789012:user/security-auditor",
+            mfa_enabled: false,
+            access_keys: [{ access_key_id: "AKIAIOSFODNN7EXAMPLE", status: "Active", age_days: 140 }],
+            attached_policies: [
+              {
+                policy_name: "AdministratorAccess",
+                policy_document: {
+                  Version: "2012-10-17",
+                  Statement: [{ Effect: "Allow", Action: "*", Resource: "*" }]
+                }
+              }
+            ]
+          },
+          {
+            user_name: "app-developer",
+            arn: "arn:aws:iam::123456789012:user/app-developer",
+            mfa_enabled: false,
+            access_keys: [{ access_key_id: "AKIAI44QH8DHBEXAMPLE", status: "Active", age_days: 45 }],
+            attached_policies: [
+              {
+                policy_name: "PassRoleComputePolicy",
+                policy_document: {
+                  Version: "2012-10-17",
+                  Statement: [
+                    { Effect: "Allow", Action: ["ec2:RunInstances"], Resource: "*" },
+                    { Effect: "Allow", Action: ["iam:PassRole"], Resource: "arn:aws:iam::123456789012:role/AdminRole" }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        s3_buckets: [
+          {
+            bucket_name: "financial-backups-bucket",
+            arn: "arn:aws:s3:::financial-backups-bucket",
+            public_access_block_enabled: false,
+            server_side_encryption_kms: false,
+            versioning_enabled: false
+          }
+        ],
+        security_groups: [
+          {
+            group_id: "sg-01ab23cd45ef6789a",
+            group_name: "production-app-sg",
+            inbound_rules: [
+              { protocol: "tcp", from_port: 22, to_port: 22, cidr_ip: "0.0.0.0/0", description: "Public SSH Access" },
+              { protocol: "tcp", from_port: 3306, to_port: 3306, cidr_ip: "0.0.0.0/0", description: "Public MySQL Database" }
+            ]
+          }
+        ]
+      };
+
+      const jsonBlob = new Blob([JSON.stringify(sampleDump)], { type: 'application/json' });
+      const sampleFile = new File([jsonBlob], 'sample_opensource_cloud_dump.json', { type: 'application/json' });
+      const result = await uploadAndAudit(sampleFile);
+      onAuditComplete(result);
+    } catch (err: any) {
+      setError(err.message || 'Failed to load open-source sample telemetry.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleDownloadSample = () => {
     const sampleDump = {
       environment_id: "custom_cloud_infrastructure_dump",
@@ -142,6 +218,14 @@ export const EmptyUploadLaunchpad: React.FC<EmptyUploadLaunchpadProps> = ({
         <p className="max-w-2xl mx-auto text-sm sm:text-base text-zinc-400 font-mono leading-relaxed">
           Ingest AWS IAM/S3 and Azure topographies to compute deterministic SOC2 & CIS posture scores, traverse lateral privilege escalation graphs, and synthesize production-ready Terraform defense patches.
         </p>
+
+        {/* Free Open Source Data Availability Notice */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-xs font-mono text-cyan-300 shadow-md">
+          <span>💡</span>
+          <span>
+            <b>Instant Testing:</b> You can test AuditHound immediately using the <b>Free Open-Source Sample Data</b> button beside uploading or explore any benchmark scenario below!
+          </span>
+        </div>
       </div>
 
       {/* Primary Ingestion Dropzone */}
@@ -186,7 +270,8 @@ export const EmptyUploadLaunchpad: React.FC<EmptyUploadLaunchpadProps> = ({
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            {/* 1. Browse Local JSON */}
             <button
               type="button"
               onClick={(e) => {
@@ -194,22 +279,38 @@ export const EmptyUploadLaunchpad: React.FC<EmptyUploadLaunchpadProps> = ({
                 fileInputRef.current?.click();
               }}
               disabled={uploading}
-              className="btn-tech-primary px-6 py-3 rounded-xl text-xs font-mono font-bold flex items-center gap-2 shadow-lg hover:scale-105 transition-all"
+              className="btn-tech-primary px-5 py-3 rounded-xl text-xs font-mono font-bold flex items-center gap-2 shadow-lg hover:scale-105 transition-all"
             >
               <FileCode className="h-4 w-4" />
               <span>Browse Local JSON</span>
             </button>
 
+            {/* 2. Free Open Source Data Instant Test Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleLoadSampleDirectly();
+              }}
+              disabled={uploading}
+              className="btn-tech-gradient px-5 py-3 rounded-xl text-xs font-mono font-bold flex items-center gap-2 text-cyan-300 border-cyan-500/40 bg-cyan-950/30 hover:text-white shadow-lg hover:scale-105 transition-all"
+            >
+              <Sparkles className="h-4 w-4 text-cyan-400 animate-pulse" />
+              <span>⚡ Test Free Open-Source Data</span>
+            </button>
+
+            {/* 3. Download Template JSON */}
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 handleDownloadSample();
               }}
-              className="btn-tech-gradient px-5 py-3 rounded-xl text-xs font-mono font-bold flex items-center gap-2 text-zinc-200 hover:text-white shadow-md hover:scale-105 transition-all"
+              className="btn-tech-gradient px-4 py-3 rounded-xl text-xs font-mono font-bold flex items-center gap-2 text-zinc-300 hover:text-white shadow-md hover:scale-105 transition-all"
+              title="Download Sample JSON template"
             >
-              <Download className="h-4 w-4 text-cyan-400" />
-              <span>Download Sample JSON</span>
+              <Download className="h-4 w-4 text-zinc-400" />
+              <span>Download Template</span>
             </button>
           </div>
         </div>

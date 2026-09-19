@@ -18,7 +18,7 @@
   <b>AuditHound</b> is an enterprise-grade autonomous cloud security posture management (CSPM) and compliance auditing platform. It continuously inspects multi-cloud infrastructure configurations (AWS, Azure, Kubernetes), models privilege escalation attack graphs, maps violations to SOC2 Common Criteria and CIS Benchmarks, and automatically generates production-ready, least-privilege Terraform (<code>.tf</code>) remediation patches.
 </p>
 
-[Key Features](#-key-features) • [Architecture](#-architecture) • [Live Scenarios](#-mock-environments-catalog) • [Quickstart](#-quickstart-guide) • [CLI Scanner](#-audithound-cli-scanner) • [REST API](#-api-specification) • [Security](#-security--hardening)
+[Visual Walkthrough](#-end-to-end-audit-walkthrough-input-posture-output--ciso-report) • [Key Features](#-key-features) • [Architecture](#-architecture) • [Live Scenarios](#-mock-environments-catalog) • [Quickstart](#-quickstart-guide) • [CLI Scanner](#-audithound-cli-scanner) • [REST API](#-api-specification) • [Security](#-security--hardening)
 
 </div>
 
@@ -36,7 +36,39 @@ Modern multi-cloud environments suffer from fragmented identity silos, sprawling
 
 ---
 
-## 🚀 Key Features
+## 📸 End-to-End Audit Walkthrough: Input, Posture Output & CISO Report
+
+AuditHound delivers an end-to-end autonomous security pipeline from raw cloud configuration ingestion to mathematical attack graph analysis, posture grading, and CISO audit sign-off:
+
+### 1️⃣ Initial Input — Scenario Telemetry & Threat Ingestion
+> Ingests multi-cloud configuration dumps (AWS IAM policies, trust relationships, security groups, and storage ACLs) and identifies latent risk boundaries.
+
+<div align="center">
+  <img src="docs/images/01_crypto_miner_input_dashboard.png" alt="AuditHound Initial Input & Scenario Dashboard" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
+  <p><i>Figure 1: Initial Telemetry Ingestion — Scenario <code>04_crypto_miner_breach_vector</code> (PassRole Escalation) loaded with active IAM and network boundaries.</i></p>
+</div>
+
+<br/>
+
+### 2️⃣ Engine Output — Posture Index & Attack Path Graph
+> Computes deterministic compliance grades (0–100) using weighted penalty algorithms and traverses multi-hop lateral movement chains with NetworkX.
+
+<div align="center">
+  <img src="docs/images/02_executive_posture_scorecard.png" alt="AuditHound Posture Scorecard & Attack Graph" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
+  <p><i>Figure 2: Executive Scorecard Output — Posture Index <b>58 (Auditor Grade D)</b> with 1 Critical Exploit Path, 1 High-Risk Finding, and SOC2/CIS compliance radars.</i></p>
+</div>
+
+<br/>
+
+### 3️⃣ Final Output — Executive CISO Compliance Report & Remediation
+> Generates comprehensive, auditor-certified CISO briefs with framework score breakdowns, risk matrices, and dynamically synthesized Terraform (<code>.tf</code>) patches.
+
+<div align="center">
+  <img src="docs/images/03_ciso_compliance_report_modal.png" alt="AuditHound Executive CISO Compliance Report" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
+  <p><i>Figure 3: CISO Executive Report Modal — SOC2 CC6.1 (60%), CC6.3 (80%), CC6.6 (100%), and CC6.7 (100%) pass rates with printable PDF export.</i></p>
+</div>
+
+---
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐

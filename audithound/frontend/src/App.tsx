@@ -508,8 +508,21 @@ export const App: React.FC = () => {
         />
       )}
 
+      {/* Persistent Floating Quick-Access for Security Concepts */}
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-30">
+        <button
+          onClick={() => setIsSecurityConceptsOpen(true)}
+          className="group flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-black/90 border border-purple-500/50 text-purple-300 hover:text-white hover:bg-purple-950/80 shadow-[0_0_30px_rgba(168,85,247,0.35)] backdrop-blur-2xl transition-all duration-300 hover:scale-105 active:scale-95 font-mono text-xs font-bold cursor-pointer"
+          title="Open Comprehensive Cybersecurity Concepts & Operator Guide"
+        >
+          <BookOpen className="h-4 w-4 text-purple-400 group-hover:rotate-12 transition-transform animate-pulse" />
+          <span className="hidden sm:inline">📚 Security Concepts & Guide</span>
+          <span className="sm:hidden">📚 Concepts</span>
+        </button>
+      </div>
+
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/[0.08] bg-black/90 backdrop-blur-md py-6 text-center text-xs text-zinc-500 font-mono">
+      <footer className="relative z-10 border-t border-white/[0.08] bg-black/90 backdrop-blur-md py-6 text-center text-xs text-zinc-500 font-mono pb-20 sm:pb-6 safe-bottom">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <AuditHoundLogo size="xs" showText={true} />

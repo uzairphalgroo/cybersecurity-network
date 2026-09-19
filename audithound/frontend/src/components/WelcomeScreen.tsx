@@ -47,10 +47,18 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
     };
   }, []);
 
-  // Smooth Fade-Out when scrolled or clicked
+  // Instant & smooth exit on click, key, touch or scroll
+  const handleTriggerExit = () => {
+    if (isExiting) return;
+    setIsExiting(true);
+    setTimeout(() => {
+      onEnter();
+    }, 120);
+  };
+
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) > 5) {
+      if (Math.abs(e.deltaY) > 3) {
         handleTriggerExit();
       }
     };
@@ -68,14 +76,6 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
-
-  const handleTriggerExit = () => {
-    if (isExiting) return;
-    setIsExiting(true);
-    setTimeout(() => {
-      onEnter();
-    }, 550);
-  };
 
   return (
     <div
@@ -149,16 +149,21 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
         </div>
       </main>
 
-      {/* Ferrari-Style 3D Scroll & Gesture Indicator */}
-      <footer className="relative z-10 pb-12 flex flex-col items-center gap-3">
-        <div className="flex flex-col items-center gap-2 group">
-          <div className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-1.5 backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.15)] group-hover:border-white transition-colors">
-            <div className="w-1.5 h-2.5 rounded-full bg-white animate-bounce" />
-          </div>
-          <span className="text-[11px] font-mono tracking-[0.25em] text-zinc-400 uppercase group-hover:text-white transition-colors flex items-center gap-1.5">
-            <span>SCROLL OR CLICK TO ENTER</span>
-            <ChevronDown className="h-3.5 w-3.5 animate-bounce" />
-          </span>
+      {/* Ferrari-Style 3D Enter Button & Scroll Gesture */}
+      <footer className="relative z-10 pb-10 flex flex-col items-center gap-4">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleTriggerExit();
+          }}
+          className="btn-tech-primary px-8 py-3.5 rounded-2xl text-xs sm:text-sm font-mono font-black tracking-widest uppercase shadow-[0_0_40px_rgba(255,255,255,0.45)] hover:scale-105 active:scale-95 transition-all flex items-center gap-2.5 cursor-pointer z-20"
+        >
+          <span>⚡ ENTER COMMAND CENTER</span>
+          <ChevronDown className="h-4 w-4 animate-bounce" />
+        </button>
+
+        <div className="flex items-center gap-2 text-[10px] font-mono tracking-[0.25em] text-zinc-400 uppercase">
+          <span>CLICK ANYWHERE OR SCROLL TO ENTER</span>
         </div>
       </footer>
     </div>

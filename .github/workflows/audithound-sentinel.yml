@@ -1,0 +1,48 @@
+name: 🛡️ AuditHound CI/CD Security Gate
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  security-audit:
+    name: 🐾 Run Autonomous Cloud Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: 📦 Install Dependencies
+        run: |
+          cd audithound/backend
+          pip install -r requirements.txt
+
+      - name: 🧪 Run Security Engine Test Suite
+        run: |
+          cd audithound/backend
+          pytest tests -v
+
+      - name: 🔍 Execute AuditHound GitOps PR Gate
+        run: |
+          cd audithound
+          python backend/github_action_scanner.py \
+            --file sample_opensource_cloud_dump.json \
+            --fail-on CRITICAL \
+            --output-comment audithound_pr_comment.md
+
+      - name: 📑 Upload Audit Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audithound-pr-comment
+          path: audithound/audithound_pr_comment.md

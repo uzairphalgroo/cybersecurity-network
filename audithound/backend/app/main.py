@@ -7,7 +7,8 @@ from app.routers import (
     environments_router,
     audit_router,
     remediation_router,
-    reports_router
+    reports_router,
+    advanced_router
 )
 
 # Configure structured logging
@@ -51,6 +52,7 @@ app.include_router(environments_router)
 app.include_router(audit_router)
 app.include_router(remediation_router)
 app.include_router(reports_router)
+app.include_router(advanced_router)
 
 
 @app.get("/", tags=["Health"])

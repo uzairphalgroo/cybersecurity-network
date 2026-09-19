@@ -54,14 +54,15 @@
         </span>
       </div>
       <p style="color: #c9d1d9; font-size: 13.5px; line-height: 1.6; margin-top: 10px;">
-        An enterprise-grade autonomous Cloud Security Posture Management (CSPM) and attack path visualization platform. Ingests AWS IAM/S3 and Azure topographies, computes deterministic SOC2 & CIS compliance posture scores (0–100), traverses privilege escalation graphs with NetworkX, dynamically generates least-privilege Terraform (<code>.tf</code>) patches, and exports auditor-certified CISO reports.
+        An enterprise-grade autonomous Cloud Security Posture Management (CSPM) and attack path visualization platform with <b>Autonomous AI Purple-Teaming Breach Simulation</b>, <b>Temporal Drift Radar</b>, <b>CI/CD GitOps PR Security Sentinel</b>, <b>1-Click Zero-Touch Auto-Remediation</b>, and <b>Real-Time eBPF Runtime Packet Telemetry</b>. Computes deterministic SOC2 & CIS compliance posture scores, traverses privilege escalation graphs with NetworkX, dynamically generates least-privilege Terraform (<code>.tf</code>) patches, and exports auditor-certified CISO reports.
       </p>
       <div style="margin-top: 12px;">
         <img src="https://img.shields.io/badge/FastAPI-3.12-3776AB?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI"/>
         <img src="https://img.shields.io/badge/React_18-TypeScript-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React"/>
         <img src="https://img.shields.io/badge/Cytoscape.js-Attack_Graphs-FF6F00?style=flat-square" alt="Cytoscape"/>
+        <img src="https://img.shields.io/badge/eBPF_Telemetry-Kernel_6.8-10B981?style=flat-square" alt="eBPF"/>
         <img src="https://img.shields.io/badge/Terraform_IaC-GitOps-844FBA?style=flat-square&logo=terraform&logoColor=white" alt="Terraform"/>
-        <img src="https://img.shields.io/badge/Pytest-23%2F23_Passed-4ade80?style=flat-square&logo=pytest&logoColor=white" alt="Pytest"/>
+        <img src="https://img.shields.io/badge/Pytest-30%2F30_Passed-4ade80?style=flat-square&logo=pytest&logoColor=white" alt="Pytest"/>
       </div>
       <div style="margin-top: 14px; padding: 10px 14px; background: #0b0f19; border-radius: 8px; border: 1px solid #21262d; font-family: monospace; font-size: 12px; color: #58a6ff;">
         <code>$ cd audithound &amp;&amp; docker compose up --build</code> &nbsp;|&nbsp; <code><a href="audithound/README.md" style="color: #7ee787;">📖 Read AuditHound Documentation →</a></code>

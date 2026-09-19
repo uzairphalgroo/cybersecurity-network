@@ -33,6 +33,11 @@ Modern multi-cloud environments suffer from fragmented identity silos, sprawling
 2. **Deterministic Compliance Mapping** (SOC2 CC6.1–CC6.8 and CIS AWS/Azure/K8s benchmarks).
 3. **Automated Terraform HCL Remediation** (generating immediate drop-in least-privilege patches).
 4. **CISO-Ready Executive Reporting** (auditor sign-offs, risk matrices, and exportable HTML/PDF briefs).
+5. 🤖 **Autonomous AI Purple-Teaming & Breach Simulator** (MITRE ATT&CK campaign emulation, blast radius % gauges, and single-click kill-chain cut-points).
+6. ⏱️ **Temporal "Time-Travel" Drift Radar** (4-epoch timeline scrubber from golden baseline to out-of-band drift and hardened recovery).
+7. 🐙 **GitHub Action & CI/CD GitOps Sentinel** (Automated PR security gate blocking misconfigurations before they reach production).
+8. ⚡ **1-Click Zero-Touch Cloud Auto-Remediation** (Non-destructive CLI dry-runs, instant cloud apply, and cryptographic rollback tokens).
+9. 📡 **Real-Time eBPF Runtime Packet Telemetry** (Kernel 6.8 eBPF JIT socket stream inspection bound directly to IAM attack paths).
 
 ---
 

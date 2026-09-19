@@ -13,16 +13,20 @@ import { HowToUseModal } from './components/HowToUseModal';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { AuditHoundLogo } from './components/AuditHoundLogo';
 import { EmptyUploadLaunchpad } from './components/EmptyUploadLaunchpad';
+import { PurpleTeamSimulator } from './components/PurpleTeamSimulator';
+import { TemporalDriftRadar } from './components/TemporalDriftRadar';
+import { EbpfTelemetryRadar } from './components/EbpfTelemetryRadar';
+import { ZeroTouchRemediatorModal } from './components/ZeroTouchRemediatorModal';
 import { fetchEnvironments, runAudit } from './services/api';
 import { EnvironmentSummary, AuditResponse, Finding } from './types/audit';
-import { LayoutDashboard, Network, AlertTriangle, Wrench, Loader2, Layers, ShieldCheck, ShieldAlert, HelpCircle, ArrowLeft, Upload, FileCode } from 'lucide-react';
+import { LayoutDashboard, Network, AlertTriangle, Wrench, Loader2, Layers, ShieldCheck, ShieldAlert, HelpCircle, ArrowLeft, Upload, FileCode, Bot, History, Radio, Zap } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [environments, setEnvironments] = useState<EnvironmentSummary[]>([]);
   const [selectedEnvId, setSelectedEnvId] = useState<string>('');
   const [auditData, setAuditData] = useState<AuditResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'graph' | 'findings' | 'remediation'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'graph' | 'findings' | 'remediation' | 'purple_team' | 'drift' | 'ebpf'>('overview');
   const [selectedFindingIdForRemediation, setSelectedFindingIdForRemediation] = useState<string | null>(null);
 
   // Welcome Screen state
@@ -33,6 +37,7 @@ export const App: React.FC = () => {
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   const [isEnvHubOpen, setIsEnvHubOpen] = useState<boolean>(false);
   const [isHowToUseOpen, setIsHowToUseOpen] = useState<boolean>(false);
+  const [isZeroTouchOpen, setIsZeroTouchOpen] = useState<boolean>(false);
 
   // Initial load: environments list only (without auto-running audit)
   useEffect(() => {
@@ -255,167 +260,241 @@ export const App: React.FC = () => {
             </div>
 
             {/* Cyber Navigation Tabs with Generous Padding */}
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-1">
-              <nav className="flex flex-wrap gap-2 sm:gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between border-b border-white/[0.08] pb-2 gap-4">
+              <nav className="flex flex-wrap gap-2 sm:gap-3">
                 <button
                   onClick={() => setActiveTab('overview')}
-                  className={`flex items-center gap-2.5 rounded-2xl py-3 px-5 sm:px-6 text-xs sm:text-sm font-mono font-bold transition-all ${
+                  className={`flex items-center gap-2 rounded-2xl py-2.5 px-4 text-xs font-mono font-bold transition-all cursor-pointer ${
                     activeTab === 'overview'
-                      ? 'bg-white text-black shadow-[0_0_25px_rgba(255,255,255,0.4)]'
+                      ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.4)]'
                       : 'text-zinc-400 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   <LayoutDashboard className="h-4 w-4" />
-                  <span>Executive Dashboard</span>
+                  <span>Dashboard</span>
                 </button>
 
-            <button
-              onClick={() => setActiveTab('graph')}
-              className={`flex items-center gap-2.5 rounded-2xl py-3 px-5 sm:px-6 text-xs sm:text-sm font-mono font-bold transition-all ${
-                activeTab === 'graph'
-                  ? 'bg-white text-black shadow-[0_0_25px_rgba(255,255,255,0.4)]'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Network className="h-4 w-4" />
-              <span>Privilege Escalation Graph</span>
-              {auditData?.graph_data?.attack_paths?.length ? (
-                <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold border ${
-                  activeTab === 'graph' ? 'bg-black text-rose-400 border-black' : 'bg-rose-500/20 text-rose-400 border-rose-500/40'
-                }`}>
-                  {auditData.graph_data.attack_paths.length}
-                </span>
-              ) : null}
-            </button>
+                <button
+                  onClick={() => setActiveTab('purple_team')}
+                  className={`flex items-center gap-2 rounded-2xl py-2.5 px-4 text-xs font-mono font-bold transition-all cursor-pointer border ${
+                    activeTab === 'purple_team'
+                      ? 'bg-purple-600 text-white border-purple-400 shadow-[0_0_20px_rgba(168,85,247,0.5)]'
+                      : 'border-purple-500/30 bg-purple-950/20 text-purple-300 hover:bg-purple-900/40'
+                  }`}
+                >
+                  <Bot className="h-4 w-4 text-purple-400" />
+                  <span>🤖 Purple-Team AI</span>
+                </button>
 
-            <button
-              onClick={() => setActiveTab('findings')}
-              className={`flex items-center gap-2.5 rounded-2xl py-3 px-5 sm:px-6 text-xs sm:text-sm font-mono font-bold transition-all ${
-                activeTab === 'findings'
-                  ? 'bg-white text-black shadow-[0_0_25px_rgba(255,255,255,0.4)]'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <AlertTriangle className="h-4 w-4" />
-              <span>Compliance Findings</span>
-              {auditData?.findings?.length ? (
-                <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold border ${
-                  activeTab === 'findings' ? 'bg-black text-zinc-100 border-black' : 'bg-zinc-800 text-zinc-300 border-white/10'
-                }`}>
-                  {auditData.findings.length}
-                </span>
-              ) : null}
-            </button>
+                <button
+                  onClick={() => setActiveTab('drift')}
+                  className={`flex items-center gap-2 rounded-2xl py-2.5 px-4 text-xs font-mono font-bold transition-all cursor-pointer border ${
+                    activeTab === 'drift'
+                      ? 'bg-blue-600 text-white border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.5)]'
+                      : 'border-blue-500/30 bg-blue-950/20 text-blue-300 hover:bg-blue-900/40'
+                  }`}
+                >
+                  <History className="h-4 w-4 text-blue-400" />
+                  <span>⏱️ Drift Radar</span>
+                </button>
 
-            <button
-              onClick={() => setActiveTab('remediation')}
-              className={`flex items-center gap-2.5 rounded-2xl py-3 px-5 sm:px-6 text-xs sm:text-sm font-mono font-bold transition-all ${
-                activeTab === 'remediation'
-                  ? 'bg-white text-black shadow-[0_0_25px_rgba(255,255,255,0.4)]'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Wrench className="h-4 w-4" />
-              <span>Terraform Patches</span>
-              {auditData?.remediation_patches?.length ? (
-                <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold border ${
-                  activeTab === 'remediation' ? 'bg-black text-zinc-100 border-black' : 'bg-white/10 text-white border-white/20'
-                }`}>
-                  {auditData.remediation_patches.length}
-                </span>
-              ) : null}
-            </button>
-          </nav>
-        </div>
+                <button
+                  onClick={() => setActiveTab('ebpf')}
+                  className={`flex items-center gap-2 rounded-2xl py-2.5 px-4 text-xs font-mono font-bold transition-all cursor-pointer border ${
+                    activeTab === 'ebpf'
+                      ? 'bg-emerald-600 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)]'
+                      : 'border-emerald-500/30 bg-emerald-950/20 text-emerald-300 hover:bg-emerald-900/40'
+                  }`}
+                >
+                  <Radio className="h-4 w-4 text-emerald-400" />
+                  <span>📡 eBPF Telemetry</span>
+                </button>
 
-        {/* Main Tab Content Display */}
-        <div className="space-y-6">
-          {/* 1. Overview Tab */}
-            {activeTab === 'overview' && (
-              <div className="space-y-6">
-                <ExecutiveScorecard
-                  score={auditData.posture_score}
-                  environmentName={auditData.environment_name}
-                  provider={auditData.provider}
-                  attackChainsCount={auditData.graph_data?.attack_paths?.length || 0}
-                />
+                <button
+                  onClick={() => setActiveTab('graph')}
+                  className={`flex items-center gap-2 rounded-2xl py-2.5 px-4 text-xs font-mono font-bold transition-all cursor-pointer ${
+                    activeTab === 'graph'
+                      ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.4)]'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <Network className="h-4 w-4" />
+                  <span>Attack Graph</span>
+                  {auditData?.graph_data?.attack_paths?.length ? (
+                    <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold border ${
+                      activeTab === 'graph' ? 'bg-black text-rose-400 border-black' : 'bg-rose-500/20 text-rose-400 border-rose-500/40'
+                    }`}>
+                      {auditData.graph_data.attack_paths.length}
+                    </span>
+                  ) : null}
+                </button>
 
-                {/* Quick Previews of Graph and Top Findings */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="lg:col-span-2">
-                    <AttackGraphViewer
-                      graphData={auditData.graph_data}
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between px-1">
-                      <h3 className="text-sm font-bold font-orbitron text-white">TOP FINDINGS</h3>
-                      <button
-                        onClick={() => setActiveTab('findings')}
-                        className="text-xs font-mono text-zinc-400 hover:text-white"
-                      >
-                        View all ({auditData.findings.length}) &rarr;
-                      </button>
+                <button
+                  onClick={() => setActiveTab('findings')}
+                  className={`flex items-center gap-2 rounded-2xl py-2.5 px-4 text-xs font-mono font-bold transition-all cursor-pointer ${
+                    activeTab === 'findings'
+                      ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.4)]'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <AlertTriangle className="h-4 w-4" />
+                  <span>Findings</span>
+                  {auditData?.findings?.length ? (
+                    <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold border ${
+                      activeTab === 'findings' ? 'bg-black text-zinc-100 border-black' : 'bg-zinc-800 text-zinc-300 border-white/10'
+                    }`}>
+                      {auditData.findings.length}
+                    </span>
+                  ) : null}
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('remediation')}
+                  className={`flex items-center gap-2 rounded-2xl py-2.5 px-4 text-xs font-mono font-bold transition-all cursor-pointer ${
+                    activeTab === 'remediation'
+                      ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.4)]'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <Wrench className="h-4 w-4" />
+                  <span>Patches</span>
+                </button>
+              </nav>
+
+              {/* 1-Click Zero-Touch Fast Trigger */}
+              <button
+                onClick={() => setIsZeroTouchOpen(true)}
+                className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-mono font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-2 border border-emerald-400/40 cursor-pointer shrink-0 transition-all hover:scale-105"
+              >
+                <Zap className="h-4 w-4 text-amber-300 animate-pulse" />
+                <span>⚡ 1-Click Zero-Touch Remediate</span>
+              </button>
+            </div>
+
+            {/* Main Tab Content Display */}
+            <div className="space-y-6">
+              {/* 1. Overview Tab */}
+              {activeTab === 'overview' && (
+                <div className="space-y-6">
+                  <ExecutiveScorecard
+                    score={auditData.posture_score}
+                    environmentName={auditData.environment_name}
+                    provider={auditData.provider}
+                    attackChainsCount={auditData.graph_data?.attack_paths?.length || 0}
+                  />
+
+                  {/* Quick Previews of Graph and Top Findings */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2">
+                      <AttackGraphViewer
+                        graphData={auditData.graph_data}
+                      />
                     </div>
-                    <div className="space-y-3">
-                      {auditData.findings.slice(0, 4).map((f) => (
-                        <div
-                          key={f.id}
-                          className="p-4 rounded-2xl bg-zinc-900/60 border border-white/10 hover:border-white/30 transition cursor-pointer shadow-md"
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between px-1">
+                        <h3 className="text-sm font-bold font-orbitron text-white">TOP FINDINGS</h3>
+                        <button
                           onClick={() => setActiveTab('findings')}
+                          className="text-xs font-mono text-zinc-400 hover:text-white"
                         >
-                          <div className="flex items-center justify-between text-xs mb-1.5">
-                            <span className="font-mono font-bold text-white">{f.id}</span>
-                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                              f.severity === 'CRITICAL' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
-                              f.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
-                              'bg-zinc-800 text-zinc-300'
-                            }`}>
-                              {f.severity}
-                            </span>
+                          View all ({auditData.findings.length}) &rarr;
+                        </button>
+                      </div>
+                      <div className="space-y-3">
+                        {auditData.findings.slice(0, 4).map((f) => (
+                          <div
+                            key={f.id}
+                            className="p-4 rounded-2xl bg-zinc-900/60 border border-white/10 hover:border-white/30 transition cursor-pointer shadow-md"
+                            onClick={() => setActiveTab('findings')}
+                          >
+                            <div className="flex items-center justify-between text-xs mb-1.5">
+                              <span className="font-mono font-bold text-white">{f.id}</span>
+                              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                                f.severity === 'CRITICAL' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
+                                f.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                                'bg-zinc-800 text-zinc-300'
+                              }`}>
+                                {f.severity}
+                              </span>
+                            </div>
+                            <p className="text-xs text-zinc-300 font-mono line-clamp-1">{f.title}</p>
                           </div>
-                          <p className="text-xs text-zinc-300 font-mono line-clamp-1">{f.title}</p>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* 2. Attack Graph Tab */}
-            {activeTab === 'graph' && (
-              <div className="space-y-4">
-                <AttackGraphViewer
-                  graphData={auditData.graph_data}
+              {/* 2. Purple Team Simulator Tab */}
+              {activeTab === 'purple_team' && (
+                <PurpleTeamSimulator
+                  auditData={auditData}
+                  onNavigateToRemediation={() => setActiveTab('remediation')}
                 />
-              </div>
-            )}
+              )}
 
-            {/* 3. Findings Table Tab */}
-            {activeTab === 'findings' && (
-              <div className="space-y-4">
-                <FindingsTable
-                  findings={auditData.findings}
-                  onSelectFindingForRemediation={handleSelectFindingForRemediation}
+              {/* 3. Temporal Drift Radar Tab */}
+              {activeTab === 'drift' && (
+                <TemporalDriftRadar
+                  auditData={auditData}
+                  onNavigateToRemediation={() => setActiveTab('remediation')}
                 />
-              </div>
-            )}
+              )}
 
-            {/* 4. Remediation Workbench Tab */}
-            {activeTab === 'remediation' && (
-              <div className="space-y-4">
-                <RemediationWorkbench
-                  patches={auditData.remediation_patches}
-                  environmentId={auditData.environment_id}
-                  selectedFindingId={selectedFindingIdForRemediation}
+              {/* 4. eBPF Packet Telemetry Tab */}
+              {activeTab === 'ebpf' && (
+                <EbpfTelemetryRadar
+                  auditData={auditData}
                 />
-              </div>
-            )}
-          </div>
-        </>
+              )}
+
+              {/* 5. Attack Graph Tab */}
+              {activeTab === 'graph' && (
+                <div className="space-y-4">
+                  <AttackGraphViewer
+                    graphData={auditData.graph_data}
+                  />
+                </div>
+              )}
+
+              {/* 6. Findings Table Tab */}
+              {activeTab === 'findings' && (
+                <div className="space-y-4">
+                  <FindingsTable
+                    findings={auditData.findings}
+                    onSelectFindingForRemediation={handleSelectFindingForRemediation}
+                  />
+                </div>
+              )}
+
+              {/* 7. Remediation Workbench Tab */}
+              {activeTab === 'remediation' && (
+                <div className="space-y-4">
+                  <RemediationWorkbench
+                    patches={auditData.remediation_patches}
+                    environmentId={auditData.environment_id}
+                    selectedFindingId={selectedFindingIdForRemediation}
+                  />
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </main>
+
+      {/* 1-Click Zero-Touch Cloud Auto-Remediation Modal */}
+      {auditData && (
+        <ZeroTouchRemediatorModal
+          isOpen={isZeroTouchOpen}
+          onClose={() => setIsZeroTouchOpen(false)}
+          findings={auditData.findings}
+          provider={auditData.provider}
+          onRemediationApplied={() => {
+            triggerAudit(selectedEnvId, true);
+          }}
+        />
       )}
-    </main>
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.08] bg-black/90 backdrop-blur-md py-6 text-center text-xs text-zinc-500 font-mono">

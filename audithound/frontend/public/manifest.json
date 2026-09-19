@@ -1,0 +1,41 @@
+{
+  "name": "AuditHound - Autonomous Cloud Security & Compliance Engine",
+  "short_name": "AuditHound",
+  "description": "Autonomous Cloud Security Posture Management (CSPM), Multi-Hop Attack Path Graphs, AI Purple-Teaming & 1-Click Zero-Touch Terraform Remediation.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "any",
+  "categories": ["security", "developer tools", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Scenario Matrix Hub",
+      "url": "/#scenarios",
+      "description": "Explore 10 pre-built cloud breach & hardened baselines"
+    },
+    {
+      "name": "Attack Graph Engine",
+      "url": "/#graph",
+      "description": "Analyze mathematical multi-hop IAM privilege escalation paths"
+    },
+    {
+      "name": "Purple-Team AI Simulator",
+      "url": "/#purple-team",
+      "description": "Simulate autonomous adversary breach campaigns"
+    },
+    {
+      "name": "Zero-Touch Remediation",
+      "url": "/#remediation",
+      "description": "Deploy 1-click synthetic Terraform least-privilege patches"
+    }
+  ]
+}

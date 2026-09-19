@@ -1,16 +1,161 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="dark scroll-smooth">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+
+    <!-- Primary Metadata -->
+    <title>AuditHound — Autonomous Cloud Security (CSPM) &amp; Zero-Touch Remediation</title>
+    <meta name="title" content="AuditHound — Autonomous Cloud Security (CSPM) &amp; Zero-Touch Remediation" />
+    <meta name="description" content="Next-Generation Cloud Security Posture Management (CSPM), Multi-Hop Attack Path Graphs, Autonomous AI Purple-Teaming, Temporal Drift Radar, eBPF Kernel Telemetry, and 1-Click Zero-Touch Terraform Remediation." />
+    <meta name="keywords" content="CSPM, Cloud Security, Cloud Security Posture Management, Attack Path Graph, IAM Privilege Escalation, Zero-Touch Remediation, Terraform Auto-Patch, SOC 2 Type II, CIS Benchmarks, eBPF Security, MITRE ATT&amp;CK, Autonomous Purple Teaming, AWS Security, Kubernetes Security, Azure Security, Drift Detection, Cloud Audit" />
+    <meta name="author" content="AuditHound Security Engineering" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://audithound.io/" />
+
+    <!-- App & Favicon Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AuditHound &bull; Autonomous Cloud Security & Compliance</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Mobile & PWA Theme Controls -->
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AuditHound" />
+    <meta name="format-detection" content="telephone=no, address=no, email=no" />
+
+    <!-- Open Graph / Facebook / LinkedIn / Discord -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://audithound.io/" />
+    <meta property="og:site_name" content="AuditHound" />
+    <meta property="og:title" content="AuditHound — Autonomous Cloud Security (CSPM) &amp; Zero-Touch Remediation" />
+    <meta property="og:description" content="Next-Gen CSPM, Multi-Hop Attack Path Graphs, AI Purple-Teaming Simulator, and 1-Click Zero-Touch Terraform Least-Privilege Remediation." />
+    <meta property="og:image" content="https://audithound.io/og-image.svg" />
+    <meta property="og:image:secure_url" content="https://audithound.io/og-image.svg" />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="AuditHound Autonomous Cloud Security Posture Management (CSPM) Engine Banner" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://audithound.io/" />
+    <meta name="twitter:site" content="@AuditHoundSec" />
+    <meta name="twitter:creator" content="@AuditHoundSec" />
+    <meta name="twitter:title" content="AuditHound — Autonomous Cloud Security (CSPM) &amp; Zero-Touch Remediation" />
+    <meta name="twitter:description" content="Autonomous Cloud Security Posture Management, Multi-Hop Attack Path Graphs, AI Purple-Teaming, and 1-Click Terraform Remediation." />
+    <meta name="twitter:image" content="https://audithound.io/og-image.svg" />
+    <meta name="twitter:image:alt" content="AuditHound Platform Interface Showcase" />
+
+    <!-- Preconnect & High-Performance Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Structured Data (JSON-LD) - Multi-Entity Penultimate SEO Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://audithound.io/#organization",
+          "name": "AuditHound",
+          "url": "https://audithound.io",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://audithound.io/favicon.svg",
+            "width": "512",
+            "height": "512"
+          },
+          "sameAs": [
+            "https://github.com/uzairphalgroo/cybersecurity-network"
+          ],
+          "description": "Enterprise autonomous cloud security posture management (CSPM), mathematical attack graph engine, and zero-touch Infrastructure-as-Code auto-remediation."
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://audithound.io/#website",
+          "url": "https://audithound.io",
+          "name": "AuditHound Cloud Security",
+          "publisher": {
+            "@id": "https://audithound.io/#organization"
+          },
+          "inLanguage": "en-US",
+          "description": "Autonomous CSPM, Multi-Hop Attack Graphs & Zero-Touch Terraform Defense"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://audithound.io/#software",
+          "name": "AuditHound CSPM & Attack Graph Sentinel",
+          "applicationCategory": "SecurityApplication",
+          "operatingSystem": "All (Web, Linux, macOS, Windows, iOS, Android)",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "featureList": [
+            "Automated Cloud Security Posture Management (CSPM)",
+            "Mathematical Multi-Hop Attack Path Graphs & Privilege Escalation Traversals",
+            "Autonomous AI Purple-Teaming Adversary Breach Simulation",
+            "Temporal Infrastructure Drift Radar & Forensic Attribution",
+            "eBPF Runtime Kernel Packet Telemetry Stream Correlation",
+            "1-Click Zero-Touch Terraform Auto-Remediation with Instant Rollback",
+            "Automated SOC 2 Type II, CIS Benchmarks & MITRE ATT&CK Compliance Mapping",
+            "Auditor-Certified Standalone CISO Executive Reports",
+            "GitHub Action Security Sentinel Gate"
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://audithound.io/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is Cloud Security Posture Management (CSPM)?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "CSPM is an automated practice of identifying, assessing, and remediating security risks, compliance violations, and misconfigurations across multi-cloud environments (AWS, Azure, GCP, Kubernetes). AuditHound evaluates cloud topologies against SOC 2 and CIS benchmarks in under 200 milliseconds."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does AuditHound detect IAM privilege escalation attack paths?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AuditHound constructs a directed graph G = (V, E) of cloud identities, roles, compute nodes, and security groups. It detects multi-hop privilege escalation vectors such as iam:PassRole combined with ec2:RunInstances, iam:CreatePolicyVersion, and unconstrained wildcard (*) permissions."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is 1-Click Zero-Touch Auto-Remediation?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AuditHound automatically synthesizes least-privilege Terraform (.tf) Infrastructure-as-Code patches. Users can run non-destructive dry-run synthetic plans or execute 1-click cloud applies with cryptographically signed rollback checkpoints."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What compliance frameworks are supported?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AuditHound natively supports SOC 2 Type II Common Criteria (CC6.1 to CC6.8), CIS AWS Foundations Benchmark v3.0, CIS Microsoft Azure Benchmark v2.0, CIS Kubernetes Benchmark v1.8, and MITRE ATT&CK Cloud Matrix."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
-  <body class="bg-[#000000] text-zinc-100 antialiased selection:bg-white selection:text-black min-h-screen">
+  <body class="bg-[#000000] text-zinc-100 antialiased selection:bg-white selection:text-black min-h-screen overflow-x-hidden">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

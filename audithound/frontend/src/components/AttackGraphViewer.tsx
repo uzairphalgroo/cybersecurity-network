@@ -245,7 +245,7 @@ export const AttackGraphViewer: React.FC<AttackGraphViewerProps> = ({ graphData 
   };
 
   return (
-    <div className="relative flex h-[620px] w-full flex-col rounded-3xl border border-white/10 bg-black/90 backdrop-blur-2xl overflow-hidden shadow-2xl font-tech">
+    <div className="relative flex h-[480px] sm:h-[560px] lg:h-[620px] w-full flex-col rounded-3xl border border-white/10 bg-black/90 backdrop-blur-2xl overflow-hidden shadow-2xl font-tech">
       {/* Top Controls Bar */}
       <div className="z-10 flex flex-wrap items-center justify-between border-b border-white/[0.08] bg-zinc-950/90 px-5 py-3 gap-3">
         <div className="flex items-center gap-2">
@@ -333,7 +333,7 @@ export const AttackGraphViewer: React.FC<AttackGraphViewerProps> = ({ graphData 
 
         {/* Node Inspection Drawer */}
         {selectedNode && (
-          <div className="absolute right-3 top-3 bottom-3 z-20 w-80 rounded-2xl border border-white/15 bg-black/95 p-5 backdrop-blur-2xl shadow-2xl overflow-y-auto font-tech">
+          <div className="absolute right-3 top-3 bottom-3 z-20 w-[calc(100%-1.5rem)] sm:w-80 rounded-2xl border border-white/15 bg-black/95 p-5 backdrop-blur-2xl shadow-2xl overflow-y-auto font-tech">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-400">NODE INSPECTOR</span>

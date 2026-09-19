@@ -1,0 +1,17 @@
+# AuditHound - Autonomous Cloud Security Posture Management & Zero-Touch Defense
+# Penultimate Search Engine Optimization & Crawling Directive
+
+User-agent: *
+Allow: /
+Allow: /api/
+Allow: /assets/
+Allow: /favicon.svg
+Allow: /manifest.json
+Allow: /og-image.svg
+
+# Crawl-delay for optimal indexing
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://audithound.io/sitemap.xml
+Sitemap: https://audithound.dev/sitemap.xml

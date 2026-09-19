@@ -9,7 +9,7 @@ REPORT_HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AuditHound Executive Security Audit: {{ audit.environment_name }}</title>
+  <title>Sentinara Executive Security Audit: {{ audit.environment_name }}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
@@ -314,7 +314,7 @@ REPORT_HTML_TEMPLATE = """<!DOCTYPE html>
           <circle cx="50" cy="45" r="4" fill="#FFFFFF" stroke="#F43F5E" stroke-width="1.5"/>
         </svg>
         <div>
-          <h1 class="logo-title">AuditHound</h1>
+          <h1 class="logo-title">Sentinara</h1>
           <div class="logo-sub">Autonomous Cloud Security Sentinel</div>
         </div>
       </div>
@@ -418,7 +418,7 @@ REPORT_HTML_TEMPLATE = """<!DOCTYPE html>
       <div class="signoff-section">
         <div>
           <div><strong>Principal Cloud Security Auditor</strong></div>
-          <div class="signoff-field">Signature / Timestamp: AuditHound Autonomous Engine v1.0</div>
+          <div class="signoff-field">Signature / Timestamp: Sentinara Autonomous Engine v1.0</div>
           <div class="signoff-field">Audit Status: Official Security Assessment Complete</div>
         </div>
         <div>
@@ -430,7 +430,7 @@ REPORT_HTML_TEMPLATE = """<!DOCTYPE html>
     </main>
 
     <footer class="footer">
-      Generated automatically by AuditHound Security Platform &bull; ISO/IEC 27001 & SOC2 Type II Certified Pipeline
+      Generated automatically by Sentinara Security Platform &bull; ISO/IEC 27001 & SOC2 Type II Certified Pipeline
     </footer>
   </div>
 </body>

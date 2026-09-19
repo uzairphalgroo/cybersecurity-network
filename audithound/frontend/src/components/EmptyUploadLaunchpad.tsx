@@ -226,7 +226,7 @@ export const EmptyUploadLaunchpad: React.FC<EmptyUploadLaunchpadProps> = ({
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-xs font-mono text-cyan-300 shadow-md">
             <span>💡</span>
             <span>
-              <b>Instant Testing:</b> You can test AuditHound immediately using the <b>Free Open-Source Sample Data</b> button beside uploading or explore any benchmark scenario below!
+              <b>Instant Testing:</b> You can test Sentinara immediately using the <b>Free Open-Source Sample Data</b> button beside uploading or explore any benchmark scenario below!
             </span>
           </div>
 

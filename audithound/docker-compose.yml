@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    container_name: audithound-backend
+    container_name: sentinara-backend
     ports:
       - "8000:8000"
     environment:
@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-    container_name: audithound-frontend
+    container_name: sentinara-frontend
     ports:
       - "3000:80"
     depends_on:

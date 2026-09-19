@@ -106,7 +106,7 @@ def execute_zero_touch_remediation(request: ZeroTouchRemediateRequest):
             "step": 1,
             "action": "IAM & Policy Pre-Flight Authorization",
             "status": "PASSED",
-            "detail": "Verified Terraform Operator role ARN: arn:aws:iam::123456789012:role/AuditHoundRemediationGate"
+            "detail": "Verified Terraform Operator role ARN: arn:aws:iam::123456789012:role/SentinaraRemediationGate"
         })
         step_logs.append({
             "step": 2,

@@ -1,6 +1,6 @@
-# Contributing to AuditHound
+# Contributing to Sentinara
 
-Thank you for your interest in contributing to **AuditHound**! We welcome contributions from cloud security engineers, DevOps specialists, and developers.
+Thank you for your interest in contributing to **Sentinara**! We welcome contributions from cloud security engineers, DevOps specialists, and developers.
 
 ---
 

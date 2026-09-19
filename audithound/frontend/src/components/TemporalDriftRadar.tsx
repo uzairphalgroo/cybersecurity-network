@@ -76,13 +76,13 @@ export const TemporalDriftRadar: React.FC<TemporalDriftRadarProps> = ({ auditDat
     {
       snapshot_id: 'SNAP-T3-REMEDIATED',
       epoch_id: 'T3',
-      timestamp: 'Target State (AuditHound Patched)',
+      timestamp: 'Target State (Sentinara Patched)',
       label: 'T3: Remediated Least-Privilege Enclave',
       posture_score: 99.0,
       letter_grade: 'A+',
       total_findings: 0,
       risk_rating: 'Hardened',
-      author: 'AuditHound Autonomous Remediation Sentinel',
+      author: 'Sentinara Autonomous Remediation Sentinel',
       commit_hash: 'remediated-hcl-applied',
       summary: 'Automated 1-click zero-touch patch applied; IAM policies scoped and ingress rules locked to VPC CIDRs.',
       changes: [

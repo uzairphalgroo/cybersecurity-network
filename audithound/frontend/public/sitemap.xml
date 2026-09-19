@@ -6,20 +6,20 @@
   
   <!-- Primary Product Landing & Cloud Security Engine -->
   <url>
-    <loc>https://audithound.io/</loc>
+    <loc>https://sentinara.io/</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://audithound.io/og-image.svg</image:loc>
-      <image:title>AuditHound Autonomous Cloud Security Posture Management (CSPM)</image:title>
+      <image:loc>https://sentinara.io/og-image.svg</image:loc>
+      <image:title>Sentinara Autonomous Cloud Security Posture Management (CSPM)</image:title>
       <image:caption>Next-Generation CSPM, Multi-Hop Attack Path Graphs &amp; 1-Click Zero-Touch Terraform Remediation</image:caption>
     </image:image>
   </url>
 
   <!-- Cloud Security Posture Management (CSPM) Core -->
   <url>
-    <loc>https://audithound.io/#cspm</loc>
+    <loc>https://sentinara.io/#cspm</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
@@ -27,7 +27,7 @@
 
   <!-- Attack Path Graphs & Privilege Escalation Engine -->
   <url>
-    <loc>https://audithound.io/#attack-graphs</loc>
+    <loc>https://sentinara.io/#attack-graphs</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
@@ -35,7 +35,7 @@
 
   <!-- Autonomous AI Purple-Teaming & Breach Simulation -->
   <url>
-    <loc>https://audithound.io/#purple-team</loc>
+    <loc>https://sentinara.io/#purple-team</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
@@ -43,7 +43,7 @@
 
   <!-- Temporal Infrastructure Drift Radar -->
   <url>
-    <loc>https://audithound.io/#drift-radar</loc>
+    <loc>https://sentinara.io/#drift-radar</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
@@ -51,7 +51,7 @@
 
   <!-- eBPF Runtime Packet Telemetry -->
   <url>
-    <loc>https://audithound.io/#ebpf-telemetry</loc>
+    <loc>https://sentinara.io/#ebpf-telemetry</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>

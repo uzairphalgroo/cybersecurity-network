@@ -1,7 +1,7 @@
 import React from 'react';
 import { Upload, FileText, RefreshCw, Layers, Sparkles, BookOpen, ChevronDown } from 'lucide-react';
 import { EnvironmentSummary, AuditResponse } from '../types/audit';
-import { AuditHoundLogo } from './AuditHoundLogo';
+import { SentinaraLogo } from './SentinaraLogo';
 
 interface NavbarProps {
   environments: EnvironmentSummary[];
@@ -54,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="cursor-pointer group flex items-center transition-transform hover:scale-[1.02]"
             title="Click to return to Upload / Initial Dashboard"
           >
-            <AuditHoundLogo size="sm" showText={true} />
+            <SentinaraLogo size="sm" showText={true} />
           </div>
         </div>
 

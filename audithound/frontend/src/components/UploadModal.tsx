@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Upload, X, FileCode, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 import { uploadAndAudit } from '../services/api';
 import { AuditResponse } from '../types/audit';
-import { AuditHoundLogo } from './AuditHoundLogo';
+import { SentinaraLogo } from './SentinaraLogo';
 
 interface UploadModalProps {
   isOpen: boolean;
@@ -84,7 +84,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose, onAud
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
           <div className="flex items-center gap-2.5">
-            <AuditHoundLogo size="xs" showText={false} />
+            <SentinaraLogo size="xs" showText={false} />
             <h3 className="text-base font-bold font-orbitron text-white">UPLOAD CLOUD DUMP (JSON)</h3>
           </div>
           <button

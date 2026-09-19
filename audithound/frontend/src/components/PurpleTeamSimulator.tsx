@@ -324,7 +324,7 @@ export const PurpleTeamSimulator: React.FC<PurpleTeamSimulatorProps> = ({ auditD
               Sever Adversary Breach Chain: {cutPoints[0]?.target_resource || 'Ingress Security Boundary & IAM Policy'}
             </h4>
             <p className="text-slate-300 text-xs mt-1 max-w-2xl">
-              {cutPoints[0]?.action || 'Applying AuditHound least-privilege Terraform patch will sever the primary pivot node.'} {cutPoints[0]?.blast_reduction || 'Reduces breach reachability by 100%'}
+              {cutPoints[0]?.action || 'Applying Sentinara least-privilege Terraform patch will sever the primary pivot node.'} {cutPoints[0]?.blast_reduction || 'Reduces breach reachability by 100%'}
             </p>
           </div>
 

@@ -1,6 +1,6 @@
 {
-  "name": "AuditHound - Autonomous Cloud Security & Compliance Engine",
-  "short_name": "AuditHound",
+  "name": "Sentinara - Autonomous Cloud Security & Compliance Engine",
+  "short_name": "Sentinara",
   "description": "Autonomous Cloud Security Posture Management (CSPM), Multi-Hop Attack Path Graphs, AI Purple-Teaming & 1-Click Zero-Touch Terraform Remediation.",
   "start_url": "/",
   "display": "standalone",

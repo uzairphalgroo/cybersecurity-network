@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { X, Printer, Download } from 'lucide-react';
 import { AuditResponse } from '../types/audit';
 import { generateClientSideReportHtml } from '../services/reportGenerator';
-import { AuditHoundLogo } from './AuditHoundLogo';
+import { SentinaraLogo } from './SentinaraLogo';
 
 interface ExecutiveReportModalProps {
   isOpen: boolean;
@@ -48,7 +48,7 @@ export const ExecutiveReportModal: React.FC<ExecutiveReportModalProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `AuditHound_Report_${auditData.environment_name.replace(/\s+/g, '_')}.html`;
+    a.download = `Sentinara_Report_${auditData.environment_name.replace(/\s+/g, '_')}.html`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -61,7 +61,7 @@ export const ExecutiveReportModal: React.FC<ExecutiveReportModalProps> = ({
         {/* Modal Header */}
         <div className="flex flex-wrap items-center justify-between border-b border-white/[0.08] bg-zinc-950 px-6 py-4 gap-4">
           <div className="flex items-center gap-3">
-            <AuditHoundLogo size="sm" showText={false} />
+            <SentinaraLogo size="sm" showText={false} />
             <div>
               <h3 className="text-sm font-bold font-orbitron text-white">
                 EXECUTIVE SECURITY AUDIT REPORT

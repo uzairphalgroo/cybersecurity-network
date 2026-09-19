@@ -1,4 +1,4 @@
-"""AuditHound CLI - Autonomous Cloud Security Scanner & Remediation Generator."""
+"""Sentinara CLI - Autonomous Cloud Security Scanner & Remediation Generator."""
 import argparse
 import sys
 import json
@@ -112,7 +112,7 @@ def scan_file(file_path: str, output_report: str = None, output_tf: str = None):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="AuditHound: Autonomous Cloud Security & SOC2/CIS Compliance Engine CLI"
+        description="Sentinara: Autonomous Cloud Security & SOC2/CIS Compliance Engine CLI"
     )
     parser.add_argument("file", help="Path to cloud configuration JSON dump")
     parser.add_argument("--report", "-r", help="Output path for executive HTML report (e.g. audit_report.html)")

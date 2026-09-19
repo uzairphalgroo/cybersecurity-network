@@ -1,8 +1,8 @@
-# 🛡️ AuditHound: Cybersecurity Glossary, Definitions & Operator Guide
+# 🛡️ Sentinara: Cybersecurity Glossary, Definitions & Operator Guide
 
-Welcome to the comprehensive technical guide and terminology reference for **AuditHound** — the Autonomous Cloud Security Posture Management (CSPM), Attack Graph Engine, and Zero-Touch Remediation Platform.
+Welcome to the comprehensive technical guide and terminology reference for **Sentinara** — the Autonomous Cloud Security Posture Management (CSPM), Attack Graph Engine, and Zero-Touch Remediation Platform.
 
-This guide provides exhaustive definitions of every security term, compliance benchmark, and architectural concept utilized in AuditHound, followed by a detailed end-to-end operator tutorial for security teams, DevOps engineers, and CISOs.
+This guide provides exhaustive definitions of every security term, compliance benchmark, and architectural concept utilized in Sentinara, followed by a detailed end-to-end operator tutorial for security teams, DevOps engineers, and CISOs.
 
 ---
 
@@ -18,7 +18,7 @@ This guide provides exhaustive definitions of every security term, compliance be
    - [SOC 2 Type II Common Criteria (CC6.1–CC6.8)](#soc-2-type-ii-common-criteria)
    - [CIS Foundations Benchmarks (AWS, Azure, Kubernetes)](#cis-foundations-benchmarks)
    - [MITRE ATT&CK Cloud Matrix](#mitre-attck-cloud-matrix)
-3. [AuditHound Posture Scoring Algorithm & Grading](#-audithound-posture-scoring-algorithm--grading)
+3. [Sentinara Posture Scoring Algorithm & Grading](#-audithound-posture-scoring-algorithm--grading)
 4. [Step-by-Step Operator & User Guide](#-step-by-step-operator--user-guide)
    - [Tutorial 1: Launching & Ingesting Cloud Data (Upload vs Benchmark Scenarios)](#tutorial-1-launching--ingesting-cloud-data)
    - [Tutorial 2: Interpreting the Executive Scorecard & Findings Matrix](#tutorial-2-interpreting-the-executive-scorecard--findings-matrix)
@@ -55,7 +55,7 @@ An **Attack Path Graph** is a directed mathematical graph $G = (V, E)$ where:
 ### 3. Autonomous AI Purple-Teaming & Breach Simulation
 **Purple Teaming** is the active convergence of Red Team (offensive adversarial simulation) and Blue Team (defensive posture hardening). 
 
-In AuditHound, the **Autonomous AI Purple-Teaming Agent** simulates real-world threat actors (such as **APT-29 / Midnight Blizzard** or **Scattered Spider**) against your cloud graph:
+In Sentinara, the **Autonomous AI Purple-Teaming Agent** simulates real-world threat actors (such as **APT-29 / Midnight Blizzard** or **Scattered Spider**) against your cloud graph:
 - **Blast Radius Percentage**: The mathematical proportion of reachable cloud assets from an initial compromised node:
   $$\text{Blast Radius} = \frac{|\text{Descendants}(G, \text{Entry Node})| + 1}{|V|} \times 100\%$$
 - **Crown Jewels**: High-value critical targets within an organization (e.g., Customer PII Data Lakes, Kubernetes Control Planes, Master KMS Encryption Keys, Root Admin IAM roles).
@@ -66,11 +66,11 @@ In AuditHound, the **Autonomous AI Purple-Teaming Agent** simulates real-world t
 ### 4. Temporal Infrastructure Drift & Provenance
 **Infrastructure Drift** occurs when manual changes made directly in cloud web consoles or emergency CLI sessions cause the actual running cloud infrastructure to diverge from the declared Infrastructure-as-Code (Terraform/CloudFormation) baseline.
 
-AuditHound’s **Temporal Drift Radar** tracks 4 distinct evolutionary snapshots:
+Sentinara’s **Temporal Drift Radar** tracks 4 distinct evolutionary snapshots:
 - **$T_0$ Genesis Baseline**: The golden state deployed via verified CI/CD pipeline (Score: ~98/100, Auditor Grade: A+).
 - **$T_1$ Feature Expansion**: Addition of microservices and storage nodes with minor credential aging (Score: ~84/100, Auditor Grade: B).
 - **$T_2$ Out-of-Band Drift**: Emergency out-of-band console changes bypassing GitOps gates, creating open `0.0.0.0/0` ingress and wildcard IAM roles (Score: ~46/100, Auditor Grade: F).
-- **$T_3$ Remediated Enclave**: Post-AuditHound auto-patch state restoring least-privilege boundaries (Score: ~99/100, Auditor Grade: A+).
+- **$T_3$ Remediated Enclave**: Post-Sentinara auto-patch state restoring least-privilege boundaries (Score: ~99/100, Auditor Grade: A+).
 - **Forensic Attribution**: Identifies triggering user ARN, commit hash, CloudTrail digest, and exact score degradation delta.
 
 ---
@@ -78,7 +78,7 @@ AuditHound’s **Temporal Drift Radar** tracks 4 distinct evolutionary snapshots
 ### 5. eBPF Runtime Packet Telemetry & Threat Correlation
 **eBPF (Extended Berkeley Packet Filter)** is a revolutionary Linux kernel technology that allows executing sandboxed, high-performance bytecode programs directly within the kernel without altering kernel source code or loading kernel modules.
 
-In AuditHound:
+In Sentinara:
 - **Kernel JIT Kprobes**: Attaches probes to `sys_enter_connect()`, `tcp_v4_connect()`, and `security_socket_bind()` to monitor socket connections with zero performance overhead.
 - **Threat Correlation**: Binds real-time runtime network beacons (e.g., suspicious C2 traffic to external rogue IPs or unauthenticated Kubernetes API server probes) directly to static IAM vulnerabilities and NetworkX attack paths.
 
@@ -95,7 +95,7 @@ In AuditHound:
 ## 📋 Compliance Frameworks & Standardized Benchmarks
 
 ### SOC 2 Type II Common Criteria
-| Trust Services Criteria | Title | Requirement & AuditHound Rule |
+| Trust Services Criteria | Title | Requirement & Sentinara Rule |
 | :--- | :--- | :--- |
 | **CC6.1** | **Logical Access Controls** | Restricts logical access to registered users; requires Multi-Factor Authentication (MFA) on all console and API users. |
 | **CC6.3** | **Least Privilege & RBAC** | Restricts administrative privileges to authorized roles; forbids wildcard `*` permissions and dangerous `iam:PassRole` vectors. |
@@ -113,7 +113,7 @@ In AuditHound:
 ---
 
 ### MITRE ATT&CK Cloud Matrix
-AuditHound maps all findings and simulation steps to MITRE ATT&CK techniques:
+Sentinara maps all findings and simulation steps to MITRE ATT&CK techniques:
 - **`T1190`**: Exploit Public-Facing Application (Open Security Group Ingress / S3 Public ACL).
 - **`T1078.004`**: Valid Accounts: Cloud Accounts (Stale Access Keys / MFA Disabled).
 - **`T1068`**: Exploitation for Privilege Escalation (AWS IAM PassRole / K8s ClusterRoleBinding).
@@ -122,9 +122,9 @@ AuditHound maps all findings and simulation steps to MITRE ATT&CK techniques:
 
 ---
 
-## 🧮 AuditHound Posture Scoring Algorithm & Grading
+## 🧮 Sentinara Posture Scoring Algorithm & Grading
 
-AuditHound computes a deterministic 0–100 Security Posture Index based on detected findings, severities, and lateral reachability:
+Sentinara computes a deterministic 0–100 Security Posture Index based on detected findings, severities, and lateral reachability:
 
 $$\text{Posture Score} = \max\left(15, \, 100 - (22 \times N_{\text{Critical}}) - (12 \times N_{\text{High}}) - (5 \times N_{\text{Medium}})\right)$$
 
@@ -152,7 +152,7 @@ $$\text{Posture Score} = \max\left(15, \, 100 - (22 \times N_{\text{Critical}}) 
 2. **Option B: Uploading Custom Cloud Configuration Dump**:
    - Click **`📤 Upload Custom JSON`** in the top bar.
    - Drag and drop your cloud export JSON file (e.g., `sample_opensource_cloud_dump.json`).
-   - AuditHound’s client-side static engine parses IAM users, roles, policies, security groups, S3 buckets, and K8s bindings in under 200 milliseconds.
+   - Sentinara’s client-side static engine parses IAM users, roles, policies, security groups, S3 buckets, and K8s bindings in under 200 milliseconds.
 
 ---
 
@@ -251,11 +251,11 @@ $$\text{Posture Score} = \max\left(15, \, 100 - (22 \times N_{\text{Critical}}) 
 
 ### Tutorial 9: Integrating GitHub Action PR Security Sentinel Gate
 
-AuditHound includes an automated GitHub Action workflow that acts as a security gate on every pull request.
+Sentinara includes an automated GitHub Action workflow that acts as a security gate on every pull request.
 
 1. Ensure [`.github/workflows/audithound-sentinel.yml`](file:///.github/workflows/audithound-sentinel.yml) is in your repository.
 2. When developers submit a pull request modifying cloud templates or JSON dumps:
-   - AuditHound CLI scans the PR changes automatically.
+   - Sentinara CLI scans the PR changes automatically.
    - If critical vulnerabilities or privilege escalation paths are detected, the PR build fails.
    - An automated markdown security review comment is posted with exact line-by-line remediation recommendations.
 
@@ -314,4 +314,4 @@ python scripts/aws_live_collector.py \
 - **Zero Public Ingress**: Ensure management ports (22, 3389, 3306) are never open to `0.0.0.0/0`.
 - **Review Cut-Points**: Prioritize fixing single-click cut-points to sever entire multi-hop attack graphs instantly.
 
-*AuditHound — Autonomous Cloud Security & Compliance Auditing Platform.*
+*Sentinara — Autonomous Cloud Security & Compliance Auditing Platform.*

@@ -38,7 +38,7 @@ def download_terraform_bundle(env_id: str):
         batch = RemediationEngine.generate_batch_remediations(findings)
 
         headers = {
-            "Content-Disposition": f'attachment; filename="audithound_remediation_{safe_env_id}.tf"'
+            "Content-Disposition": f'attachment; filename="sentinara_remediation_{safe_env_id}.tf"'
         }
         return Response(content=batch.combined_terraform, media_type="text/plain", headers=headers)
     except FileNotFoundError:

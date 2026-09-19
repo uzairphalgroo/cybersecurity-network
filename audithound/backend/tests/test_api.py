@@ -59,7 +59,7 @@ def test_report_html_endpoint():
     response = client.get("/api/reports/html/leaky_health_datalake")
     assert response.status_code == 200
     assert "<!DOCTYPE html>" in response.text
-    assert "AuditHound" in response.text
+    assert "Sentinara" in response.text
 
 
 def test_upload_custom_environment_and_audit():

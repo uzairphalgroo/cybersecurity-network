@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛡️ AUDITHOUND
+# 🛡️ SENTINARA
 ### Autonomous Multi-Cloud Security Auditing & Compliance Posture Engine
 
 [![Python Version](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
@@ -15,14 +15,14 @@
 <br />
 
 <p align="center">
-  <b>AuditHound</b> is an enterprise-grade autonomous cloud security posture management (CSPM) and compliance auditing platform. It continuously inspects multi-cloud infrastructure configurations (AWS, Azure, Kubernetes), models privilege escalation attack graphs, maps violations to SOC2 Common Criteria and CIS Benchmarks, and automatically generates production-ready, least-privilege Terraform (<code>.tf</code>) remediation patches.
+  <b>Sentinara</b> is an enterprise-grade autonomous cloud security posture management (CSPM) and compliance auditing platform. It continuously inspects multi-cloud infrastructure configurations (AWS, Azure, Kubernetes), models privilege escalation attack graphs, maps violations to SOC2 Common Criteria and CIS Benchmarks, and automatically generates production-ready, least-privilege Terraform (<code>.tf</code>) remediation patches.
 </p>
 
 [📖 Comprehensive Security Glossary & User Guide](docs/SECURITY_CONCEPTS_AND_USER_GUIDE.md) • [Visual Walkthrough](#-end-to-end-audit-walkthrough-input-posture-output--ciso-report) • [Key Features](#-key-features) • [Architecture](#-architecture) • [Live Scenarios](#-mock-environments-catalog) • [Quickstart](#-quickstart-guide) • [Backend API Reference](#-backend-api-reference--endpoints) • [Vercel Deployment](#-cloud--production-deployment) • [CLI Scanner](#-audithound-cli-scanner) • [Security](#-security--hardening)
 
 </div>
 
-> 📘 **Looking for deep terminology definitions and operator tutorials?** Read the [**AuditHound Security Concepts, Definitions & Operator Guide**](docs/SECURITY_CONCEPTS_AND_USER_GUIDE.md) covering SOC2 CC6.1–CC6.8, CIS Benchmarks, MITRE ATT&CK techniques, eBPF kprobes, and step-by-step feature walkthroughs.
+> 📘 **Looking for deep terminology definitions and operator tutorials?** Read the [**Sentinara Security Concepts, Definitions & Operator Guide**](docs/SECURITY_CONCEPTS_AND_USER_GUIDE.md) covering SOC2 CC6.1–CC6.8, CIS Benchmarks, MITRE ATT&CK techniques, eBPF kprobes, and step-by-step feature walkthroughs.
 
 
 ---
@@ -31,7 +31,7 @@
 
 Modern multi-cloud environments suffer from fragmented identity silos, sprawling permission boundaries, and latent privilege escalation paths. Traditional static linters only look at single resources in isolation; they miss the composite identity chains that attackers exploit to take over entire cloud organizations.
 
-**AuditHound** bridges this gap by combining:
+**Sentinara** bridges this gap by combining:
 1. **Graph-Theoretic Attack Path Analysis** (NetworkX traversal detecting lateral movement and IAM privilege escalation).
 2. **Deterministic Compliance Mapping** (SOC2 CC6.1–CC6.8 and CIS AWS/Azure/K8s benchmarks).
 3. **Automated Terraform HCL Remediation** (generating immediate drop-in least-privilege patches).
@@ -46,13 +46,13 @@ Modern multi-cloud environments suffer from fragmented identity silos, sprawling
 
 ## 📸 End-to-End Audit Walkthrough: Input, Posture Output & CISO Report
 
-AuditHound delivers an end-to-end autonomous security pipeline from raw cloud configuration ingestion to mathematical attack graph analysis, posture grading, and CISO audit sign-off:
+Sentinara delivers an end-to-end autonomous security pipeline from raw cloud configuration ingestion to mathematical attack graph analysis, posture grading, and CISO audit sign-off:
 
 ### 1️⃣ Initial Input & Baseline Telemetry Ingestion
 > Ingests multi-cloud configuration dumps (AWS IAM policies, trust relationships, security groups, and storage ACLs) and benchmarks them against SOC2 & CIS foundations.
 
 <div align="center">
-  <img src="docs/images/01_fintech_banking_input_dashboard.png" alt="AuditHound Fintech Banking Baseline Dashboard" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
+  <img src="docs/images/01_fintech_banking_input_dashboard.png" alt="Sentinara Fintech Banking Baseline Dashboard" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
   <p><i>Figure 1: Baseline Telemetry Ingestion — Scenario <code>01_fintech_prod_banking</code> (Tier-1 Banking Enclave) evaluated with <b>Posture Index 96 (Auditor Grade A+)</b>, zero exploit paths, and 100% compliance across SOC2 CC6.1, CC6.3, CC6.6, and CC6.7.</i></p>
 </div>
 
@@ -62,7 +62,7 @@ AuditHound delivers an end-to-end autonomous security pipeline from raw cloud co
 > When evaluating misconfigured environments (e.g., PassRole escalation or unauthenticated S3 access), the engine traverses multi-hop lateral movement chains with NetworkX and calculates risk degradation.
 
 <div align="center">
-  <img src="docs/images/02_executive_posture_scorecard.png" alt="AuditHound Posture Scorecard & Attack Graph" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
+  <img src="docs/images/02_executive_posture_scorecard.png" alt="Sentinara Posture Scorecard & Attack Graph" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
   <p><i>Figure 2: Exploit Path Detection — Scenario <code>04_crypto_miner_breach_vector</code> evaluated with <b>Posture Index 58 (Auditor Grade D)</b>, isolating 1 Critical Exploit Path, 1 High-Risk Finding, and CIS AWS non-compliance.</i></p>
 </div>
 
@@ -72,7 +72,7 @@ AuditHound delivers an end-to-end autonomous security pipeline from raw cloud co
 > Generates comprehensive, auditor-certified CISO briefs with framework score breakdowns, risk matrices, and dynamically synthesized Terraform (<code>.tf</code>) patches.
 
 <div align="center">
-  <img src="docs/images/03_ciso_compliance_report_modal.png" alt="AuditHound Executive CISO Compliance Report" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
+  <img src="docs/images/03_ciso_compliance_report_modal.png" alt="Sentinara Executive CISO Compliance Report" width="100%" style="border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);"/>
   <p><i>Figure 3: CISO Executive Report Modal — SOC2 CC6.1 (60%), CC6.3 (80%), CC6.6 (100%), and CC6.7 (100%) pass rates with printable PDF export.</i></p>
 </div>
 
@@ -164,7 +164,7 @@ flowchart TB
 
 ## 📦 Mock Environments Catalog
 
-AuditHound includes 10 pre-loaded cloud scenarios demonstrating real-world cloud architectures:
+Sentinara includes 10 pre-loaded cloud scenarios demonstrating real-world cloud architectures:
 
 | ID | Environment Name | Provider | Letter Grade | Risk Level | Attack Vector / Key Violations |
 |---|---|---|:---:|:---:|---|
@@ -247,7 +247,7 @@ The FastAPI backend server runs on port `8000` (interactive OpenAPI Swagger docs
 ## 🚀 Cloud & Production Deployment
 
 ### 1. Instant Vercel Web Deployment (Zero-Server SPA)
-AuditHound is architected with complete client-side graph traversal and deterministic compliance rules, enabling **100% standalone deployment on Vercel**:
+Sentinara is architected with complete client-side graph traversal and deterministic compliance rules, enabling **100% standalone deployment on Vercel**:
 
 1. Import this repository into [Vercel](https://vercel.com/new).
 2. Configure project settings:
@@ -269,9 +269,9 @@ docker compose up --build
 
 ---
 
-## 🖥️ AuditHound CLI Scanner
+## 🖥️ Sentinara CLI Scanner
 
-AuditHound includes a standalone command-line scanner (`audithound_cli.py`) for automated CI/CD security pipelines.
+Sentinara includes a standalone command-line scanner (`audithound_cli.py`) for automated CI/CD security pipelines.
 
 ```bash
 cd audithound
@@ -289,7 +289,7 @@ python backend/audithound_cli.py \
 
 ## 📡 Live AWS Cloud Collector
 
-To extract live configurations from an actual AWS account and generate an AuditHound JSON file:
+To extract live configurations from an actual AWS account and generate an Sentinara JSON file:
 
 ```bash
 cd audithound
@@ -304,7 +304,7 @@ python scripts/aws_live_collector.py \
 
 ## 🔒 Security & Hardening
 
-AuditHound is built with security-first engineering practices:
+Sentinara is built with security-first engineering practices:
 - **Strict CORS Origin Restriction**: Wildcard origins are disallowed; requests are constrained to trusted origins.
 - **Path Traversal Defense**: All environment identifiers are validated against strict regex bounds (`^[a-zA-Z0-9_\-\.]+$`).
 - **DoS Memory Protection**: Upload payloads are capped at 5MB with strict streaming byte limits.

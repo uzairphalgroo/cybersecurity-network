@@ -17,7 +17,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { AuditHoundLogo } from './AuditHoundLogo';
+import { SentinaraLogo } from './SentinaraLogo';
 
 interface HowToUseModalProps {
   isOpen: boolean;
@@ -47,11 +47,11 @@ export const HowToUseModal: React.FC<HowToUseModalProps> = ({
       subhead: "What is cloud security and why do we audit it?",
       mascotMood: "🐶👋",
       mascotSpeech: "Hi! Think of your AWS or Azure cloud like a giant castle where you keep your most valuable treasures (customer data, credit cards, user passwords). If someone forgets to lock the front door, a sneaky thief can sneak right in!",
-      explanation: "AuditHound acts as an autonomous digital guard dog. It scans all your cloud configurations (IAM users, S3 storage buckets, firewalls, and Kubernetes roles) to ensure every single door is locked with military-grade security.",
+      explanation: "Sentinara acts as an autonomous digital guard dog. It scans all your cloud configurations (IAM users, S3 storage buckets, firewalls, and Kubernetes roles) to ensure every single door is locked with military-grade security.",
       bullets: [
         "Cloud environments are made of Users, Storage Buckets, Servers, and Firewalls.",
         "Hackers look for small mistakes like open ports or permissions given to 'Everyone'.",
-        "AuditHound continuously checks your castle against official international security laws."
+        "Sentinara continuously checks your castle against official international security laws."
       ],
       actionLabel: "Next: Choose a Castle 👉",
       icon: ShieldCheck,
@@ -176,7 +176,7 @@ export const HowToUseModal: React.FC<HowToUseModalProps> = ({
       title: "7. Autonomous Terraform Patches 🪄🛠️",
       subhead: "Auto-generate least-privilege Infrastructure-as-Code",
       mascotMood: "🐶🪄",
-      mascotSpeech: "Instead of telling you what is broken and leaving you stuck, AuditHound generates ready-to-use Terraform (.tf) code patches that automatically lock all vulnerabilities!",
+      mascotSpeech: "Instead of telling you what is broken and leaving you stuck, Sentinara generates ready-to-use Terraform (.tf) code patches that automatically lock all vulnerabilities!",
       explanation: "Go to the 'Terraform Patches' tab. Each patch removes wildcard permissions (*:*) and applies granular resource-level least privilege.",
       bullets: [
         "Side-by-Side Comparison: Shows the Vulnerable State vs. Remediated State.",
@@ -244,11 +244,11 @@ export const HowToUseModal: React.FC<HowToUseModalProps> = ({
         {/* Top Header */}
         <div className="flex items-center justify-between border-b border-white/[0.08] bg-zinc-950/90 px-6 py-4">
           <div className="flex items-center gap-3">
-            <AuditHoundLogo size="xs" showText={false} />
+            <SentinaraLogo size="xs" showText={false} />
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-bold font-orbitron text-white">
-                  HOW TO USE AUDITHOUND
+                  HOW TO USE SENTINARA
                 </h3>
                 <span className="rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-mono font-bold text-cyan-300 border border-cyan-500/30">
                   PAGE {currentStep + 1} OF {steps.length}

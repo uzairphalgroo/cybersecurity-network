@@ -20,14 +20,14 @@ class RemediationEngine:
 
         if "AWS-IAM-PRIVESC" in rule_id or "PASSROLE" in finding.id:
             hcl = f"""# ==============================================================================
-# AuditHound Automated Remediation Patch: Restricted PassRole Policy
+# Sentinara Automated Remediation Patch: Restricted PassRole Policy
 # Finding ID: {finding.id}
 # Rule: {finding.rule_id}
 # Compliance: SOC2 CC6.3, CIS AWS v3.0 Benchmark
 # ==============================================================================
 
 resource "aws_iam_policy" "remediated_passrole_{res_name}" {{
-  name        = "AuditHound_RestrictedPassRole_{res_name}"
+  name        = "Sentinara_RestrictedPassRole_{res_name}"
   description = "Remediated least-privilege PassRole policy scoped to exact service roles"
 
   policy = jsonencode({{
@@ -57,7 +57,7 @@ resource "aws_iam_policy" "remediated_passrole_{res_name}" {{
   }})
 
   tags = {{
-    ManagedBy   = "AuditHound-AutoRemediator"
+    ManagedBy   = "Sentinara-AutoRemediator"
     Remediation = "{finding.id}"
   }}
 }}
@@ -68,13 +68,13 @@ resource "aws_iam_policy" "remediated_passrole_{res_name}" {{
 
         elif "AWS-IAM-MFA" in rule_id:
             hcl = f"""# ==============================================================================
-# AuditHound Automated Remediation Patch: Enforce MFA for All IAM API Access
+# Sentinara Automated Remediation Patch: Enforce MFA for All IAM API Access
 # Finding ID: {finding.id}
 # Compliance: SOC2 CC6.1, CIS AWS Benchmark 1.5
 # ==============================================================================
 
 resource "aws_iam_policy" "enforce_mfa_global" {{
-  name        = "AuditHound_DenyAllWithoutMFA"
+  name        = "Sentinara_DenyAllWithoutMFA"
   description = "Enforces multi-factor authentication before permitting any mutating AWS API calls"
 
   policy = jsonencode({{
@@ -109,7 +109,7 @@ resource "aws_iam_policy" "enforce_mfa_global" {{
         elif "AWS-S3-PUBLIC" in rule_id or "S3-PUBLIC" in finding.id:
             clean_bucket = res_id.split(":::")[-1] if ":::" in res_id else res_name
             hcl = f"""# ==============================================================================
-# AuditHound Automated Remediation Patch: S3 Public Access Block & Ownership
+# Sentinara Automated Remediation Patch: S3 Public Access Block & Ownership
 # Target Bucket: {clean_bucket}
 # Compliance: SOC2 CC6.6, CIS AWS Benchmark 2.1.1
 # ==============================================================================
@@ -138,7 +138,7 @@ resource "aws_s3_bucket_ownership_controls" "remediated_ownership_{clean_bucket.
         elif "AWS-S3-ENCRYPTION" in rule_id:
             clean_bucket = res_id.split(":::")[-1] if ":::" in res_id else res_name
             hcl = f"""# ==============================================================================
-# AuditHound Automated Remediation Patch: S3 KMS-CMK Server-Side Encryption
+# Sentinara Automated Remediation Patch: S3 KMS-CMK Server-Side Encryption
 # Target Bucket: {clean_bucket}
 # Compliance: SOC2 CC6.7, CIS AWS Benchmark 2.1.2
 # ==============================================================================
@@ -150,7 +150,7 @@ resource "aws_kms_key" "s3_vault_key_{clean_bucket.replace('-', '_')}" {{
 
   tags = {{
     Environment = "Production"
-    AuditHound  = "Remediated"
+    Sentinara  = "Remediated"
   }}
 }}
 
@@ -172,7 +172,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "remediated_sse_{c
 
         elif "AWS-SG" in rule_id or "SG-OPEN" in finding.id or "SG-ALL" in finding.id:
             hcl = f"""# ==============================================================================
-# AuditHound Automated Remediation Patch: Security Group Restrictive Ingress
+# Sentinara Automated Remediation Patch: Security Group Restrictive Ingress
 # Target Security Group: {res_name}
 # Compliance: SOC2 CC6.6, CIS AWS Benchmark 5.2 / 5.3
 # ==============================================================================
@@ -184,7 +184,7 @@ resource "aws_security_group_rule" "remediated_restricted_ingress_{res_name}" {{
   protocol          = "tcp"
   cidr_blocks       = ["10.0.0.0/8"] # Scoped to authorized internal VPC/VPN CIDR
   security_group_id = "{res_name}"
-  description       = "AuditHound Remediated: Revoked 0.0.0.0/0, restricted to internal VPC"
+  description       = "Sentinara Remediated: Revoked 0.0.0.0/0, restricted to internal VPC"
 }}
 """
             orig = f"Security Group rule allowed 0.0.0.0/0 ingress on sensitive ports"
@@ -193,7 +193,7 @@ resource "aws_security_group_rule" "remediated_restricted_ingress_{res_name}" {{
 
         elif "K8S-RBAC" in rule_id:
             hcl = f"""# ==============================================================================
-# AuditHound Automated Remediation Patch: Scoped Kubernetes RBAC Role & Binding
+# Sentinara Automated Remediation Patch: Scoped Kubernetes RBAC Role & Binding
 # Target: {res_name}
 # Compliance: SOC2 CC6.3, CIS Kubernetes Benchmark 5.1.1
 # ==============================================================================
@@ -236,13 +236,13 @@ resource "kubernetes_role_binding" "scoped_app_binding" {{
 
         elif "AZURE-NSG" in rule_id:
             hcl = f"""# ==============================================================================
-# AuditHound Automated Remediation Patch: Azure NSG Restrictive Inbound Rule
+# Sentinara Automated Remediation Patch: Azure NSG Restrictive Inbound Rule
 # Target NSG: {res_name}
 # Compliance: SOC2 CC6.6, CIS Microsoft Azure Benchmark 6.1
 # ==============================================================================
 
 resource "azurerm_network_security_rule" "remediated_nsg_inbound_{res_name}" {{
-  name                        = "AuditHound_Restricted_Inbound"
+  name                        = "Sentinara_Restricted_Inbound"
   priority                    = 100
   direction                   = "Inbound"
   access                      = "Allow"
@@ -262,13 +262,13 @@ resource "azurerm_network_security_rule" "remediated_nsg_inbound_{res_name}" {{
         else:
             # Generic Least-Privilege IAM Scoping
             hcl = f"""# ==============================================================================
-# AuditHound Automated Remediation Patch: Scoped Least Privilege
+# Sentinara Automated Remediation Patch: Scoped Least Privilege
 # Target Finding: {finding.id}
 # Compliance: SOC2 CC6.3
 # ==============================================================================
 
 resource "aws_iam_policy" "scoped_least_privilege_{res_name}" {{
-  name        = "AuditHound_Scoped_{res_name}"
+  name        = "Sentinara_Scoped_{res_name}"
   description = "Scoped policy replacing wildcard administrator rights with least privilege"
 
   policy = jsonencode({{

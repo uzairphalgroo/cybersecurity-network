@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AuditHound CI/CD GitOps Sentinel & GitHub Action Scanner
+Sentinara CI/CD GitOps Sentinel & GitHub Action Scanner
 Analyzes cloud configuration dumps in Pull Requests, evaluates posture deltas,
 and generates rich markdown PR comment summaries for automated merge blocking.
 """
@@ -15,7 +15,7 @@ from app.engine.compliance import ComplianceEngine
 from app.engine.remediation import RemediationEngine
 
 def run_ci_scan(file_path: str, fail_severity: str = "CRITICAL", output_comment_path: str = None) -> int:
-    print(f"🐾 [AuditHound GitOps Sentinel] Analyzing file: {file_path}")
+    print(f"🐾 [Sentinara GitOps Sentinel] Analyzing file: {file_path}")
     
     path_obj = Path(file_path)
     if not path_obj.exists():
@@ -46,7 +46,7 @@ def run_ci_scan(file_path: str, fail_severity: str = "CRITICAL", output_comment_
     print("="*70 + "\n")
 
     # Generate PR Comment Markdown
-    comment_md = f"""## 🛡️ AuditHound CI/CD Security Gate
+    comment_md = f"""## 🛡️ Sentinara CI/CD Security Gate
 
 ### Assessment Summary for `{data.environment_name}` ({data.cloud_provider})
 | Posture Score | Grade | Critical Risks | High Risks | Attack Paths |
@@ -65,9 +65,9 @@ def run_ci_scan(file_path: str, fail_severity: str = "CRITICAL", output_comment_
             comment_md += f"- **[{f.severity}]** `{f.id}`: {f.title}\n  - *Impact*: {f.risk_impact}\n"
 
     if remediations:
-        comment_md += f"\n### 🛠️ Automated Remediation\nAuditHound generated **{len(remediations)} scoped Terraform (`.tf`) patches** to resolve these violations.\n"
+        comment_md += f"\n### 🛠️ Automated Remediation\nSentinara generated **{len(remediations)} scoped Terraform (`.tf`) patches** to resolve these violations.\n"
 
-    comment_md += "\n---\n*Generated autonomously by [AuditHound Security Sentinel](https://github.com/uzairphalgroo/cybersecurity-network/tree/main/audithound)*\n"
+    comment_md += "\n---\n*Generated autonomously by [Sentinara Security Sentinel](https://github.com/uzairphalgroo/cybersecurity-network/tree/main/audithound)*\n"
 
     if output_comment_path:
         with open(output_comment_path, "w", encoding="utf-8") as f:
@@ -86,7 +86,7 @@ def run_ci_scan(file_path: str, fail_severity: str = "CRITICAL", output_comment_
     return 0
 
 def main():
-    parser = argparse.ArgumentParser(description="AuditHound CI/CD GitOps Security Sentinel")
+    parser = argparse.ArgumentParser(description="Sentinara CI/CD GitOps Security Sentinel")
     parser.add_argument("--file", required=True, help="Path to JSON cloud configuration dump")
     parser.add_argument("--fail-on", default="CRITICAL", choices=["CRITICAL", "HIGH", "MEDIUM", "NEVER"], help="Severity threshold to trigger non-zero exit")
     parser.add_argument("--output-comment", default="audithound_pr_comment.md", help="Path to write GitHub PR comment markdown")

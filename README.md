@@ -47,10 +47,10 @@
     <td align="left" style="background: linear-gradient(135deg, #0d1117 0%, #161b22 100%); border-radius: 14px; border: 1px solid #30363d; padding: 24px;">
       <div style="display: flex; align-items: center; justify-content: space-between;">
         <h3 style="margin: 0; color: #58a6ff;">
-          <a href="audithound/" style="color: #58a6ff; text-decoration: none;">🐺 Project: AuditHound — Autonomous Multi-Cloud Security Posture Engine</a>
+          <a href="audithound/" style="color: #58a6ff; text-decoration: none;">🐺 Project: Sentinara — Autonomous Multi-Cloud Security Posture Engine</a>
         </h3>
         <span>
-          <a href="audithound/"><img src="https://img.shields.io/badge/Project_Directory-📁_audithound%2F-38bdf8?style=for-the-badge&logo=github&logoColor=white" alt="Open AuditHound Folder"/></a>
+          <a href="audithound/"><img src="https://img.shields.io/badge/Project_Directory-📁_audithound%2F-38bdf8?style=for-the-badge&logo=github&logoColor=white" alt="Open Sentinara Folder"/></a>
         </span>
       </div>
       <p style="color: #c9d1d9; font-size: 13.5px; line-height: 1.6; margin-top: 10px;">
@@ -65,7 +65,7 @@
         <img src="https://img.shields.io/badge/Pytest-30%2F30_Passed-4ade80?style=flat-square&logo=pytest&logoColor=white" alt="Pytest"/>
       </div>
       <div style="margin-top: 14px; padding: 10px 14px; background: #0b0f19; border-radius: 8px; border: 1px solid #21262d; font-family: monospace; font-size: 12px; color: #58a6ff;">
-        <code>$ cd audithound &amp;&amp; docker compose up --build</code> &nbsp;|&nbsp; <code><a href="audithound/README.md" style="color: #7ee787;">📖 AuditHound Documentation →</a></code> &nbsp;|&nbsp; <code><a href="audithound/docs/SECURITY_CONCEPTS_AND_USER_GUIDE.md" style="color: #38bdf8;">📘 Security Glossary &amp; User Guide →</a></code>
+        <code>$ cd audithound &amp;&amp; docker compose up --build</code> &nbsp;|&nbsp; <code><a href="audithound/README.md" style="color: #7ee787;">📖 Sentinara Documentation →</a></code> &nbsp;|&nbsp; <code><a href="audithound/docs/SECURITY_CONCEPTS_AND_USER_GUIDE.md" style="color: #38bdf8;">📘 Security Glossary &amp; User Guide →</a></code>
       </div>
     </td>
   </tr>
@@ -182,7 +182,7 @@ flowchart TB
 # ==============================================================================
 
 resource "aws_iam_policy" "remediated_restricted_passrole" {
-  name        = "AuditHound_RestrictedPassRole_Scoped"
+  name        = "Sentinara_RestrictedPassRole_Scoped"
   description = "Remediated least-privilege PassRole policy scoped to explicit service roles"
 
   policy = jsonencode({
@@ -213,7 +213,7 @@ resource "aws_iam_policy" "remediated_restricted_passrole" {
   })
 
   tags = {
-    ManagedBy   = "AuditHound-Security-Sentinel"
+    ManagedBy   = "Sentinara-Security-Sentinel"
     Environment = "Production"
     AuditDate   = "2026-09-19"
   }

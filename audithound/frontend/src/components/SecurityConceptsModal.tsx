@@ -14,7 +14,7 @@ import {
   Cpu,
   ArrowRight
 } from 'lucide-react';
-import { AuditHoundLogo } from './AuditHoundLogo';
+import { SentinaraLogo } from './SentinaraLogo';
 
 interface SecurityConceptsModalProps {
   isOpen: boolean;
@@ -88,7 +88,7 @@ export const SecurityConceptsModal: React.FC<SecurityConceptsModalProps> = ({
         'T0 Genesis Baseline: Verified golden state deployed via CI/CD pipeline (Score: ~98/100, Grade A+).',
         'T1 Feature Expansion: Additions of microservices and storage nodes with minor credential aging (Score: ~84/100, Grade B).',
         'T2 Out-of-Band Drift: Emergency manual console changes introducing 0.0.0.0/0 ingress and wildcard IAM roles (Score: ~46/100, Grade F).',
-        'T3 Remediated Enclave: Post-AuditHound zero-touch auto-patch state restoring least privilege (Score: ~99/100, Grade A+).',
+        'T3 Remediated Enclave: Post-Sentinara zero-touch auto-patch state restoring least privilege (Score: ~99/100, Grade A+).',
         'Forensic Attribution: Captures triggering actor ARN, commit hash, CloudTrail digest, and net score degradation.'
       ]
     },
@@ -235,14 +235,14 @@ export const SecurityConceptsModal: React.FC<SecurityConceptsModalProps> = ({
     {
       step: '09',
       title: 'Integrating GitHub Action PR Security Sentinel',
-      desc: 'Automate PR scanning via .github/workflows/audithound-sentinel.yml to block critical IAM privilege escalation before deployment.',
+      desc: 'Automate PR scanning via .github/workflows/sentinara-sentinel.yml to block critical IAM privilege escalation before deployment.',
       action: undefined,
       actionText: undefined
     },
     {
       step: '10',
       title: 'Running the Standalone CLI Scanner & Live AWS Collector',
-      desc: 'Execute audithound_cli.py on local JSON dumps or use aws_live_collector.py to snapshot live AWS IAM, S3, and Security Groups.',
+      desc: 'Execute sentinara_cli.py on local JSON dumps or use aws_live_collector.py to snapshot live AWS IAM, S3, and Security Groups.',
       action: undefined,
       actionText: undefined
     }
@@ -270,7 +270,7 @@ export const SecurityConceptsModal: React.FC<SecurityConceptsModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/[0.08] bg-black px-6 py-4">
           <div className="flex items-center gap-3">
-            <AuditHoundLogo size="xs" showText={false} />
+            <SentinaraLogo size="xs" showText={false} />
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-black font-orbitron text-white">
@@ -368,7 +368,7 @@ export const SecurityConceptsModal: React.FC<SecurityConceptsModalProps> = ({
                     CORE CLOUD SECURITY DEFINITIONS & MECHANICS
                   </h4>
                   <p className="text-xs text-zinc-400 font-mono">
-                    Essential concepts governing AuditHound's automated static graph and dynamic runtime analysis.
+                    Essential concepts governing Sentinara's automated static graph and dynamic runtime analysis.
                   </p>
                 </div>
               </div>
@@ -423,7 +423,7 @@ export const SecurityConceptsModal: React.FC<SecurityConceptsModalProps> = ({
                   COMPLIANCE FRAMEWORKS & STANDARDIZED BENCHMARKS
                 </h4>
                 <p className="text-xs text-zinc-400 font-mono">
-                  AuditHound automatically aligns all cloud topology discoveries with recognized cybersecurity standards.
+                  Sentinara automatically aligns all cloud topology discoveries with recognized cybersecurity standards.
                 </p>
               </div>
 
@@ -477,7 +477,7 @@ export const SecurityConceptsModal: React.FC<SecurityConceptsModalProps> = ({
                   </h4>
                 </div>
                 <p className="text-xs text-zinc-300 font-sans leading-relaxed">
-                  AuditHound calculates an objective 0–100 Security Posture Index based on detected finding severities, privilege escalation paths, and lateral reachability:
+                  Sentinara calculates an objective 0–100 Security Posture Index based on detected finding severities, privilege escalation paths, and lateral reachability:
                 </p>
 
                 <div className="p-4 rounded-xl bg-black border border-cyan-500/40 font-mono text-xs text-cyan-300 text-center font-bold tracking-wide shadow-inner">

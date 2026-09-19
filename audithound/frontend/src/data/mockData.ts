@@ -219,7 +219,7 @@ export const STATIC_AUDIT_RESPONSES: Record<string, AuditResponse> = {
         title: 'Remediate PassRole Privilege Escalation',
         original_config_snippet: 'iam:PassRole on resource: [*] with ec2:RunInstances',
         remediated_terraform_hcl: `resource "aws_iam_policy" "remediated_passrole_PassRoleAndEC2LaunchPolicy" {
-  name        = "AuditHound_RestrictedPassRole"
+  name        = "Sentinara_RestrictedPassRole"
   description = "Remediated least-privilege PassRole policy scoped to exact service roles"
 
   policy = jsonencode({

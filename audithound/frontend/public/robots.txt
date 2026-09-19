@@ -1,17 +1,8 @@
-# AuditHound - Autonomous Cloud Security Posture Management & Zero-Touch Defense
-# Penultimate Search Engine Optimization & Crawling Directive
-
+# Sentinara - Autonomous Cloud Security Posture Management & Zero-Touch Defense
+# Multi-Cloud CSPM, Mathematical Attack Graph Engine & Automated Terraform Remediation
 User-agent: *
 Allow: /
-Allow: /api/
-Allow: /assets/
-Allow: /favicon.svg
-Allow: /manifest.json
-Allow: /og-image.svg
 
-# Crawl-delay for optimal indexing
-Crawl-delay: 1
-
-# Sitemaps
-Sitemap: https://audithound.io/sitemap.xml
-Sitemap: https://audithound.dev/sitemap.xml
+# Canonical Sitemap Discovery
+Sitemap: https://sentinara.io/sitemap.xml
+Sitemap: https://sentinara.dev/sitemap.xml

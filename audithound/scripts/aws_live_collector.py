@@ -1,4 +1,4 @@
-"""AWS Live Collector - Extracts live AWS IAM, S3, and Security Group configurations into AuditHound JSON format."""
+"""AWS Live Collector - Extracts live AWS IAM, S3, and Security Group configurations into Sentinara JSON format."""
 import json
 import argparse
 from datetime import datetime, timezone
@@ -140,7 +140,7 @@ def collect_live_aws(output_file: str, profile: str = None, region: str = "us-ea
     except Exception as e:
         print(f"[!] Warning reading Security Groups: {e}")
 
-    # Assemble AuditHound dump
+    # Assemble Sentinara dump
     dump = {
         "id": f"live_aws_{region}_{int(datetime.now().timestamp())}",
         "name": f"Live AWS Cloud Audit ({region})",
@@ -171,7 +171,7 @@ def collect_live_aws(output_file: str, profile: str = None, region: str = "us-ea
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Live AWS Configuration Collector for AuditHound")
+    parser = argparse.ArgumentParser(description="Live AWS Configuration Collector for Sentinara")
     parser.add_argument("--output", "-o", default="live_aws_dump.json", help="Output JSON path")
     parser.add_argument("--profile", "-p", default=None, help="AWS CLI profile name")
     parser.add_argument("--region", "-r", default="us-east-1", help="AWS region")

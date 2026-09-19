@@ -11,8 +11,9 @@ import { ExecutiveReportModal } from './components/ExecutiveReportModal';
 import { EnvironmentHubModal } from './components/EnvironmentHubModal';
 import { HowToUseModal } from './components/HowToUseModal';
 import { SecurityConceptsModal } from './components/SecurityConceptsModal';
+import { LegalModal } from './components/LegalModal';
 import { WelcomeScreen } from './components/WelcomeScreen';
-import { AuditHoundLogo } from './components/AuditHoundLogo';
+import { SentinaraLogo } from './components/SentinaraLogo';
 import { EmptyUploadLaunchpad } from './components/EmptyUploadLaunchpad';
 import { PurpleTeamSimulator } from './components/PurpleTeamSimulator';
 import { TemporalDriftRadar } from './components/TemporalDriftRadar';
@@ -20,7 +21,7 @@ import { EbpfTelemetryRadar } from './components/EbpfTelemetryRadar';
 import { ZeroTouchRemediatorModal } from './components/ZeroTouchRemediatorModal';
 import { fetchEnvironments, runAudit } from './services/api';
 import { EnvironmentSummary, AuditResponse, Finding } from './types/audit';
-import { LayoutDashboard, Network, AlertTriangle, Wrench, Loader2, Layers, ShieldCheck, ShieldAlert, HelpCircle, ArrowLeft, Upload, FileCode, Bot, History, Radio, Zap, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Network, AlertTriangle, Wrench, Loader2, Layers, ShieldCheck, ShieldAlert, HelpCircle, ArrowLeft, Upload, FileCode, Bot, History, Radio, Zap, BookOpen, Scale } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [environments, setEnvironments] = useState<EnvironmentSummary[]>([]);
@@ -40,6 +41,8 @@ export const App: React.FC = () => {
   const [isHowToUseOpen, setIsHowToUseOpen] = useState<boolean>(false);
   const [isSecurityConceptsOpen, setIsSecurityConceptsOpen] = useState<boolean>(false);
   const [isZeroTouchOpen, setIsZeroTouchOpen] = useState<boolean>(false);
+  const [isLegalOpen, setIsLegalOpen] = useState<boolean>(false);
+  const [legalTab, setLegalTab] = useState<'terms' | 'privacy' | 'security'>('terms');
 
   // Initial load: environments list only (without auto-running audit)
   useEffect(() => {
@@ -523,41 +526,58 @@ export const App: React.FC = () => {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.08] bg-black/90 backdrop-blur-md py-6 text-center text-xs text-zinc-500 font-mono pb-20 sm:pb-6 safe-bottom">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <AuditHoundLogo size="xs" showText={true} />
+            <SentinaraLogo size="xs" showText={true} />
           </div>
-          <div className="text-zinc-500 text-[11px]">
-            Autonomous Cloud Security Sentinel &bull; SOC2 / CIS Benchmarks &bull; Terraform Remediation
+          <div className="text-zinc-400 text-[11px] text-center">
+            Autonomous Multi-Cloud Security Sentinel &bull; Attack Graph Modeling &bull; Zero-Touch Remediation
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-zinc-400">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-zinc-400 text-[11px] sm:text-xs">
+            <button
+              onClick={() => {
+                setLegalTab('terms');
+                setIsLegalOpen(true);
+              }}
+              className="hover:text-cyan-300 transition flex items-center gap-1"
+            >
+              <Scale className="h-3.5 w-3.5 text-cyan-400" />
+              <span>Terms of Service</span>
+            </button>
+            <span>&bull;</span>
+            <button
+              onClick={() => {
+                setLegalTab('privacy');
+                setIsLegalOpen(true);
+              }}
+              className="hover:text-emerald-300 transition"
+            >
+              <span>Privacy Policy</span>
+            </button>
+            <span>&bull;</span>
+            <button
+              onClick={() => {
+                setLegalTab('security');
+                setIsLegalOpen(true);
+              }}
+              className="hover:text-purple-300 transition"
+            >
+              <span>Security & Disclosure</span>
+            </button>
+            <span>&bull;</span>
             <button
               onClick={() => setIsSecurityConceptsOpen(true)}
-              className="hover:text-purple-300 transition flex items-center gap-1.5 text-purple-400 font-bold"
+              className="hover:text-purple-300 transition flex items-center gap-1 text-purple-400 font-bold"
             >
               <BookOpen className="h-3.5 w-3.5" />
-              <span>📚 Security Concepts & Guide</span>
+              <span>Concepts</span>
             </button>
             <span>&bull;</span>
             <button
               onClick={() => setIsHowToUseOpen(true)}
-              className="hover:text-white transition flex items-center gap-1.5"
-            >
-              <span>🐶 How To Use</span>
-            </button>
-            <span>&bull;</span>
-            <button
-              onClick={() => setShowWelcome(true)}
               className="hover:text-white transition"
             >
-              3D Showcase
-            </button>
-            <span>&bull;</span>
-            <button
-              onClick={() => setIsEnvHubOpen(true)}
-              className="hover:text-white transition"
-            >
-              Scenario Matrix
+              Guide
             </button>
           </div>
         </div>
@@ -599,6 +619,12 @@ export const App: React.FC = () => {
         }}
         onOpenEnvHub={() => setIsEnvHubOpen(true)}
         onOpenReport={() => setIsReportOpen(true)}
+      />
+
+      <LegalModal
+        isOpen={isLegalOpen}
+        onClose={() => setIsLegalOpen(false)}
+        initialTab={legalTab}
       />
 
       {auditData && (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EnvironmentSummary } from '../types/audit';
 import { X, Layers, Search, ShieldAlert, CheckCircle2, Cloud, Server, Box, ArrowRight } from 'lucide-react';
-import { AuditHoundLogo } from './AuditHoundLogo';
+import { SentinaraLogo } from './SentinaraLogo';
 
 interface EnvironmentHubModalProps {
   isOpen: boolean;
@@ -73,7 +73,7 @@ export const EnvironmentHubModal: React.FC<EnvironmentHubModalProps> = ({
         {/* Header */}
         <div className="flex flex-wrap items-center justify-between border-b border-white/[0.08] pb-5 gap-4">
           <div className="flex items-center gap-3">
-            <AuditHoundLogo size="sm" showText={false} />
+            <SentinaraLogo size="sm" showText={false} />
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-bold font-orbitron text-white tracking-wide">

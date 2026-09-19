@@ -72,7 +72,7 @@ export function generateClientSideReportHtml(audit: AuditResponse): string {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AuditHound Executive Audit: ${escapeHtml(audit.environment_name)}</title>
+  <title>Sentinara Executive Audit: ${escapeHtml(audit.environment_name)}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
     
@@ -251,15 +251,15 @@ export function generateClientSideReportHtml(audit: AuditResponse): string {
           <circle cx="50" cy="45" r="4" fill="#38BDF8"/>
         </svg>
         <div>
-          <h1 class="logo-title">AUDITHOUND</h1>
-          <div class="logo-sub">Autonomous Cloud Security & Compliance Audit</div>
+          <h1 class="logo-title">SENTINARA</h1>
+          <div class="logo-sub">Autonomous Multi-Cloud Security & Compliance Audit</div>
         </div>
       </div>
       <div class="report-meta">
         <div>Environment: <strong>${escapeHtml(audit.environment_name)}</strong></div>
         <div>Provider: <strong>${escapeHtml(audit.provider)}</strong></div>
         <div>Timestamp: <strong>${escapeHtml(new Date(audit.timestamp).toUTCString())}</strong></div>
-        <div>Report ID: <strong>AH-${escapeHtml(audit.environment_id.substring(0, 8).toUpperCase())}</strong></div>
+        <div>Report ID: <strong>SNT-${escapeHtml(audit.environment_id.substring(0, 8).toUpperCase())}</strong></div>
       </div>
     </header>
 
@@ -303,7 +303,7 @@ export function generateClientSideReportHtml(audit: AuditResponse): string {
         <div>
           <h3 style="font-size: 13px; font-weight: 700; color: #ffffff; text-transform: uppercase;">Lead Security Auditor Sign-Off</h3>
           <div class="signoff-field">Authorized Signature</div>
-          <div class="signoff-field">Printed Name: Autonomous Sentinel Engine</div>
+          <div class="signoff-field">Printed Name: Sentinara Autonomous Sentinel</div>
           <div class="signoff-field">Date: ${escapeHtml(new Date().toLocaleDateString())}</div>
         </div>
         <div>
@@ -316,7 +316,7 @@ export function generateClientSideReportHtml(audit: AuditResponse): string {
     </main>
 
     <footer class="footer">
-      Generated automatically by AuditHound Enterprise &bull; SOC2 CC6.1, CC6.3 & CIS v3.0 Compliance Certified
+      Generated automatically by Sentinara Enterprise &bull; SOC2 CC6.1, CC6.3 & CIS v3.0 Compliance Certified
     </footer>
   </div>
 </body>

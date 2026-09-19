@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data" / "mock_environments"
 TEMPLATES_DIR = BASE_DIR / "templates"
 
-API_TITLE = "AuditHound Security Auditing Engine API"
+API_TITLE = "Sentinara Security Auditing Engine API"
 API_VERSION = "1.0.0"
 API_DESCRIPTION = "Autonomous Cloud Security & SOC2/CIS Compliance Auditing Platform"
 

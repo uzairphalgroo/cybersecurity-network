@@ -1,4 +1,4 @@
-"""AuditHound - Autonomous Cloud Security & Compliance Auditing Platform."""
+"""Sentinara - Autonomous Cloud Security & Compliance Auditing Platform."""
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -57,10 +57,10 @@ app.include_router(advanced_router)
 
 @app.get("/", tags=["Health"])
 def health_check():
-    """Returns the operational status of the AuditHound security engine."""
+    """Returns the operational status of the Sentinara security engine."""
     return {
         "status": "online",
-        "service": "AuditHound Security Auditing Engine",
+        "service": "Sentinara Security Auditing Engine",
         "version": API_VERSION,
         "frameworks_supported": [
             "SOC2 Common Criteria (CC6.1, CC6.3, CC6.6, CC6.7, CC6.8)",

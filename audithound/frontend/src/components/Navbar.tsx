@@ -13,6 +13,7 @@ interface NavbarProps {
   onOpenEnvHub: () => void;
   onOpenWelcome?: () => void;
   onOpenHowToUse?: () => void;
+  onResetToUpload?: () => void;
   auditData: AuditResponse | null;
   loading: boolean;
 }
@@ -27,6 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenEnvHub,
   onOpenWelcome,
   onOpenHowToUse,
+  onResetToUpload,
   auditData,
   loading,
 }) => {
@@ -43,9 +45,12 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Left Section: Brand Logo */}
         <div className="flex items-center min-w-[180px] lg:min-w-[220px]">
           <div 
-            onClick={onOpenWelcome}
+            onClick={() => {
+              if (onResetToUpload) onResetToUpload();
+              else if (onOpenWelcome) onOpenWelcome();
+            }}
             className="cursor-pointer group flex items-center transition-transform hover:scale-[1.02]"
-            title="Click to open 3D Showcase"
+            title="Click to return to Upload / Initial Dashboard"
           >
             <AuditHoundLogo size="sm" showText={true} />
           </div>
@@ -71,9 +76,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative hidden md:block max-w-[240px]">
             <select
               value={selectedEnvId}
-              onChange={(e) => onSelectEnv(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value) onSelectEnv(e.target.value);
+                else if (onResetToUpload) onResetToUpload();
+              }}
               className="w-full appearance-none rounded-xl border border-white/15 bg-zinc-900/90 py-1.5 pl-3 pr-8 text-xs font-mono font-medium text-zinc-200 shadow-inner hover:border-white/30 focus:border-white focus:outline-none focus:ring-1 focus:ring-white transition truncate"
             >
+              <option value="" className="bg-zinc-950 text-zinc-400 py-1">
+                -- Choose Benchmark Scenario --
+              </option>
               {environments.map((env) => (
                 <option key={env.id} value={env.id} className="bg-zinc-950 text-zinc-200 py-1">
                   {env.name} ({(env.cloud_provider || 'AWS').toUpperCase()})

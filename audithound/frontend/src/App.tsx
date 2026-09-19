@@ -12,20 +12,21 @@ import { EnvironmentHubModal } from './components/EnvironmentHubModal';
 import { HowToUseModal } from './components/HowToUseModal';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { AuditHoundLogo } from './components/AuditHoundLogo';
+import { EmptyUploadLaunchpad } from './components/EmptyUploadLaunchpad';
 import { fetchEnvironments, runAudit } from './services/api';
 import { EnvironmentSummary, AuditResponse, Finding } from './types/audit';
-import { LayoutDashboard, Network, AlertTriangle, Wrench, Loader2, Layers, ShieldCheck, ShieldAlert, HelpCircle } from 'lucide-react';
+import { LayoutDashboard, Network, AlertTriangle, Wrench, Loader2, Layers, ShieldCheck, ShieldAlert, HelpCircle, ArrowLeft, Upload, FileCode } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [environments, setEnvironments] = useState<EnvironmentSummary[]>([]);
-  const [selectedEnvId, setSelectedEnvId] = useState<string>('02_crypto_miner_breach');
+  const [selectedEnvId, setSelectedEnvId] = useState<string>('');
   const [auditData, setAuditData] = useState<AuditResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'graph' | 'findings' | 'remediation'>('overview');
   const [selectedFindingIdForRemediation, setSelectedFindingIdForRemediation] = useState<string | null>(null);
 
   // Welcome Screen state
-  const [showWelcome, setShowWelcome] = useState<boolean>(true);
+  const [showWelcome, setShowWelcome] = useState<boolean>(false);
 
   // Modals
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
@@ -33,20 +34,14 @@ export const App: React.FC = () => {
   const [isEnvHubOpen, setIsEnvHubOpen] = useState<boolean>(false);
   const [isHowToUseOpen, setIsHowToUseOpen] = useState<boolean>(false);
 
-  // Initial load: environments
+  // Initial load: environments list only (without auto-running audit)
   useEffect(() => {
     async function loadCatalog() {
       try {
         const envs = await fetchEnvironments();
         setEnvironments(envs);
-        if (envs.length > 0) {
-          const defaultEnv = envs.find((e) => e.id === '02_crypto_miner_breach') || envs[0];
-          setSelectedEnvId(defaultEnv.id);
-          triggerAudit(defaultEnv.id);
-        }
       } catch (err) {
         console.error('Failed to load environments:', err);
-        setLoading(false);
       }
     }
     loadCatalog();
@@ -129,95 +124,150 @@ export const App: React.FC = () => {
 
       {/* Main Container */}
       <main className="relative z-10 mx-auto flex-1 w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-4 pb-12 space-y-8">
-        {/* Quick 1-Click Environment Pill Carousel in dedicated Glass Bar */}
-        {environments.length > 0 && (
-          <div className="rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-3 shadow-xl">
-            <div className="flex items-center gap-2.5 overflow-x-auto py-1 px-1 scrollbar-none">
-              <span className="text-xs font-mono font-black uppercase tracking-widest text-zinc-300 shrink-0 flex items-center gap-1.5 px-2">
-                <Layers className="h-3.5 w-3.5 text-cyan-400 animate-pulse" />
-                <span>SCENARIOS:</span>
-              </span>
-              {environments.map((env) => {
-                const isSelected = env.id === selectedEnvId;
-                const isCompliant = env.id.includes('banking') || env.id.includes('aerospace');
-
-                return (
-                  <button
-                    key={env.id}
-                    onClick={() => handleSelectEnv(env.id)}
-                    className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-mono font-bold whitespace-nowrap transition-all duration-300 border shadow-md ${
-                      isSelected
-                        ? 'border-white bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.4)] scale-105'
-                        : 'border-white/[0.08] bg-black/80 text-zinc-400 hover:border-white/30 hover:text-white hover:bg-zinc-900/80'
-                    }`}
-                  >
-                    {isCompliant ? (
-                      <ShieldCheck className={`h-4 w-4 ${isSelected ? 'text-emerald-700' : 'text-emerald-400'}`} />
-                    ) : (
-                      <ShieldAlert className={`h-4 w-4 ${isSelected ? 'text-rose-700' : 'text-rose-400'}`} />
-                    )}
-                    <span>{env.name.split(' (')[0]}</span>
-                  </button>
-                );
-              })}
+        {/* State 1: Loading Spinner */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-24 space-y-4">
+            <div className="relative">
+              <div className="h-16 w-16 rounded-full border-2 border-white/10 border-t-cyan-400 animate-spin" />
+              <Loader2 className="h-8 w-8 text-cyan-400 absolute inset-0 m-auto animate-pulse" />
             </div>
+            <p className="text-sm font-mono text-zinc-300 animate-pulse">
+              Ingesting cloud topography and evaluating security graphs...
+            </p>
           </div>
         )}
 
-        {/* Environment Title & Sub-header with Brittle Moving RGB Gradient */}
-        {auditData && (
-          <div className="flex flex-wrap items-center justify-between gap-6 border-b border-white/[0.08] pb-6">
-            <div>
-              <div className="flex items-center gap-3">
-                <span className="rounded-xl bg-zinc-900 border border-white/20 px-3 py-1 text-[11px] font-mono font-black text-white uppercase tracking-widest shadow-sm">
-                  {auditData.provider} CLOUD
-                </span>
-                <h2 className="text-2xl sm:text-4xl font-black font-orbitron tracking-wide text-gradient-rgb-brittle">
-                  {auditData.environment_name}
-                </h2>
+        {/* State 2: Empty Upload Launchpad (Initial startup state) */}
+        {!auditData && !loading && (
+          <EmptyUploadLaunchpad
+            environments={environments}
+            onSelectEnv={handleSelectEnv}
+            onAuditComplete={handleAuditComplete}
+            onOpenHowToUse={() => setIsHowToUseOpen(true)}
+          />
+        )}
+
+        {/* State 3: Active Cloud Audit Command Center */}
+        {auditData && !loading && (
+          <>
+            {/* Top Quick Actions Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <button
+                onClick={() => {
+                  setAuditData(null);
+                  setSelectedEnvId('');
+                }}
+                className="btn-tech-gradient px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 text-zinc-300 hover:text-white shadow-md hover:scale-105 transition-all"
+              >
+                <ArrowLeft className="h-4 w-4 text-cyan-400" />
+                <span>← Upload New Cloud Dump / Switch Scenario</span>
+              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsUploadOpen(true)}
+                  className="btn-tech-primary px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 shadow-md hover:scale-105 transition-all"
+                >
+                  <Upload className="h-4 w-4" />
+                  <span>Upload Custom JSON</span>
+                </button>
+                <button
+                  onClick={() => setIsEnvHubOpen(true)}
+                  className="btn-tech-gradient px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 text-zinc-300 hover:text-white shadow-md hover:scale-105 transition-all"
+                >
+                  <Layers className="h-4 w-4 text-cyan-400" />
+                  <span>Scenario Hub</span>
+                </button>
               </div>
-              <p className="mt-2 text-xs sm:text-sm text-zinc-400 font-mono flex items-center gap-3">
-                <span>Timestamp: {new Date(auditData.timestamp).toLocaleString()}</span>
-                <span>&bull;</span>
-                <span>Scope: IAM / RBAC / S3 ACL / NSG Ingress</span>
-              </p>
             </div>
 
-            {/* Quick Action Buttons */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setIsHowToUseOpen(true)}
-                className="btn-tech-gradient px-5 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 text-zinc-200 hover:text-white shadow-md hover:scale-105 transition-all"
-              >
-                <HelpCircle className="h-4 w-4 text-cyan-400" />
-                <span>Beginner Guide</span>
-              </button>
+            {/* Quick 1-Click Environment Pill Carousel in dedicated Glass Bar */}
+            {environments.length > 0 && (
+              <div className="rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-3 shadow-xl">
+                <div className="flex items-center gap-2.5 overflow-x-auto py-1 px-1 scrollbar-none">
+                  <span className="text-xs font-mono font-black uppercase tracking-widest text-zinc-300 shrink-0 flex items-center gap-1.5 px-2">
+                    <Layers className="h-3.5 w-3.5 text-cyan-400 animate-pulse" />
+                    <span>SCENARIOS:</span>
+                  </span>
+                  {environments.map((env) => {
+                    const isSelected = env.id === selectedEnvId;
+                    const isCompliant = env.id.includes('banking') || env.id.includes('aerospace');
 
-              <button
-                onClick={() => setIsEnvHubOpen(true)}
-                className="btn-tech-primary px-6 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 shadow-xl hover:scale-105 transition-all"
-              >
-                <Layers className="h-4 w-4" />
-                <span>Scenario Hub</span>
-              </button>
+                    return (
+                      <button
+                        key={env.id}
+                        onClick={() => handleSelectEnv(env.id)}
+                        className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-mono font-bold whitespace-nowrap transition-all duration-300 border shadow-md ${
+                          isSelected
+                            ? 'border-white bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.4)] scale-105'
+                            : 'border-white/[0.08] bg-black/80 text-zinc-400 hover:border-white/30 hover:text-white hover:bg-zinc-900/80'
+                        }`}
+                      >
+                        {isCompliant ? (
+                          <ShieldCheck className={`h-4 w-4 ${isSelected ? 'text-emerald-700' : 'text-emerald-400'}`} />
+                        ) : (
+                          <ShieldAlert className={`h-4 w-4 ${isSelected ? 'text-rose-700' : 'text-rose-400'}`} />
+                        )}
+                        <span>{env.name.split(' (')[0]}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Environment Title & Sub-header with Brittle Moving RGB Gradient */}
+            <div className="flex flex-wrap items-center justify-between gap-6 border-b border-white/[0.08] pb-6">
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="rounded-xl bg-zinc-900 border border-white/20 px-3 py-1 text-[11px] font-mono font-black text-white uppercase tracking-widest shadow-sm">
+                    {auditData.provider} CLOUD
+                  </span>
+                  <h2 className="text-2xl sm:text-4xl font-black font-orbitron tracking-wide text-gradient-rgb-brittle">
+                    {auditData.environment_name}
+                  </h2>
+                </div>
+                <p className="mt-2 text-xs sm:text-sm text-zinc-400 font-mono flex items-center gap-3">
+                  <span>Timestamp: {new Date(auditData.timestamp).toLocaleString()}</span>
+                  <span>&bull;</span>
+                  <span>Scope: IAM / RBAC / S3 ACL / NSG Ingress</span>
+                </p>
+              </div>
+
+              {/* Quick Action Buttons */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setIsHowToUseOpen(true)}
+                  className="btn-tech-gradient px-5 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 text-zinc-200 hover:text-white shadow-md hover:scale-105 transition-all"
+                >
+                  <HelpCircle className="h-4 w-4 text-cyan-400" />
+                  <span>Beginner Guide</span>
+                </button>
+
+                <button
+                  onClick={() => setIsReportOpen(true)}
+                  className="btn-tech-primary px-6 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 shadow-xl hover:scale-105 transition-all"
+                >
+                  <FileCode className="h-4 w-4" />
+                  <span>CISO Audit Report</span>
+                </button>
+              </div>
             </div>
-          </div>
-        )}
 
-        {/* Cyber Navigation Tabs with Generous Padding */}
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-1">
-          <nav className="flex flex-wrap gap-2 sm:gap-4">
-            <button
-              onClick={() => setActiveTab('overview')}
-              className={`flex items-center gap-2.5 rounded-2xl py-3 px-5 sm:px-6 text-xs sm:text-sm font-mono font-bold transition-all ${
-                activeTab === 'overview'
-                  ? 'bg-white text-black shadow-[0_0_25px_rgba(255,255,255,0.4)]'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <LayoutDashboard className="h-4 w-4" />
-              <span>Executive Dashboard</span>
-            </button>
+            {/* Cyber Navigation Tabs with Generous Padding */}
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-1">
+              <nav className="flex flex-wrap gap-2 sm:gap-4">
+                <button
+                  onClick={() => setActiveTab('overview')}
+                  className={`flex items-center gap-2.5 rounded-2xl py-3 px-5 sm:px-6 text-xs sm:text-sm font-mono font-bold transition-all ${
+                    activeTab === 'overview'
+                      ? 'bg-white text-black shadow-[0_0_25px_rgba(255,255,255,0.4)]'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  <span>Executive Dashboard</span>
+                </button>
 
             <button
               onClick={() => setActiveTab('graph')}
@@ -279,20 +329,8 @@ export const App: React.FC = () => {
         </div>
 
         {/* Main Tab Content Display */}
-        {loading && !auditData ? (
-          <div className="flex h-96 flex-col items-center justify-center space-y-4 rounded-3xl border border-white/10 bg-black/60 backdrop-blur-xl">
-            <Loader2 className="h-10 w-10 animate-spin text-white" />
-            <p className="text-sm text-zinc-400 font-mono tracking-widest uppercase animate-pulse">
-              Synthesizing Multi-Cloud Security Graphs & Compliance Telemetry...
-            </p>
-          </div>
-        ) : !auditData ? (
-          <div className="rounded-3xl border border-white/10 bg-black/60 p-12 text-center">
-            <p className="text-zinc-400 font-mono">No audit data available. Please select or upload an environment.</p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {/* 1. Overview Tab */}
+        <div className="space-y-6">
+          {/* 1. Overview Tab */}
             {activeTab === 'overview' && (
               <div className="space-y-6">
                 <ExecutiveScorecard
@@ -375,8 +413,9 @@ export const App: React.FC = () => {
               </div>
             )}
           </div>
-        )}
-      </main>
+        </>
+      )}
+    </main>
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.08] bg-black/90 backdrop-blur-md py-6 text-center text-xs text-zinc-500 font-mono">

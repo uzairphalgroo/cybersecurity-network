@@ -43,7 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/[0.08] bg-black/90 backdrop-blur-2xl shadow-2xl safe-top">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8 py-2 gap-2 sm:gap-4">
+      <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-2.5 sm:px-6 lg:px-8 py-2 gap-1.5 sm:gap-4">
         {/* Left Section: Brand Logo */}
         <div className="flex items-center shrink-0">
           <div 
@@ -54,7 +54,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="cursor-pointer group flex items-center transition-transform hover:scale-[1.02]"
             title="Click to return to Upload / Initial Dashboard"
           >
-            <SentinaraLogo size="sm" showText={true} />
+            {/* Responsive Logo: xs on mobile, sm on desktop */}
+            <div className="sm:hidden">
+              <SentinaraLogo size="xs" showText={true} />
+            </div>
+            <div className="hidden sm:block">
+              <SentinaraLogo size="sm" showText={true} />
+            </div>
           </div>
         </div>
 
@@ -63,7 +69,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Scenario Hub Matrix Launcher */}
           <button
             onClick={onOpenEnvHub}
-            className="btn-tech-gradient px-3.5 py-2 rounded-xl text-xs font-mono font-bold text-white flex items-center gap-2 shadow-md transition-all hover:scale-105 shrink-0"
+            className="btn-tech-gradient px-3.5 py-2 rounded-xl text-xs font-mono font-bold text-white flex items-center gap-2 shadow-md transition-all hover:scale-105 shrink-0 cursor-pointer"
             title="Open 3D Scenario Matrix Hub"
           >
             <Layers className="h-3.5 w-3.5 text-cyan-300 animate-pulse" />
@@ -109,25 +115,25 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Right Section: Compact Utilities & Action Buttons */}
-        <div className="flex items-center justify-end gap-2 shrink-0">
+        <div className="flex items-center justify-end gap-1 sm:gap-2 shrink-0">
           {/* Mobile Scenario Hub Button */}
           <button
             onClick={onOpenEnvHub}
-            className="md:hidden btn-tech-gradient p-2 rounded-xl text-zinc-300 hover:text-white"
+            className="md:hidden btn-tech-gradient p-1.5 sm:p-2 rounded-xl text-zinc-300 hover:text-white cursor-pointer"
             title="Open Scenario Hub"
           >
-            <Layers className="h-4 w-4 text-cyan-300" />
+            <Layers className="h-3.5 w-3.5 text-cyan-300" />
           </button>
 
           {/* Always Available Core Concepts & Guide Button */}
           {onOpenSecurityConcepts && (
             <button
               onClick={onOpenSecurityConcepts}
-              className="btn-tech-gradient px-3 py-2 rounded-xl text-xs font-mono font-bold text-purple-300 hover:text-white flex items-center gap-1.5 border border-purple-500/40 bg-purple-950/30 transition-all hover:scale-105 shadow-md shadow-purple-950/50 cursor-pointer"
+              className="btn-tech-gradient px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-xs font-mono font-bold text-purple-300 hover:text-white flex items-center gap-1 sm:gap-1.5 border border-purple-500/40 bg-purple-950/30 transition-all hover:scale-105 shadow-md shadow-purple-950/50 cursor-pointer"
               title="Open Official Cybersecurity Glossary & Operator Guide"
             >
-              <BookOpen className="h-3.5 w-3.5 text-purple-400 animate-pulse" />
-              <span className="font-mono">Concepts</span>
+              <BookOpen className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-purple-400 animate-pulse" />
+              <span className="font-mono hidden xs:inline sm:inline">Concepts</span>
             </button>
           )}
 
@@ -135,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {onOpenHowToUse && (
             <button
               onClick={onOpenHowToUse}
-              className="btn-tech-gradient px-2.5 py-2 rounded-xl text-xs font-mono font-semibold text-zinc-300 hover:text-white hidden sm:flex items-center gap-1.5 border border-cyan-500/25 transition-all hover:scale-105 shadow-sm"
+              className="btn-tech-gradient px-2.5 py-2 rounded-xl text-xs font-mono font-semibold text-zinc-300 hover:text-white hidden lg:flex items-center gap-1.5 border border-cyan-500/25 transition-all hover:scale-105 shadow-sm cursor-pointer"
               title="Open Easy 5-Year-Old Security Guide"
             >
               <span className="text-xs">🐶</span>
@@ -146,7 +152,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Upload Custom JSON */}
           <button
             onClick={onOpenUpload}
-            className="btn-tech-gradient hidden xl:flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-mono font-bold text-white shadow-sm"
+            className="btn-tech-gradient hidden xl:flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-mono font-bold text-white shadow-sm cursor-pointer"
           >
             <Upload className="h-3.5 w-3.5 text-zinc-300" />
             <span>Upload JSON</span>
@@ -156,27 +162,28 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={onOpenReport}
             disabled={!auditData}
-            className="btn-tech-primary flex items-center gap-1.5 rounded-xl px-3 sm:px-3.5 py-2 text-xs font-mono font-bold shadow-md disabled:opacity-40 hover:scale-105 transition-all"
+            className="btn-tech-primary flex items-center gap-1 sm:gap-1.5 rounded-xl px-2 sm:px-3.5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-mono font-bold shadow-md disabled:opacity-40 hover:scale-105 transition-all cursor-pointer shrink-0"
+            title="View Executive CISO Audit Report"
           >
-            <FileText className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Report</span>
+            <FileText className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+            <span className="hidden xs:inline sm:inline">Report</span>
           </button>
 
           {/* Refresh Action */}
           <button
             onClick={onRefreshAudit}
             disabled={loading}
-            className="rounded-xl border border-white/10 bg-white/5 p-2 text-zinc-300 hover:bg-white/15 hover:text-white hover:border-white/25 transition disabled:opacity-50"
+            className="rounded-xl border border-white/10 bg-white/5 p-1.5 sm:p-2 text-zinc-300 hover:bg-white/15 hover:text-white hover:border-white/25 transition disabled:opacity-50 cursor-pointer"
             title="Re-run Compliance Audit"
           >
-            <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin text-white' : ''}`} />
+            <RefreshCw className={`h-3 w-3 sm:h-3.5 sm:w-3.5 ${loading ? 'animate-spin text-white' : ''}`} />
           </button>
 
           {/* 3D Showcase Button */}
           {onOpenWelcome && (
             <button
               onClick={onOpenWelcome}
-              className="hidden lg:flex rounded-xl border border-white/10 bg-white/5 p-2 text-zinc-400 hover:text-white hover:bg-white/10 transition"
+              className="hidden lg:flex rounded-xl border border-white/10 bg-white/5 p-2 text-zinc-400 hover:text-white hover:bg-white/10 transition cursor-pointer"
               title="Open 3D Showcase"
             >
               <Sparkles className="h-3.5 w-3.5" />

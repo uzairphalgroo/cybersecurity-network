@@ -247,29 +247,35 @@ export const App: React.FC = () => {
               </div>
 
               {/* Quick Action Buttons */}
-              <div className="flex items-center gap-3">
+              <div className="grid grid-cols-3 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto mt-2 sm:mt-0">
                 <button
                   onClick={() => setIsSecurityConceptsOpen(true)}
-                  className="btn-tech-gradient px-4 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 text-purple-300 border border-purple-500/30 hover:text-white shadow-md hover:scale-105 transition-all"
+                  className="btn-tech-gradient px-2 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl text-[10px] xs:text-xs sm:text-xs font-mono font-bold flex items-center justify-center gap-1 sm:gap-2 text-purple-300 border border-purple-500/30 hover:text-white shadow-md hover:scale-[1.02] transition-all cursor-pointer"
+                  title="Concepts & Architecture Guide"
                 >
-                  <BookOpen className="h-4 w-4 text-purple-400" />
-                  <span>Concepts & Guide</span>
+                  <BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-purple-400 shrink-0" />
+                  <span className="truncate hidden sm:inline">Concepts & Guide</span>
+                  <span className="truncate sm:hidden">Concepts</span>
                 </button>
 
                 <button
                   onClick={() => setIsHowToUseOpen(true)}
-                  className="btn-tech-gradient px-4 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 text-zinc-200 hover:text-white shadow-md hover:scale-105 transition-all"
+                  className="btn-tech-gradient px-2 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl text-[10px] xs:text-xs sm:text-xs font-mono font-bold flex items-center justify-center gap-1 sm:gap-2 text-zinc-200 hover:text-white shadow-md hover:scale-[1.02] transition-all cursor-pointer"
+                  title="Beginner Guide"
                 >
-                  <HelpCircle className="h-4 w-4 text-cyan-400" />
-                  <span>Beginner Guide</span>
+                  <HelpCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-cyan-400 shrink-0" />
+                  <span className="truncate hidden sm:inline">Beginner Guide</span>
+                  <span className="truncate sm:hidden">Guide</span>
                 </button>
 
                 <button
                   onClick={() => setIsReportOpen(true)}
-                  className="btn-tech-primary px-5 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 shadow-xl hover:scale-105 transition-all"
+                  className="btn-tech-primary px-2 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl text-[10px] xs:text-xs sm:text-xs font-mono font-bold flex items-center justify-center gap-1 sm:gap-2 shadow-xl hover:scale-[1.02] transition-all cursor-pointer"
+                  title="View Executive CISO Audit Report"
                 >
-                  <FileCode className="h-4 w-4" />
-                  <span>CISO Audit Report</span>
+                  <FileCode className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
+                  <span className="truncate hidden sm:inline">CISO Audit Report</span>
+                  <span className="truncate sm:hidden">CISO Report</span>
                 </button>
               </div>
             </div>

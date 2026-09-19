@@ -1,0 +1,113 @@
+{
+  "id": "leaky_health_datalake",
+  "name": "Leaky Health DataLake (HIPAA Violation)",
+  "description": "Healthcare analytics environment storing Electronic Protected Health Information (ePHI) in an unencrypted S3 bucket with public read ACLs and disabled public access blocks.",
+  "cloud_provider": "AWS",
+  "created_at": "2026-09-08T11:45:00Z",
+  "version": "1.0",
+  "metadata": {
+    "organization": "BioPulse Analytics",
+    "tier": "Data Engineering",
+    "classification": "HIPAA ePHI Critical Exposure"
+  },
+  "iam_users": [
+    {
+      "username": "data_engineer_sam",
+      "arn": "arn:aws:iam::556677889900:user/data_engineer_sam",
+      "mfa_enabled": true,
+      "access_keys": [
+        {
+          "access_key_id": "AKIASAMHEALTHKEY001",
+          "status": "Active",
+          "create_date": "2026-08-01T09:00:00Z",
+          "last_rotated_days_ago": 48
+        }
+      ],
+      "attached_policies": [
+        "arn:aws:iam::556677889900:policy/DataLakeFullBucketPolicy"
+      ],
+      "attached_roles": [],
+      "groups": ["DataEngineers"]
+    }
+  ],
+  "iam_roles": [],
+  "iam_policies": [
+    {
+      "policy_name": "DataLakeFullBucketPolicy",
+      "arn": "arn:aws:iam::556677889900:policy/DataLakeFullBucketPolicy",
+      "statements": [
+        {
+          "effect": "Allow",
+          "action": ["s3:GetObject", "s3:PutObject", "s3:ListBucket"],
+          "resource": [
+            "arn:aws:s3:::biopulse-patient-records-ephi-lake",
+            "arn:aws:s3:::biopulse-patient-records-ephi-lake/*"
+          ]
+        }
+      ],
+      "is_admin_policy": false
+    }
+  ],
+  "s3_buckets": [
+    {
+      "name": "biopulse-patient-records-ephi-lake",
+      "arn": "arn:aws:s3:::biopulse-patient-records-ephi-lake",
+      "region": "us-east-1",
+      "versioning_enabled": false,
+      "encryption_enabled": false,
+      "kms_key_id": null,
+      "public_access_block": {
+        "BlockPublicAcls": false,
+        "IgnorePublicAcls": false,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+      },
+      "acl_grants": [
+        { "Grantee": "http://acs.amazonaws.com/groups/global/AllUsers", "Permission": "READ" }
+      ],
+      "bucket_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AllowPublicAnonymousRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": ["s3:GetObject"],
+            "Resource": ["arn:aws:s3:::biopulse-patient-records-ephi-lake/*"]
+          }
+        ]
+      },
+      "contains_sensitive_data": true,
+      "data_classification": "HIPAA"
+    }
+  ],
+  "security_groups": [
+    {
+      "group_id": "sg-05healthlake01",
+      "group_name": "emr-spark-cluster-sg",
+      "vpc_id": "vpc-05healthdatalake",
+      "ingress_rules": [
+        {
+          "protocol": "tcp",
+          "from_port": 8088,
+          "to_port": 8088,
+          "cidr_ip": "10.100.0.0/16",
+          "description": "YARN Web UI internal only"
+        }
+      ],
+      "egress_rules": [
+        {
+          "protocol": "-1",
+          "from_port": null,
+          "to_port": null,
+          "cidr_ip": "0.0.0.0/0",
+          "description": "Egress outbound"
+        }
+      ],
+      "attached_resources": ["i-05emrmaster"]
+    }
+  ],
+  "azure_role_assignments": [],
+  "azure_nsgs": [],
+  "k8s_role_bindings": []
+}

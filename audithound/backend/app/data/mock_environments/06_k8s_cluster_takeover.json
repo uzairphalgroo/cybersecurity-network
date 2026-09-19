@@ -1,0 +1,64 @@
+{
+  "id": "k8s_cluster_takeover",
+  "name": "Kubernetes Cluster Takeover Vector",
+  "description": "Production EKS/GKE cluster with an overly permissive default namespace ServiceAccount bound to cluster-admin, allowing any container compromised in default namespace full cluster root access.",
+  "cloud_provider": "Kubernetes",
+  "created_at": "2026-09-14T16:00:00Z",
+  "version": "1.0",
+  "metadata": {
+    "organization": "CloudScale Microservices",
+    "tier": "Kubernetes Ingress Cluster",
+    "classification": "CIS K8s Critical Violation"
+  },
+  "iam_users": [],
+  "iam_roles": [],
+  "iam_policies": [],
+  "s3_buckets": [],
+  "security_groups": [],
+  "azure_role_assignments": [],
+  "azure_nsgs": [],
+  "k8s_role_bindings": [
+    {
+      "name": "default-sa-cluster-admin-binding",
+      "namespace": "default",
+      "role_kind": "ClusterRole",
+      "role_name": "cluster-admin",
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "default",
+          "namespace": "default"
+        }
+      ],
+      "rules": [
+        {
+          "api_groups": ["*"],
+          "resources": ["*"],
+          "verbs": ["*"]
+        }
+      ],
+      "is_cluster_admin": true
+    },
+    {
+      "name": "monitoring-viewer-binding",
+      "namespace": "monitoring",
+      "role_kind": "Role",
+      "role_name": "prometheus-reader",
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "prometheus-sa",
+          "namespace": "monitoring"
+        }
+      ],
+      "rules": [
+        {
+          "api_groups": [""],
+          "resources": ["pods", "services", "endpoints"],
+          "verbs": ["get", "list", "watch"]
+        }
+      ],
+      "is_cluster_admin": false
+    }
+  ]
+}

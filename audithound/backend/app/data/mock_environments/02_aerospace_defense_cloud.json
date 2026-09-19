@@ -1,0 +1,116 @@
+{
+  "id": "aerospace_defense_cloud",
+  "name": "Aerospace & Defense Sovereign Enclave",
+  "description": "FedRAMP High & CIS AWS Benchmark v3.0 certified enclave with zero wildcard permissions, hardware MFA enforcement, and zero direct internet ingress.",
+  "cloud_provider": "AWS",
+  "created_at": "2026-09-16T10:00:00Z",
+  "version": "1.0",
+  "metadata": {
+    "organization": "AeroDefense Dynamics",
+    "tier": "Mission-Critical Enclave",
+    "classification": "ITAR / FedRAMP High"
+  },
+  "iam_users": [
+    {
+      "username": "flight_telemetry_admin",
+      "arn": "arn:aws:iam::998877665544:user/flight_telemetry_admin",
+      "mfa_enabled": true,
+      "access_keys": [
+        {
+          "access_key_id": "AKIAFEDRAMPHIGHKEY01",
+          "status": "Active",
+          "create_date": "2026-09-10T10:00:00Z",
+          "last_rotated_days_ago": 9
+        }
+      ],
+      "attached_policies": [
+        "arn:aws:iam::998877665544:policy/TelemetryStreamAccessPolicy"
+      ],
+      "attached_roles": [],
+      "groups": ["TelemetryOperators"]
+    }
+  ],
+  "iam_roles": [
+    {
+      "role_name": "AvionicsDataProcessorRole",
+      "arn": "arn:aws:iam::998877665544:role/AvionicsDataProcessorRole",
+      "assume_role_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": { "Service": "lambda.amazonaws.com" },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "attached_policies": [
+        "arn:aws:iam::998877665544:policy/TelemetryStreamAccessPolicy"
+      ],
+      "inline_policies": [],
+      "trusts_wildcard": false
+    }
+  ],
+  "iam_policies": [
+    {
+      "policy_name": "TelemetryStreamAccessPolicy",
+      "arn": "arn:aws:iam::998877665544:policy/TelemetryStreamAccessPolicy",
+      "statements": [
+        {
+          "effect": "Allow",
+          "action": ["kinesis:GetRecords", "kinesis:GetShardIterator", "kinesis:DescribeStream"],
+          "resource": ["arn:aws:kinesis:us-gov-west-1:998877665544:stream/TelemetryLive"]
+        }
+      ],
+      "is_admin_policy": false
+    }
+  ],
+  "s3_buckets": [
+    {
+      "name": "aerospace-guidance-telemetry-vault",
+      "arn": "arn:aws:s3:::aerospace-guidance-telemetry-vault",
+      "region": "us-gov-west-1",
+      "versioning_enabled": true,
+      "encryption_enabled": true,
+      "kms_key_id": "arn:aws:kms:us-gov-west-1:998877665544:key/cmk-itar-vault-01",
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+      },
+      "acl_grants": [],
+      "contains_sensitive_data": true,
+      "data_classification": "ITAR"
+    }
+  ],
+  "security_groups": [
+    {
+      "group_id": "sg-02govwest8899001",
+      "group_name": "avionics-isolated-sg",
+      "vpc_id": "vpc-0govwest11223344",
+      "ingress_rules": [
+        {
+          "protocol": "tcp",
+          "from_port": 8443,
+          "to_port": 8443,
+          "cidr_ip": "172.16.0.0/12",
+          "description": "Restricted GovCloud mTLS Ingress"
+        }
+      ],
+      "egress_rules": [
+        {
+          "protocol": "tcp",
+          "from_port": 8443,
+          "to_port": 8443,
+          "cidr_ip": "172.16.0.0/12",
+          "description": "Restricted GovCloud mTLS Egress"
+        }
+      ],
+      "attached_resources": ["i-02flightprocessor01"]
+    }
+  ],
+  "azure_role_assignments": [],
+  "azure_nsgs": [],
+  "k8s_role_bindings": []
+}

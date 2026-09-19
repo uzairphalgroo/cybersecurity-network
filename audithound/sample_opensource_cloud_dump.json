@@ -1,0 +1,221 @@
+{
+  "environment_id": "opensource_cloudgoat_bishopfox_audit",
+  "name": "Open-Source Vulnerable Cloud Benchmark (CloudGoat + BishopFox)",
+  "description": "Realistic open-source security research dataset combining BishopFox IAM privilege escalation vectors, Rhino Security Labs CloudGoat S3 data lake leaks, and OWASP Kubernetes misconfigurations.",
+  "cloud_provider": "AWS",
+  "classification": "Open-Source Security Research Lab",
+  "tier": "Tier-1 Production Emulation",
+  "created_at": "2026-09-19T20:41:00Z",
+  "iam_users": [
+    {
+      "user_name": "contractor-dev-jordan",
+      "arn": "arn:aws:iam::123456789012:user/contractor-dev-jordan",
+      "attached_policies": [
+        {
+          "policy_name": "BishopFox-PrivEsc-CreatePolicyVersion",
+          "policy_document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "AllowPolicyVersionManagement",
+                "Effect": "Allow",
+                "Action": [
+                  "iam:CreatePolicyVersion",
+                  "iam:SetDefaultPolicyVersion",
+                  "iam:GetPolicy",
+                  "iam:GetPolicyVersion"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+        }
+      ],
+      "access_keys": [
+        {
+          "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+          "status": "Active",
+          "created_date": "2024-01-10T12:00:00Z",
+          "last_used_date": "2026-09-18T14:30:00Z"
+        }
+      ],
+      "mfa_enabled": false
+    },
+    {
+      "user_name": "ci-cd-deployer-robot",
+      "arn": "arn:aws:iam::123456789012:user/ci-cd-deployer-robot",
+      "attached_policies": [
+        {
+          "policy_name": "Overprivileged-CICD-FullAccess",
+          "policy_document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "AllowEverythingForDeployment",
+                "Effect": "Allow",
+                "Action": "*",
+                "Resource": "*"
+              }
+            ]
+          }
+        }
+      ],
+      "access_keys": [
+        {
+          "access_key_id": "AKIAI44QH8DHBEXAMPLE",
+          "status": "Active",
+          "created_date": "2023-06-15T08:00:00Z",
+          "last_used_date": "2026-09-19T10:15:00Z"
+        }
+      ],
+      "mfa_enabled": false
+    }
+  ],
+  "iam_roles": [
+    {
+      "role_name": "AppServerInstanceRole",
+      "arn": "arn:aws:iam::123456789012:role/AppServerInstanceRole",
+      "assume_role_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "attached_policies": [
+        {
+          "policy_name": "CloudGoat-PassRole-EC2Runner",
+          "policy_document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "PassRoleToAdmin",
+                "Effect": "Allow",
+                "Action": [
+                  "iam:PassRole",
+                  "ec2:RunInstances",
+                  "ec2:AssociateIamInstanceProfile"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "role_name": "OrganizationAdminPrivilegedRole",
+      "arn": "arn:aws:iam::123456789012:role/OrganizationAdminPrivilegedRole",
+      "assume_role_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::123456789012:root"
+            },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "attached_policies": [
+        {
+          "policy_name": "AdministratorAccess",
+          "policy_document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "*",
+                "Resource": "*"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "s3_buckets": [
+    {
+      "bucket_name": "cloudgoat-customer-datalake-prod-backup",
+      "arn": "arn:aws:s3:::cloudgoat-customer-datalake-prod-backup",
+      "region": "us-east-1",
+      "is_public": true,
+      "public_access_block": {
+        "block_public_acls": false,
+        "ignore_public_acls": false,
+        "block_public_policy": false,
+        "restrict_public_buckets": false
+      },
+      "acl_grants": [
+        {
+          "grantee": "http://acs.amazonaws.com/groups/global/AllUsers",
+          "permission": "READ"
+        },
+        {
+          "grantee": "http://acs.amazonaws.com/groups/global/AuthenticatedUsers",
+          "permission": "WRITE"
+        }
+      ],
+      "encryption": {
+        "enabled": false
+      },
+      "versioning": {
+        "enabled": false
+      }
+    }
+  ],
+  "security_groups": [
+    {
+      "group_id": "sg-0a81729bca7192f1a",
+      "group_name": "app-backend-ingress-sg",
+      "vpc_id": "vpc-01928374a123f",
+      "description": "Production API database and SSH backend security group",
+      "ingress_rules": [
+        {
+          "protocol": "tcp",
+          "from_port": 22,
+          "to_port": 22,
+          "cidr_blocks": [
+            "0.0.0.0/0"
+          ],
+          "description": "Open SSH access from anywhere on Internet"
+        },
+        {
+          "protocol": "tcp",
+          "from_port": 3306,
+          "to_port": 3306,
+          "cidr_blocks": [
+            "0.0.0.0/0"
+          ],
+          "description": "Unrestricted MySQL database port exposed to Internet"
+        }
+      ]
+    }
+  ],
+  "kubernetes_rbac": {
+    "cluster_name": "prod-financial-k8s-cluster",
+    "cluster_role_bindings": [
+      {
+        "binding_name": "default-serviceaccount-cluster-admin-binding",
+        "role_ref": {
+          "kind": "ClusterRole",
+          "name": "cluster-admin",
+          "api_group": "rbac.authorization.k8s.io"
+        },
+        "subjects": [
+          {
+            "kind": "ServiceAccount",
+            "name": "default",
+            "namespace": "default"
+          }
+        ]
+      }
+    ]
+  }
+}

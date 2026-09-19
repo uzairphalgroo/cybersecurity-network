@@ -1,0 +1,158 @@
+{
+  "id": "fintech_prod_banking",
+  "name": "Fintech Tier-1 Production Banking Cloud",
+  "description": "SOC2 CC6.1/6.3 and CIS AWS 3.0 hardened production environment with strict least-privilege RBAC, KMS-CMK encryption, and zero open public ingress.",
+  "cloud_provider": "AWS",
+  "created_at": "2026-09-15T08:00:00Z",
+  "version": "1.0",
+  "metadata": {
+    "organization": "Apex Global Banking",
+    "tier": "Production",
+    "classification": "PCI-DSS / SOC2 Type II Hardened"
+  },
+  "iam_users": [
+    {
+      "username": "lead_secops_auditor",
+      "arn": "arn:aws:iam::112233445566:user/lead_secops_auditor",
+      "mfa_enabled": true,
+      "access_keys": [
+        {
+          "access_key_id": "AKIAIOSFODNN7EXAMPLE1",
+          "status": "Active",
+          "create_date": "2026-08-25T10:00:00Z",
+          "last_rotated_days_ago": 25
+        }
+      ],
+      "attached_policies": [
+        "arn:aws:iam::112233445566:policy/ReadOnlySecurityAuditPolicy"
+      ],
+      "attached_roles": [],
+      "groups": ["SecurityAuditors"]
+    },
+    {
+      "username": "core_banking_deployer",
+      "arn": "arn:aws:iam::112233445566:user/core_banking_deployer",
+      "mfa_enabled": true,
+      "access_keys": [
+        {
+          "access_key_id": "AKIAIOSFODNN7EXAMPLE2",
+          "status": "Active",
+          "create_date": "2026-09-01T12:00:00Z",
+          "last_rotated_days_ago": 18
+        }
+      ],
+      "attached_policies": [
+        "arn:aws:iam::112233445566:policy/ScopedCICDDeployerPolicy"
+      ],
+      "attached_roles": [],
+      "groups": ["CICDAutomation"]
+    }
+  ],
+  "iam_roles": [
+    {
+      "role_name": "CoreBankingServiceRole",
+      "arn": "arn:aws:iam::112233445566:role/CoreBankingServiceRole",
+      "assume_role_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": { "Service": "ecs-tasks.amazonaws.com" },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "attached_policies": [
+        "arn:aws:iam::112233445566:policy/ScopedDynamoDBLedgerPolicy"
+      ],
+      "inline_policies": [],
+      "trusts_wildcard": false
+    }
+  ],
+  "iam_policies": [
+    {
+      "policy_name": "ReadOnlySecurityAuditPolicy",
+      "arn": "arn:aws:iam::112233445566:policy/ReadOnlySecurityAuditPolicy",
+      "statements": [
+        {
+          "effect": "Allow",
+          "action": ["cloudtrail:LookupEvents", "config:Get*", "guardduty:List*"],
+          "resource": ["*"]
+        }
+      ],
+      "is_admin_policy": false
+    },
+    {
+      "policy_name": "ScopedCICDDeployerPolicy",
+      "arn": "arn:aws:iam::112233445566:policy/ScopedCICDDeployerPolicy",
+      "statements": [
+        {
+          "effect": "Allow",
+          "action": ["ecs:UpdateService", "ecs:DescribeServices"],
+          "resource": ["arn:aws:ecs:us-east-1:112233445566:service/banking-cluster/*"]
+        }
+      ],
+      "is_admin_policy": false
+    },
+    {
+      "policy_name": "ScopedDynamoDBLedgerPolicy",
+      "arn": "arn:aws:iam::112233445566:policy/ScopedDynamoDBLedgerPolicy",
+      "statements": [
+        {
+          "effect": "Allow",
+          "action": ["dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem"],
+          "resource": ["arn:aws:dynamodb:us-east-1:112233445566:table/CustomerLedger"]
+        }
+      ],
+      "is_admin_policy": false
+    }
+  ],
+  "s3_buckets": [
+    {
+      "name": "apex-bank-immutable-audit-logs",
+      "arn": "arn:aws:s3:::apex-bank-immutable-audit-logs",
+      "region": "us-east-1",
+      "versioning_enabled": true,
+      "encryption_enabled": true,
+      "kms_key_id": "arn:aws:kms:us-east-1:112233445566:key/mrk-987654321",
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+      },
+      "acl_grants": [],
+      "contains_sensitive_data": true,
+      "data_classification": "PCI"
+    }
+  ],
+  "security_groups": [
+    {
+      "group_id": "sg-01a2b3c4d5e6f7001",
+      "group_name": "banking-app-tier-sg",
+      "vpc_id": "vpc-0987654321fedcba0",
+      "ingress_rules": [
+        {
+          "protocol": "tcp",
+          "from_port": 443,
+          "to_port": 443,
+          "cidr_ip": "10.0.0.0/16",
+          "description": "Internal ALB TLS Ingress only"
+        }
+      ],
+      "egress_rules": [
+        {
+          "protocol": "tcp",
+          "from_port": 443,
+          "to_port": 443,
+          "cidr_ip": "10.0.0.0/16",
+          "description": "Internal VPC Egress only"
+        }
+      ],
+      "attached_resources": ["i-01122334455667788"]
+    }
+  ],
+  "azure_role_assignments": [],
+  "azure_nsgs": [],
+  "k8s_role_bindings": []
+}

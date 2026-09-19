@@ -1,0 +1,121 @@
+{
+  "id": "crypto_miner_breach_vector",
+  "name": "Crypto-Miner Attack Vector (PassRole Escalation)",
+  "description": "Environment exhibiting classic AWS privilege escalation: Junior Dev possesses iam:PassRole combined with ec2:RunInstances, allowing execution of EC2 instances with high-privileged AdminRole.",
+  "cloud_provider": "AWS",
+  "created_at": "2026-09-12T09:15:00Z",
+  "version": "1.0",
+  "metadata": {
+    "organization": "ComputeBurst Labs",
+    "tier": "Vulnerable Research Sandbox",
+    "classification": "High Breach Risk"
+  },
+  "iam_users": [
+    {
+      "username": "jr_developer_dave",
+      "arn": "arn:aws:iam::445566778899:user/jr_developer_dave",
+      "mfa_enabled": false,
+      "access_keys": [
+        {
+          "access_key_id": "AKIADAVEDEVKEY004455",
+          "status": "Active",
+          "create_date": "2026-07-01T10:00:00Z",
+          "last_rotated_days_ago": 120
+        }
+      ],
+      "attached_policies": [
+        "arn:aws:iam::445566778899:policy/PassRoleAndEC2LaunchPolicy"
+      ],
+      "attached_roles": [],
+      "groups": ["DevTeam"]
+    }
+  ],
+  "iam_roles": [
+    {
+      "role_name": "OverPrivilegedAdminInstanceRole",
+      "arn": "arn:aws:iam::445566778899:role/OverPrivilegedAdminInstanceRole",
+      "assume_role_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": { "Service": "ec2.amazonaws.com" },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "attached_policies": [
+        "arn:aws:iam::aws:policy/AdministratorAccess"
+      ],
+      "inline_policies": [],
+      "trusts_wildcard": false
+    }
+  ],
+  "iam_policies": [
+    {
+      "policy_name": "PassRoleAndEC2LaunchPolicy",
+      "arn": "arn:aws:iam::445566778899:policy/PassRoleAndEC2LaunchPolicy",
+      "statements": [
+        {
+          "effect": "Allow",
+          "action": ["ec2:RunInstances", "ec2:DescribeInstances"],
+          "resource": ["*"]
+        },
+        {
+          "effect": "Allow",
+          "action": ["iam:PassRole"],
+          "resource": ["arn:aws:iam::445566778899:role/OverPrivilegedAdminInstanceRole"]
+        }
+      ],
+      "is_admin_policy": false
+    }
+  ],
+  "s3_buckets": [
+    {
+      "name": "computeburst-internal-models",
+      "arn": "arn:aws:s3:::computeburst-internal-models",
+      "region": "us-east-1",
+      "versioning_enabled": false,
+      "encryption_enabled": true,
+      "kms_key_id": "arn:aws:kms:us-east-1:445566778899:key/def-001",
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+      },
+      "acl_grants": [],
+      "contains_sensitive_data": false,
+      "data_classification": "Internal"
+    }
+  ],
+  "security_groups": [
+    {
+      "group_id": "sg-04cryptominer01",
+      "group_name": "miner-default-sg",
+      "vpc_id": "vpc-04computevpc",
+      "ingress_rules": [
+        {
+          "protocol": "tcp",
+          "from_port": 80,
+          "to_port": 80,
+          "cidr_ip": "0.0.0.0/0",
+          "description": "Public HTTP"
+        }
+      ],
+      "egress_rules": [
+        {
+          "protocol": "-1",
+          "from_port": null,
+          "to_port": null,
+          "cidr_ip": "0.0.0.0/0",
+          "description": "Unrestricted egress for mining pools"
+        }
+      ],
+      "attached_resources": ["i-04devbox"]
+    }
+  ],
+  "azure_role_assignments": [],
+  "azure_nsgs": [],
+  "k8s_role_bindings": []
+}

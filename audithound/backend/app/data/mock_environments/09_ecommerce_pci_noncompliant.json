@@ -1,0 +1,98 @@
+{
+  "id": "ecommerce_pci_noncompliant",
+  "name": "E-Commerce Cardholder Data Environment (PCI Violation)",
+  "description": "Retail checkout payment architecture with unencrypted S3 cardholder exports, overly permissive database security groups exposing port 3306 to public subnets, and missing MFA.",
+  "cloud_provider": "AWS",
+  "created_at": "2026-09-05T14:10:00Z",
+  "version": "1.0",
+  "metadata": {
+    "organization": "ShopFast Direct",
+    "tier": "PCI Scope CDE",
+    "classification": "PCI-DSS Scope Failure"
+  },
+  "iam_users": [
+    {
+      "username": "checkout_backend_svc",
+      "arn": "arn:aws:iam::667788990011:user/checkout_backend_svc",
+      "mfa_enabled": false,
+      "access_keys": [
+        {
+          "access_key_id": "AKIACHECKOUTKEY0099",
+          "status": "Active",
+          "create_date": "2026-04-10T10:00:00Z",
+          "last_rotated_days_ago": 162
+        }
+      ],
+      "attached_policies": [
+        "arn:aws:iam::667788990011:policy/WildcardRDSAndS3Policy"
+      ],
+      "attached_roles": [],
+      "groups": ["CheckoutServices"]
+    }
+  ],
+  "iam_roles": [],
+  "iam_policies": [
+    {
+      "policy_name": "WildcardRDSAndS3Policy",
+      "arn": "arn:aws:iam::667788990011:policy/WildcardRDSAndS3Policy",
+      "statements": [
+        {
+          "effect": "Allow",
+          "action": ["rds:*", "s3:*"],
+          "resource": ["*"]
+        }
+      ],
+      "is_admin_policy": false
+    }
+  ],
+  "s3_buckets": [
+    {
+      "name": "shopfast-daily-creditcard-exports",
+      "arn": "arn:aws:s3:::shopfast-daily-creditcard-exports",
+      "region": "us-east-1",
+      "versioning_enabled": false,
+      "encryption_enabled": false,
+      "kms_key_id": null,
+      "public_access_block": {
+        "BlockPublicAcls": false,
+        "IgnorePublicAcls": false,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+      },
+      "acl_grants": [
+        { "Grantee": "http://acs.amazonaws.com/groups/global/AllUsers", "Permission": "READ" }
+      ],
+      "contains_sensitive_data": true,
+      "data_classification": "PCI"
+    }
+  ],
+  "security_groups": [
+    {
+      "group_id": "sg-09ecommercepci01",
+      "group_name": "rds-mysql-checkout-sg",
+      "vpc_id": "vpc-09ecommercevpc",
+      "ingress_rules": [
+        {
+          "protocol": "tcp",
+          "from_port": 3306,
+          "to_port": 3306,
+          "cidr_ip": "0.0.0.0/0",
+          "description": "Public Ingress to Production Payment Database"
+        }
+      ],
+      "egress_rules": [
+        {
+          "protocol": "-1",
+          "from_port": null,
+          "to_port": null,
+          "cidr_ip": "0.0.0.0/0",
+          "description": "All outbound"
+        }
+      ],
+      "attached_resources": ["rds-cluster-checkout-prod"]
+    }
+  ],
+  "azure_role_assignments": [],
+  "azure_nsgs": [],
+  "k8s_role_bindings": []
+}

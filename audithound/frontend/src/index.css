@@ -1,0 +1,217 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #000000;
+    color: #f4f4f5;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-tech {
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+/* Tech Glass Panels */
+.glass-tech {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-tech-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-tech-hover:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 40px -10px rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Glowing Tech Gradient Button */
+.btn-tech-gradient {
+  position: relative;
+  background: linear-gradient(180deg, rgba(30, 30, 30, 0.9) 0%, rgba(10, 10, 10, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.btn-tech-gradient::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(168,85,247,0.5), rgba(6,182,212,0.5), rgba(255,255,255,0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  pointer-events: none;
+}
+
+.btn-tech-gradient:hover::before {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+}
+
+.btn-tech-gradient:hover {
+  box-shadow: 0 0 25px -5px rgba(255, 255, 255, 0.15), 0 0 15px -3px rgba(168, 85, 247, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Primary Glowing White Button */
+.btn-tech-primary {
+  background: linear-gradient(135deg, #ffffff 0%, #e4e4e7 100%);
+  color: #000000;
+  font-weight: 700;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+.btn-tech-primary:hover {
+  background: #ffffff;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 0 0 15px rgba(6, 182, 212, 0.4);
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Brittle Moving RGB Gradient Classes */
+@keyframes rgbGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.text-gradient-rgb-moving {
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #00f0ff 20%,
+    #a855f7 40%,
+    #ec4899 60%,
+    #eab308 80%,
+    #00ffaa 90%,
+    #ffffff 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rgbGradientShift 4s ease infinite;
+}
+
+.text-gradient-rgb-brittle {
+  background: linear-gradient(
+    115deg,
+    #ffffff 0%,
+    #e2e8f0 15%,
+    #38bdf8 30%,
+    #c084fc 48%,
+    #f43f5e 65%,
+    #34d399 82%,
+    #ffffff 100%
+  );
+  background-size: 250% 250%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rgbGradientShift 5s linear infinite;
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+}
+
+.bg-rgb-moving-glow {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(6, 182, 212, 0.15) 25%,
+    rgba(168, 85, 247, 0.15) 50%,
+    rgba(236, 72, 153, 0.15) 75%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  background-size: 300% 300%;
+  animation: rgbGradientShift 6s ease infinite;
+}
+
+/* Radar Sweep & Orbital Pulse */
+@keyframes radarSweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes energyPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+.animate-radar-sweep {
+  animation: radarSweep 6s linear infinite;
+}
+
+.animate-energy-pulse {
+  animation: energyPulse 3s ease-in-out infinite;
+}
+
+/* Metallic Text Gradients */
+.text-gradient-silver {
+  background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-chromatic {
+  background: linear-gradient(135deg, #ffffff 0%, #d8b4fe 30%, #67e8f9 70%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Scanline Overlay Animation */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+.animate-scanline {
+  animation: scanline 8s linear infinite;
+}

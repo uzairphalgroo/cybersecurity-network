@@ -1,0 +1,106 @@
+{
+  "id": "ransomware_target_enterprise",
+  "name": "Ransomware Blast Radius (Wipeout Vector)",
+  "description": "Enterprise cloud with vulnerable IAM policy creation rights (`iam:CreatePolicyVersion`) allowing low-privilege users to elevate themselves to root, combined with unversioned critical S3 storage vulnerable to destructive encryption/deletion.",
+  "cloud_provider": "AWS",
+  "created_at": "2026-09-02T10:15:00Z",
+  "version": "1.0",
+  "metadata": {
+    "organization": "MegaCorp Logistics",
+    "tier": "Enterprise Operations",
+    "classification": "Critical Ransomware Blast Radius"
+  },
+  "iam_users": [
+    {
+      "username": "tier1_support_bob",
+      "arn": "arn:aws:iam::123456789012:user/tier1_support_bob",
+      "mfa_enabled": false,
+      "access_keys": [
+        {
+          "access_key_id": "AKIABOBTIER1KEY990",
+          "status": "Active",
+          "create_date": "2026-05-20T10:00:00Z",
+          "last_rotated_days_ago": 122
+        }
+      ],
+      "attached_policies": [
+        "arn:aws:iam::123456789012:policy/PolicyEditorPrivEscPolicy"
+      ],
+      "attached_roles": [],
+      "groups": ["Helpdesk"]
+    }
+  ],
+  "iam_roles": [],
+  "iam_policies": [
+    {
+      "policy_name": "PolicyEditorPrivEscPolicy",
+      "arn": "arn:aws:iam::123456789012:policy/PolicyEditorPrivEscPolicy",
+      "statements": [
+        {
+          "effect": "Allow",
+          "action": [
+            "iam:CreatePolicyVersion",
+            "iam:SetDefaultPolicyVersion",
+            "iam:GetPolicy",
+            "iam:GetPolicyVersion"
+          ],
+          "resource": ["*"]
+        },
+        {
+          "effect": "Allow",
+          "action": ["s3:DeleteBucket", "s3:DeleteObject*", "s3:PutObject*"],
+          "resource": ["*"]
+        }
+      ],
+      "is_admin_policy": false
+    }
+  ],
+  "s3_buckets": [
+    {
+      "name": "megacorp-core-erp-databases",
+      "arn": "arn:aws:s3:::megacorp-core-erp-databases",
+      "region": "us-east-1",
+      "versioning_enabled": false,
+      "encryption_enabled": false,
+      "kms_key_id": null,
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+      },
+      "acl_grants": [],
+      "contains_sensitive_data": true,
+      "data_classification": "PCI"
+    }
+  ],
+  "security_groups": [
+    {
+      "group_id": "sg-10ransomware01",
+      "group_name": "erp-database-sg",
+      "vpc_id": "vpc-10megacorp",
+      "ingress_rules": [
+        {
+          "protocol": "tcp",
+          "from_port": 1433,
+          "to_port": 1433,
+          "cidr_ip": "0.0.0.0/0",
+          "description": "Exposed MS SQL port to internet"
+        }
+      ],
+      "egress_rules": [
+        {
+          "protocol": "-1",
+          "from_port": null,
+          "to_port": null,
+          "cidr_ip": "0.0.0.0/0",
+          "description": "All outbound"
+        }
+      ],
+      "attached_resources": ["i-10erpserver"]
+    }
+  ],
+  "azure_role_assignments": [],
+  "azure_nsgs": [],
+  "k8s_role_bindings": []
+}

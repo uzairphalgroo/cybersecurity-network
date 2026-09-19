@@ -1,0 +1,142 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shieldFrameGrad" x1="14" y1="8" x2="86" y2="94" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9" />
+      <stop offset="45%" stop-color="#94A3B8" stop-opacity="0.4" />
+      <stop offset="85%" stop-color="#38BDF8" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#C084FC" stop-opacity="0.8" />
+    </linearGradient>
+
+    <linearGradient id="facetSilver" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#64748B" />
+    </linearGradient>
+
+    <linearGradient id="facetDark" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1E293B" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#020617" stop-opacity="0.95" />
+    </linearGradient>
+
+    <linearGradient id="houndCoreGrad" x1="36" y1="36" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="30%" stop-color="#67E8F9" />
+      <stop offset="70%" stop-color="#A855F7" />
+      <stop offset="100%" stop-color="#EC4899" />
+    </linearGradient>
+
+    <linearGradient id="irisRing" x1="42" y1="38" x2="58" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#F43F5E" />
+    </linearGradient>
+
+    <filter id="coreGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Shield Base Plate -->
+  <path
+    d="M 50 6 L 88 20 L 88 52 C 88 77 50 94 50 94 C 50 94 12 77 12 52 L 12 20 Z"
+    fill="url(#facetDark)"
+    stroke="url(#shieldFrameGrad)"
+    stroke-width="2.2"
+    stroke-linejoin="round"
+  />
+
+  <!-- Internal Security Hex Mesh Grid -->
+  <path
+    d="M 50 14 L 80 25 L 80 50 C 80 70 50 86 50 86 C 50 86 20 70 20 50 L 20 25 Z"
+    stroke="rgba(255,255,255,0.12)"
+    stroke-width="1"
+    stroke-dasharray="2 3"
+    fill="none"
+  />
+
+  <!-- Left Sentinel Canine Ear -->
+  <path
+    d="M 28 18 L 43 32 L 28 37 Z"
+    fill="url(#facetSilver)"
+    stroke="#FFFFFF"
+    stroke-width="0.8"
+    stroke-linejoin="round"
+  />
+
+  <!-- Right Sentinel Canine Ear -->
+  <path
+    d="M 72 18 L 72 37 L 57 32 Z"
+    fill="url(#facetSilver)"
+    stroke="#FFFFFF"
+    stroke-width="0.8"
+    stroke-linejoin="round"
+  />
+
+  <!-- Crown Forehead Plate -->
+  <path
+    d="M 50 20 L 64 34 L 50 44 L 36 34 Z"
+    fill="#0F172A"
+    stroke="#E2E8F0"
+    stroke-width="1.2"
+    stroke-linejoin="round"
+  />
+
+  <!-- Left Cheek Stealth Armor -->
+  <path
+    d="M 20 38 L 36 34 L 40 56 L 24 56 Z"
+    fill="url(#facetDark)"
+    stroke="rgba(255,255,255,0.5)"
+    stroke-width="1"
+    stroke-linejoin="round"
+  />
+
+  <!-- Right Cheek Stealth Armor -->
+  <path
+    d="M 80 38 L 76 56 L 60 56 L 64 34 Z"
+    fill="url(#facetDark)"
+    stroke="rgba(255,255,255,0.5)"
+    stroke-width="1"
+    stroke-linejoin="round"
+  />
+
+  <!-- Center Cyber Snout / Radar Bridge -->
+  <path
+    d="M 40 56 L 50 46 L 60 56 L 55 68 L 45 68 Z"
+    fill="#090D16"
+    stroke="url(#shieldFrameGrad)"
+    stroke-width="1.2"
+    stroke-linejoin="round"
+  />
+
+  <!-- Lower Cerberus Jaw Chevron -->
+  <path
+    d="M 33 60 L 50 80 L 67 60 L 59 66 L 50 74 L 41 66 Z"
+    fill="url(#facetSilver)"
+    stroke="#FFFFFF"
+    stroke-width="1"
+    stroke-linejoin="round"
+  />
+
+  <!-- Glowing Ocular Aperture Core -->
+  <polygon
+    points="50,38 57,45 50,52 43,45"
+    fill="url(#houndCoreGrad)"
+    filter="url(#coreGlow)"
+  />
+
+  <!-- Radar Scanner Ring -->
+  <circle
+    cx="50"
+    cy="45"
+    r="3.5"
+    fill="#FFFFFF"
+    stroke="url(#irisRing)"
+    stroke-width="1.2"
+  />
+
+  <!-- Micro Radar Crosshair Beacons -->
+  <line x1="50" y1="34" x2="50" y2="36" stroke="#38BDF8" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="50" y1="54" x2="50" y2="56" stroke="#EC4899" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="39" y1="45" x2="41" y2="45" stroke="#38BDF8" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="59" y1="45" x2="61" y2="45" stroke="#EC4899" stroke-width="1.5" stroke-linecap="round" />
+</svg>

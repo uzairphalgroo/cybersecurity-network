@@ -10,6 +10,7 @@ import { UploadModal } from './components/UploadModal';
 import { ExecutiveReportModal } from './components/ExecutiveReportModal';
 import { EnvironmentHubModal } from './components/EnvironmentHubModal';
 import { HowToUseModal } from './components/HowToUseModal';
+import { SecurityConceptsModal } from './components/SecurityConceptsModal';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { AuditHoundLogo } from './components/AuditHoundLogo';
 import { EmptyUploadLaunchpad } from './components/EmptyUploadLaunchpad';
@@ -19,7 +20,7 @@ import { EbpfTelemetryRadar } from './components/EbpfTelemetryRadar';
 import { ZeroTouchRemediatorModal } from './components/ZeroTouchRemediatorModal';
 import { fetchEnvironments, runAudit } from './services/api';
 import { EnvironmentSummary, AuditResponse, Finding } from './types/audit';
-import { LayoutDashboard, Network, AlertTriangle, Wrench, Loader2, Layers, ShieldCheck, ShieldAlert, HelpCircle, ArrowLeft, Upload, FileCode, Bot, History, Radio, Zap } from 'lucide-react';
+import { LayoutDashboard, Network, AlertTriangle, Wrench, Loader2, Layers, ShieldCheck, ShieldAlert, HelpCircle, ArrowLeft, Upload, FileCode, Bot, History, Radio, Zap, BookOpen } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [environments, setEnvironments] = useState<EnvironmentSummary[]>([]);
@@ -37,6 +38,7 @@ export const App: React.FC = () => {
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   const [isEnvHubOpen, setIsEnvHubOpen] = useState<boolean>(false);
   const [isHowToUseOpen, setIsHowToUseOpen] = useState<boolean>(false);
+  const [isSecurityConceptsOpen, setIsSecurityConceptsOpen] = useState<boolean>(false);
   const [isZeroTouchOpen, setIsZeroTouchOpen] = useState<boolean>(false);
 
   // Initial load: environments list only (without auto-running audit)
@@ -120,6 +122,7 @@ export const App: React.FC = () => {
         onOpenEnvHub={() => setIsEnvHubOpen(true)}
         onOpenWelcome={() => setShowWelcome(true)}
         onOpenHowToUse={() => setIsHowToUseOpen(true)}
+        onOpenSecurityConcepts={() => setIsSecurityConceptsOpen(true)}
         auditData={auditData}
         loading={loading}
       />
@@ -149,6 +152,7 @@ export const App: React.FC = () => {
             onSelectEnv={handleSelectEnv}
             onAuditComplete={handleAuditComplete}
             onOpenHowToUse={() => setIsHowToUseOpen(true)}
+            onOpenSecurityConcepts={() => setIsSecurityConceptsOpen(true)}
           />
         )}
 
@@ -242,8 +246,16 @@ export const App: React.FC = () => {
               {/* Quick Action Buttons */}
               <div className="flex items-center gap-3">
                 <button
+                  onClick={() => setIsSecurityConceptsOpen(true)}
+                  className="btn-tech-gradient px-4 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 text-purple-300 border border-purple-500/30 hover:text-white shadow-md hover:scale-105 transition-all"
+                >
+                  <BookOpen className="h-4 w-4 text-purple-400" />
+                  <span>Concepts & Guide</span>
+                </button>
+
+                <button
                   onClick={() => setIsHowToUseOpen(true)}
-                  className="btn-tech-gradient px-5 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 text-zinc-200 hover:text-white shadow-md hover:scale-105 transition-all"
+                  className="btn-tech-gradient px-4 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 text-zinc-200 hover:text-white shadow-md hover:scale-105 transition-all"
                 >
                   <HelpCircle className="h-4 w-4 text-cyan-400" />
                   <span>Beginner Guide</span>
@@ -251,7 +263,7 @@ export const App: React.FC = () => {
 
                 <button
                   onClick={() => setIsReportOpen(true)}
-                  className="btn-tech-primary px-6 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 shadow-xl hover:scale-105 transition-all"
+                  className="btn-tech-primary px-5 py-2.5 rounded-2xl text-xs font-mono font-bold flex items-center gap-2 shadow-xl hover:scale-105 transition-all"
                 >
                   <FileCode className="h-4 w-4" />
                   <span>CISO Audit Report</span>
@@ -505,12 +517,20 @@ export const App: React.FC = () => {
           <div className="text-zinc-500 text-[11px]">
             Autonomous Cloud Security Sentinel &bull; SOC2 / CIS Benchmarks &bull; Terraform Remediation
           </div>
-          <div className="flex items-center gap-4 text-zinc-400">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-zinc-400">
+            <button
+              onClick={() => setIsSecurityConceptsOpen(true)}
+              className="hover:text-purple-300 transition flex items-center gap-1.5 text-purple-400 font-bold"
+            >
+              <BookOpen className="h-3.5 w-3.5" />
+              <span>📚 Security Concepts & Guide</span>
+            </button>
+            <span>&bull;</span>
             <button
               onClick={() => setIsHowToUseOpen(true)}
               className="hover:text-white transition flex items-center gap-1.5"
             >
-              <span>🐶 How To Use Guide</span>
+              <span>🐶 How To Use</span>
             </button>
             <span>&bull;</span>
             <button
@@ -551,6 +571,18 @@ export const App: React.FC = () => {
         onNavigateToTab={(tab) => {
           setActiveTab(tab);
           setIsHowToUseOpen(false);
+        }}
+        onOpenEnvHub={() => setIsEnvHubOpen(true)}
+        onOpenReport={() => setIsReportOpen(true)}
+        onOpenSecurityConcepts={() => setIsSecurityConceptsOpen(true)}
+      />
+
+      <SecurityConceptsModal
+        isOpen={isSecurityConceptsOpen}
+        onClose={() => setIsSecurityConceptsOpen(false)}
+        onNavigateToTab={(tab) => {
+          setActiveTab(tab);
+          setIsSecurityConceptsOpen(false);
         }}
         onOpenEnvHub={() => setIsEnvHubOpen(true)}
         onOpenReport={() => setIsReportOpen(true)}

@@ -13,7 +13,8 @@ import {
   ArrowRight,
   ShieldAlert,
   Cpu,
-  CheckCircle2
+  CheckCircle2,
+  BookOpen
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { AuditHoundLogo } from './AuditHoundLogo';
@@ -24,6 +25,7 @@ interface HowToUseModalProps {
   onNavigateToTab?: (tab: 'overview' | 'graph' | 'findings' | 'remediation') => void;
   onOpenEnvHub?: () => void;
   onOpenReport?: () => void;
+  onOpenSecurityConcepts?: () => void;
 }
 
 export const HowToUseModal: React.FC<HowToUseModalProps> = ({
@@ -32,6 +34,7 @@ export const HowToUseModal: React.FC<HowToUseModalProps> = ({
   onNavigateToTab,
   onOpenEnvHub,
   onOpenReport,
+  onOpenSecurityConcepts,
 }) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
 
@@ -347,12 +350,27 @@ export const HowToUseModal: React.FC<HowToUseModalProps> = ({
             </div>
           </div>
 
-          {/* Quick Tip Pill */}
-          <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-xs text-zinc-400 font-mono">
-            <Lightbulb className="h-4 w-4 text-amber-400 flex-shrink-0" />
-            <span>
-              <strong>Tip:</strong> You can navigate between all pages using the <strong>Next</strong> and <strong>Previous</strong> buttons below or jump straight into the live interactive feature!
-            </span>
+          {/* Quick Tip Pill & Deep Dive */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-white/[0.03] border border-white/10 text-xs text-zinc-400 font-mono">
+            <div className="flex items-center gap-2.5">
+              <Lightbulb className="h-4 w-4 text-amber-400 flex-shrink-0" />
+              <span>
+                <strong>Tip:</strong> Navigate using <strong>Next</strong> & <strong>Previous</strong> or jump straight into the feature!
+              </span>
+            </div>
+
+            {onOpenSecurityConcepts && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onOpenSecurityConcepts();
+                }}
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-950/60 border border-purple-500/40 text-purple-300 hover:text-white hover:bg-purple-900/60 text-[11px] font-mono font-bold transition shadow-sm shrink-0"
+              >
+                <BookOpen className="h-3.5 w-3.5" />
+                <span>Full Concepts Guide &rarr;</span>
+              </button>
+            )}
           </div>
         </div>
 

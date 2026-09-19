@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, FileText, RefreshCw, Layers, Sparkles } from 'lucide-react';
+import { Upload, FileText, RefreshCw, Layers, Sparkles, BookOpen } from 'lucide-react';
 import { EnvironmentSummary, AuditResponse } from '../types/audit';
 import { AuditHoundLogo } from './AuditHoundLogo';
 
@@ -13,6 +13,7 @@ interface NavbarProps {
   onOpenEnvHub: () => void;
   onOpenWelcome?: () => void;
   onOpenHowToUse?: () => void;
+  onOpenSecurityConcepts?: () => void;
   onResetToUpload?: () => void;
   auditData: AuditResponse | null;
   loading: boolean;
@@ -28,6 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenEnvHub,
   onOpenWelcome,
   onOpenHowToUse,
+  onOpenSecurityConcepts,
   onResetToUpload,
   auditData,
   loading,
@@ -108,6 +110,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right Section: Compact Utilities & Action Buttons */}
         <div className="flex items-center justify-end gap-2 sm:gap-2.5 min-w-[180px] lg:min-w-[220px]">
+          {/* Security Concepts & Guide Button */}
+          {onOpenSecurityConcepts && (
+            <button
+              onClick={onOpenSecurityConcepts}
+              className="btn-tech-gradient px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-semibold text-zinc-300 hover:text-white flex items-center gap-1.5 border border-purple-500/30 transition-all hover:scale-105 shadow-sm"
+              title="Open Official Cybersecurity Glossary & Operator Guide"
+            >
+              <BookOpen className="h-3.5 w-3.5 text-purple-400" />
+              <span className="font-mono text-purple-300 hidden sm:inline">Concepts</span>
+            </button>
+          )}
+
           {/* Small, Compact "How To Use" Button */}
           {onOpenHowToUse && (
             <button

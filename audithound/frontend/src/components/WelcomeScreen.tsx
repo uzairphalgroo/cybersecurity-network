@@ -7,17 +7,8 @@ interface WelcomeScreenProps {
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
-  const [mounted, setMounted] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Smooth Fade-In on mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMounted(true);
-    }, 40);
-    return () => clearTimeout(timer);
-  }, []);
 
   // 3D Parallax Tilt with zero-React-render RAF update
   useEffect(() => {
@@ -96,12 +87,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
         ['--mouse-x-num' as any]: '0',
         ['--mouse-y-num' as any]: '0',
       }}
-      className={`fixed inset-0 z-50 bg-[#000000] cursor-pointer select-none flex flex-col items-center justify-between transition-all duration-700 ease-in-out overflow-hidden ${
-        !mounted 
-          ? 'opacity-0 scale-98' 
-          : isExiting 
-            ? 'opacity-0 scale-105 blur-xl pointer-events-none' 
-            : 'opacity-100 scale-100'
+      className={`fixed inset-0 z-50 bg-[#000000] cursor-pointer select-none flex flex-col items-center justify-between transition-all duration-500 ease-out overflow-hidden ${
+        isExiting 
+          ? 'opacity-0 scale-105 blur-xl pointer-events-none' 
+          : 'opacity-100 scale-100'
       }`}
     >
       {/* Monochromatic Cyber Geometry Grid Plane with 3D Perspective */}

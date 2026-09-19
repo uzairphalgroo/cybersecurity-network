@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, FileCode, ArrowRight, ShieldCheck, ShieldAlert, Sparkles, Download, Layers, HelpCircle, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, FileCode, ArrowRight, ShieldCheck, ShieldAlert, Sparkles, Download, Layers, HelpCircle, CheckCircle2, AlertCircle, Loader2, BookOpen } from 'lucide-react';
 import { EnvironmentSummary, AuditResponse } from '../types/audit';
 import { uploadAndAudit } from '../services/api';
 
@@ -8,6 +8,7 @@ interface EmptyUploadLaunchpadProps {
   onSelectEnv: (envId: string) => void;
   onAuditComplete: (audit: AuditResponse) => void;
   onOpenHowToUse: () => void;
+  onOpenSecurityConcepts?: () => void;
 }
 
 export const EmptyUploadLaunchpad: React.FC<EmptyUploadLaunchpadProps> = ({
@@ -15,6 +16,7 @@ export const EmptyUploadLaunchpad: React.FC<EmptyUploadLaunchpadProps> = ({
   onSelectEnv,
   onAuditComplete,
   onOpenHowToUse,
+  onOpenSecurityConcepts,
 }) => {
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -219,12 +221,31 @@ export const EmptyUploadLaunchpad: React.FC<EmptyUploadLaunchpadProps> = ({
           Ingest AWS IAM/S3 and Azure topographies to compute deterministic SOC2 & CIS posture scores, traverse lateral privilege escalation graphs, and synthesize production-ready Terraform defense patches.
         </p>
 
-        {/* Free Open Source Data Availability Notice */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-xs font-mono text-cyan-300 shadow-md">
-          <span>💡</span>
-          <span>
-            <b>Instant Testing:</b> You can test AuditHound immediately using the <b>Free Open-Source Sample Data</b> button beside uploading or explore any benchmark scenario below!
-          </span>
+        {/* Free Open Source Data & Concepts Links */}
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-xs font-mono text-cyan-300 shadow-md">
+            <span>💡</span>
+            <span>
+              <b>Instant Testing:</b> You can test AuditHound immediately using the <b>Free Open-Source Sample Data</b> button beside uploading or explore any benchmark scenario below!
+            </span>
+          </div>
+
+          {onOpenSecurityConcepts && (
+            <button
+              onClick={onOpenSecurityConcepts}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-950/40 border border-purple-500/40 text-xs font-mono font-bold text-purple-300 hover:text-white hover:bg-purple-900/50 shadow-md hover:scale-105 transition-all"
+            >
+              <BookOpen className="h-3.5 w-3.5 text-purple-400" />
+              <span>📚 Security Concepts & Operator Guide</span>
+            </button>
+          )}
+
+          <button
+            onClick={onOpenHowToUse}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 border border-white/20 text-xs font-mono font-bold text-zinc-300 hover:text-white hover:border-white/40 shadow-md hover:scale-105 transition-all"
+          >
+            <span>🐶 Beginner 5-Yr Guide</span>
+          </button>
         </div>
       </div>
 

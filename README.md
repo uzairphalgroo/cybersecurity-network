@@ -26,6 +26,7 @@
 </p>
 
 <p align="center">
+  <a href="#-active-security-projects"><b>🚀 Active Projects</b></a> •
   <a href="#-core-security-pillars"><b>🔥 Core Pillars</b></a> •
   <a href="#-zero-trust--cloud-defense-architecture"><b>📐 System Architecture</b></a> •
   <a href="#-live-threat-radar--telemetry-stream"><b>📡 Threat Radar</b></a> •
@@ -34,6 +35,40 @@
   <a href="#-technologies--tooling-arsenal"><b>🧰 Tech Arsenal</b></a>
 </p>
 
+</div>
+
+---
+
+## 🚀 Active Security Projects
+
+<div align="center">
+<table width="100%">
+  <tr>
+    <td align="left" style="background: linear-gradient(135deg, #0d1117 0%, #161b22 100%); border-radius: 14px; border: 1px solid #30363d; padding: 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <h3 style="margin: 0; color: #58a6ff;">
+          <a href="audithound/" style="color: #58a6ff; text-decoration: none;">🐺 Project: AuditHound — Autonomous Multi-Cloud Security Posture Engine</a>
+        </h3>
+        <span>
+          <a href="audithound/"><img src="https://img.shields.io/badge/Project_Directory-📁_audithound%2F-38bdf8?style=for-the-badge&logo=github&logoColor=white" alt="Open AuditHound Folder"/></a>
+        </span>
+      </div>
+      <p style="color: #c9d1d9; font-size: 13.5px; line-height: 1.6; margin-top: 10px;">
+        An enterprise-grade autonomous Cloud Security Posture Management (CSPM) and attack path visualization platform. Ingests AWS IAM/S3 and Azure topographies, computes deterministic SOC2 & CIS compliance posture scores (0–100), traverses privilege escalation graphs with NetworkX, dynamically generates least-privilege Terraform (<code>.tf</code>) patches, and exports auditor-certified CISO reports.
+      </p>
+      <div style="margin-top: 12px;">
+        <img src="https://img.shields.io/badge/FastAPI-3.12-3776AB?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI"/>
+        <img src="https://img.shields.io/badge/React_18-TypeScript-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React"/>
+        <img src="https://img.shields.io/badge/Cytoscape.js-Attack_Graphs-FF6F00?style=flat-square" alt="Cytoscape"/>
+        <img src="https://img.shields.io/badge/Terraform_IaC-GitOps-844FBA?style=flat-square&logo=terraform&logoColor=white" alt="Terraform"/>
+        <img src="https://img.shields.io/badge/Pytest-23%2F23_Passed-4ade80?style=flat-square&logo=pytest&logoColor=white" alt="Pytest"/>
+      </div>
+      <div style="margin-top: 14px; padding: 10px 14px; background: #0b0f19; border-radius: 8px; border: 1px solid #21262d; font-family: monospace; font-size: 12px; color: #58a6ff;">
+        <code>$ cd audithound &amp;&amp; docker compose up --build</code> &nbsp;|&nbsp; <code><a href="audithound/README.md" style="color: #7ee787;">📖 Read AuditHound Documentation →</a></code>
+      </div>
+    </td>
+  </tr>
+</table>
 </div>
 
 ---

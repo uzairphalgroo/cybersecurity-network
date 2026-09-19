@@ -29,8 +29,8 @@ export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'graph' | 'findings' | 'remediation' | 'purple_team' | 'drift' | 'ebpf'>('overview');
   const [selectedFindingIdForRemediation, setSelectedFindingIdForRemediation] = useState<string | null>(null);
 
-  // Welcome Screen state
-  const [showWelcome, setShowWelcome] = useState<boolean>(false);
+  // Welcome Screen state (shown on initial load, refresh & site entry)
+  const [showWelcome, setShowWelcome] = useState<boolean>(true);
 
   // Modals
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);

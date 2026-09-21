@@ -1,6 +1,4 @@
 {
-  "buildCommand": "cd \"cybersecurity projects/sentinanra/frontend/ && npm install && npm run build",
-  "outputDirectory": "cybersecurity projects/sentinanra/frontend",
   "framework": "vite",
   "rewrites": [
     {

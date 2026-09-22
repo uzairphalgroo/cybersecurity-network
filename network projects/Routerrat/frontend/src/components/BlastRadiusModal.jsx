@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
 export default function BlastRadiusModal({ isOpen, onClose, incident, telemetry }) {
   const [radiusData, setRadiusData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ export default function BlastRadiusModal({ isOpen, onClose, incident, telemetry 
     setLoading(true);
     try {
       // Simulate API call to backend engine
-      const res = await fetch('/api/blast-radius', {
+      const res = await fetch(`${API_BASE}/api/blast-radius`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -53,7 +55,7 @@ export default function BlastRadiusModal({ isOpen, onClose, incident, telemetry 
         timestamp: new Date().toISOString()
       };
 
-      const resp = await fetch('/api/webhook/test', {
+      const resp = await fetch(`${API_BASE}/api/webhook/test`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

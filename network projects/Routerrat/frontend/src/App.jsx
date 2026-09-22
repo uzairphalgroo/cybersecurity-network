@@ -17,6 +17,8 @@ import LegalModal from './components/LegalModal';
 import EducationalGuide from './components/EducationalGuide';
 import BackgroundCanvas from './components/BackgroundCanvas';
 
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
 export default function App() {
   const [selectedAsn, setSelectedAsn] = useState(13335); // Cloudflare
   const [asns, setAsns] = useState([]);
@@ -43,7 +45,7 @@ export default function App() {
 
   // 1. Fetch ASN list
   useEffect(() => {
-    fetch('/api/asns')
+    fetch(`${API_BASE}/api/asns`)
       .then((res) => res.json())
       .then((data) => setAsns(data))
       .catch((err) => console.error("Error fetching ASNs:", err));
@@ -52,7 +54,7 @@ export default function App() {
   // 2. Fetch Telemetry for selected ASN
   const loadTelemetry = async (asn, currentFixture) => {
     try {
-      const res = await fetch(`/api/telemetry/${asn}`);
+      const res = await fetch(`${API_BASE}/api/telemetry/${asn}`);
       const data = await res.json();
       
       const liveTelemetry = data.telemetry || {};
@@ -84,7 +86,7 @@ export default function App() {
   // 3. WebSocket connection for live streaming
   useEffect(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws/telemetry`;
+    const wsUrl = import.meta.env.VITE_WS_URL || `${protocol}//${window.location.host}/ws/telemetry`;
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => setWsConnected(true);
@@ -136,7 +138,7 @@ export default function App() {
   // Handle Triggering Historical Outage Fixture
   const handleTriggerFixture = async (fixtureKey) => {
     try {
-      const res = await fetch(`/api/fixtures/trigger/${fixtureKey}`, { method: 'POST' });
+      const res = await fetch(`${API_BASE}/api/fixtures/trigger/${fixtureKey}`, { method: 'POST' });
       const data = await res.json();
       
       const fixture = data.fixture;

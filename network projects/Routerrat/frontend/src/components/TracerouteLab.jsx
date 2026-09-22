@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Route, Play, Activity, Clock, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
 export default function TracerouteLab({ targetPrefix }) {
   const [running, setRunning] = useState(false);
   const [results, setResults] = useState(null);
@@ -12,7 +14,7 @@ export default function TracerouteLab({ targetPrefix }) {
     setResults(null);
     setError(null);
     try {
-      const res = await fetch('/api/traceroute', {
+      const res = await fetch(`${API_BASE}/api/traceroute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ target_prefix: targetPrefix })

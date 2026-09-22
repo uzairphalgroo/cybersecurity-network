@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle2, AlertTriangle, MessageSquare, Terminal } from 'lucide-react';
 import { motion } from 'framer-motion';
+const API_BASE = import.meta.env.VITE_API_URL || "";
 
 export default function WebhookTester() {
   const [webhookUrl, setWebhookUrl] = useState('simulated://discord.com/api/webhooks/...');
@@ -11,7 +12,7 @@ export default function WebhookTester() {
     setLoading(true);
     setStatus(null);
     try {
-      const res = await fetch('/api/webhook/test', {
+      const res = await fetch(`${API_BASE}/api/webhook/test`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

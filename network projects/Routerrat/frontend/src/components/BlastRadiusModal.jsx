@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-const API_BASE = import.meta.env.VITE_API_URL || "";
+const API_BASE = "https://routerrat.onrender.com";
 
 export default function BlastRadiusModal({ isOpen, onClose, incident, telemetry }) {
   const [radiusData, setRadiusData] = useState(null);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Route, Play, Activity, Clock, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const API_BASE = import.meta.env.VITE_API_URL || "";
+const API_BASE = "https://routerrat.onrender.com";
 
 export default function TracerouteLab({ targetPrefix }) {
   const [running, setRunning] = useState(false);

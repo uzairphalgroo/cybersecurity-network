@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle2, AlertTriangle, MessageSquare, Terminal } from 'lucide-react';
 import { motion } from 'framer-motion';
-const API_BASE = import.meta.env.VITE_API_URL || "";
+const API_BASE = "https://routerrat.onrender.com";
 
 export default function WebhookTester() {
   const [webhookUrl, setWebhookUrl] = useState('simulated://discord.com/api/webhooks/...');

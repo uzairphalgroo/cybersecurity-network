@@ -17,7 +17,7 @@ import LegalModal from './components/LegalModal';
 import EducationalGuide from './components/EducationalGuide';
 import BackgroundCanvas from './components/BackgroundCanvas';
 
-const API_BASE = import.meta.env.VITE_API_URL || "";
+const API_BASE = "https://routerrat.onrender.com";
 
 export default function App() {
   const [selectedAsn, setSelectedAsn] = useState(13335); // Cloudflare
@@ -85,8 +85,7 @@ export default function App() {
 
   // 3. WebSocket connection for live streaming
   useEffect(() => {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = import.meta.env.VITE_WS_URL || `${protocol}//${window.location.host}/ws/telemetry`;
+    const wsUrl = "wss://routerrat.onrender.com/ws/telemetry";
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => setWsConnected(true);

@@ -1,8 +1,8 @@
 # ROUTERRAT - Global Threat Intelligence Network
 
-![Welcome Screen](./demo1.jpg)
+![Welcome Screen](./demo1.png)
 
-![NOC Dashboard](./demo2.jpg)
+![NOC Dashboard](./demo2.png)
 
 ## Overview
 RouterRat is an advanced, open-source 3D Network Operations Center (NOC) dashboard designed for real-time Border Gateway Protocol (BGP) anomaly detection and global threat visualization. Built with a highly responsive, cyberpunk-inspired 3D interface, RouterRat maps the underlying fabric of the internet to visually expose Route Hijacks, Route Flapping, and Path Surges as they happen.

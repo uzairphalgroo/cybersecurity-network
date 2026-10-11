@@ -253,7 +253,7 @@ Sentinara is architected with complete client-side graph traversal and determini
 1. Import this repository into [Vercel](https://vercel.com/new).
 2. Configure project settings:
    - **Framework Preset**: `Vite`
-   - **Root Directory**: `sentinara/frontend`
+   - **Root Directory**: `cybersecurity projects/sentinara/frontend` (or default `./` root, both are preconfigured with `vercel.json`)
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
 3. Click **Deploy**. Vercel will automatically apply the included `vercel.json` SPA routing rewrite rules.

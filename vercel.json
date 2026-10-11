@@ -1,0 +1,11 @@
+{
+  "buildCommand": "cd \"cybersecurity projects/sentinara/frontend\" && npm install && npm run build",
+  "outputDirectory": "cybersecurity projects/sentinara/frontend/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "cybersecurity-network",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Enterprise Cybersecurity & Network Lab Monorepo",
+  "scripts": {
+    "build": "cd \"cybersecurity projects/sentinara/frontend\" && npm install && npm run build"
+  }
+}
